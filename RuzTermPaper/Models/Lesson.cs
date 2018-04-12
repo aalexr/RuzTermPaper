@@ -56,11 +56,8 @@ namespace RuzTermPaper.Models
         /// <returns></returns>
         public async static Task<IList<Group>> FindGroupAsync(string findText)
         {
-
             requestUri = $"{baseUri}groups?findtext={findText}";
             return await Json.ToObjectAsync<IList<Group>>(await App.http.GetStringAsync(requestUri));
-
-
         }
 
         /// <summary>
@@ -68,13 +65,7 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="request">Ссылка</param>
         /// <returns></returns>
-        public async static Task<IList<Lesson>> GetTimetable(string request)
-        {
-
-            return await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
-
-
-        }
+        public async static Task<IList<Lesson>> GetTimetable(string request) => await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
 
         public static string ConstructRequest(ReceiverType who, DateTime from, DateTime to, string email, Language lang = Language.Russian)
         {

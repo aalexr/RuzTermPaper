@@ -19,7 +19,7 @@
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
-                        <DataTemplate x:DataType="models:LessonRecord">
+                        <DataTemplate x:DataType="models:Lesson">
                             <TextBlock>
                                 <Run Text="{x:Bind DayOfWeekString}"/>
                                 <Run Text="{x:Bind DateOfNest, Converter={StaticResource DateConverter}}"/>
@@ -30,7 +30,7 @@
             </ListView.GroupStyle>
 
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:LessonRecord">
+                <DataTemplate x:DataType="models:Lesson">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition/>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RuzTermPaper.Models;
+using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -12,22 +13,15 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class SearchPage : Page
     {
-        private Requester rq;
         private MainPage page;
         private List<string> EmailSg { get; set; } = new List<string>();
 
         public SearchPage()
         {
             this.InitializeComponent();
-            rq = new Requester();
             groupsListView.ItemsSource = StaticData.Groups;
             lecturersListView.ItemsSource = StaticData.Lecturers;
             studentListView.ItemsSource = StaticData.StudentEmails;
-        }
-
-        ~SearchPage()
-        {
-            rq.Dispose();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -38,7 +32,6 @@ namespace RuzTermPaper.Pages
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            rq.Dispose();
             base.OnNavigatedFrom(e);
         }
 
@@ -55,10 +48,10 @@ namespace RuzTermPaper.Pages
                 switch (sender.Tag)
                 {
                     case "Lecturer":
-                        sender.ItemsSource = await rq.FindLecturerAsync(sender.Text);
+                        sender.ItemsSource = await Lesson.FindLecturerAsync(sender.Text);
                         break;
                     case "Group":
-                        sender.ItemsSource = await rq.FindGroupAsync(sender.Text);
+                        sender.ItemsSource = await Lesson.FindGroupAsync(sender.Text);
                         break;
                 }
             }
