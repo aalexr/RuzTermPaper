@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RuzTermPaper.Models;
+using System;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -14,17 +15,16 @@ namespace RuzTermPaper.Pages
     {
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Requester requester = new Requester();
             string uri;
 
             switch (e.Parameter)
             {
                 case Group G:
                     StaticData.Lessons.Clear();
-                    uri = $"{Requester.baseUri}personlessons?fromdate={DateTime.Today.ToString("yyyy.MM.dd")}&todate={DateTime.Today.AddDays(7).ToString("yyyy.MM.dd")}&receivertype=3&groupOid={G.groupOid}";
+                    uri = $"{Lesson.baseUri}personlessons?fromdate={DateTime.Today.ToString("yyyy.MM.dd")}&todate={DateTime.Today.AddDays(7).ToString("yyyy.MM.dd")}&receivertype=3&groupOid={G.groupOid}";
                     try
                     {
-                        foreach (var p in await requester.GetTimetable(uri))
+                        foreach (var p in await Lesson.GetTimetable(uri))
                             StaticData.Lessons.Add(p);
                     }
                     catch (Exception ex)
@@ -36,10 +36,10 @@ namespace RuzTermPaper.Pages
 
                 case Lecturer L:
                     StaticData.Lessons.Clear();
-                    uri = $"{Requester.baseUri}personlessons?fromdate={DateTime.Today.ToString("yyyy.MM.dd")}&todate={DateTime.Today.AddDays(7).ToString("yyyy.MM.dd")}&receivertype=1&lecturerOid={L.lecturerOid}";
+                    uri = $"{Lesson.baseUri}personlessons?fromdate={DateTime.Today.ToString("yyyy.MM.dd")}&todate={DateTime.Today.AddDays(7).ToString("yyyy.MM.dd")}&receivertype=1&lecturerOid={L.lecturerOid}";
                     try
                     {
-                        foreach (var p in await requester.GetTimetable(uri))
+                        foreach (var p in await Lesson.GetTimetable(uri))
                             StaticData.Lessons.Add(p);
                     }
                     catch (Exception ex)
@@ -54,10 +54,10 @@ namespace RuzTermPaper.Pages
                     if (string.IsNullOrEmpty(S))
                         break;
 
-                    uri = $"{Requester.baseUri}personlessons?fromdate={DateTime.Today.ToString("yyyy.MM.dd")}&todate={DateTime.Today.AddDays(7).ToString("yyyy.MM.dd")}&receivertype=0&&email={S}";
+                    uri = $"{Lesson.baseUri}personlessons?fromdate={DateTime.Today.ToString("yyyy.MM.dd")}&todate={DateTime.Today.AddDays(7).ToString("yyyy.MM.dd")}&receivertype=0&&email={S}";
                     try
                     {
-                        foreach (var p in await requester.GetTimetable(uri))
+                        foreach (var p in await Lesson.GetTimetable(uri))
                             StaticData.Lessons.Add(p);
                     }
                     catch (Exception ex)
@@ -68,7 +68,7 @@ namespace RuzTermPaper.Pages
                     goto default;
 
                 default:
-                    requester.Dispose();
+                    Lesson.Dispose();
                     break;
             }
 

@@ -1,5 +1,5 @@
 ﻿namespace RuzTermPaper.Models
 {
-    enum ReceiverType { Student, Lecturer, Group }
-    enum Language { Russian, English }
+    public enum ReceiverType { Student, Lecturer, Group }
+    public enum Language { Russian, English }
 }

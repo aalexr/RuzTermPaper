@@ -97,6 +97,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Lesson.cs" />
     <Compile Include="Pages\Find.xaml.cs">
       <DependentUpon>Find.xaml</DependentUpon>
     </Compile>
@@ -105,7 +106,6 @@
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Lecturer.cs" />
-    <Compile Include="Models\LessonRecord.cs" />
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -119,7 +119,6 @@
       <DependentUpon>TimetablePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\Requester.cs" />
     <Compile Include="StaticData.cs" />
   </ItemGroup>
   <ItemGroup>
