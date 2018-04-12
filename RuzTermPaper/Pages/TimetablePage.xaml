@@ -30,7 +30,7 @@
                                 <tools:DateToStringConverter x:Key="DtS"/>
                             </TextBlock.Resources>
                             <Run Text="{x:Bind DayOfWeekString}"/>
-                            <Run Text="{x:Bind DateOfNest}"/>
+                            <Run Text="{x:Bind DateOfNest, Converter={StaticResource DtS}}"/>
                         </TextBlock>
 
                         <TextBlock TextAlignment="Left" Grid.Row="1" Text="{x:Bind BeginLesson}"/>
