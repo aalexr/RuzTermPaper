@@ -9,6 +9,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <tools:DateToStringConverter x:Name="DateConverter"/>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ListView Name="timetable">
             <ListView.ItemTemplate>
@@ -26,11 +30,8 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock TextAlignment="Left">
-                            <TextBlock.Resources>
-                                <tools:DateToStringConverter x:Key="DtS"/>
-                            </TextBlock.Resources>
                             <Run Text="{x:Bind DayOfWeekString}"/>
-                            <Run Text="{x:Bind DateOfNest, Converter={StaticResource DtS}}"/>
+                            <Run Text="{x:Bind DateOfNest, Converter={StaticResource DateConverter}}"/>
                         </TextBlock>
 
                         <TextBlock TextAlignment="Left" Grid.Row="1" Text="{x:Bind BeginLesson}"/>
