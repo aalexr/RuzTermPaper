@@ -68,7 +68,6 @@ namespace RuzTermPaper.Pages
                     goto default;
 
                 default:
-                    Lesson.Dispose();
                     break;
             }
 
