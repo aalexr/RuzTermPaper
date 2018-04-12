@@ -22,6 +22,7 @@ namespace RuzTermPaper
     /// </summary>
     sealed partial class App : Application
     {
+        public static System.Net.Http.HttpClient http = new System.Net.Http.HttpClient();
         /// <summary>
         /// Инициализирует одноэлементный объект приложения.  Это первая выполняемая строка разрабатываемого
         /// кода; поэтому она является логическим эквивалентом main() или WinMain().

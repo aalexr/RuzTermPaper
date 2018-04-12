@@ -45,11 +45,8 @@ namespace RuzTermPaper.Models
         /// <returns></returns>
         public async static Task<IList<Lecturer>> FindLecturerAsync(string findText)
         {
-            using (var http = new System.Net.Http.HttpClient())
-            {
-                requestUri = $"{baseUri}lecturers?findtext={findText}";
-                return JsonConvert.DeserializeObject<IList<Lecturer>>(await http.GetStringAsync(requestUri));
-            }
+            requestUri = $"{baseUri}lecturers?findtext={findText}";
+            return JsonConvert.DeserializeObject<IList<Lecturer>>(await App.http.GetStringAsync(requestUri));
         }
 
         /// <summary>
@@ -59,11 +56,10 @@ namespace RuzTermPaper.Models
         /// <returns></returns>
         public async static Task<IList<Group>> FindGroupAsync(string findText)
         {
-            using (var http = new System.Net.Http.HttpClient())
-            {
-                requestUri = $"{baseUri}groups?findtext={findText}";
-                return await Json.ToObjectAsync<IList<Group>>(await http.GetStringAsync(requestUri));
-            }
+
+            requestUri = $"{baseUri}groups?findtext={findText}";
+            return await Json.ToObjectAsync<IList<Group>>(await App.http.GetStringAsync(requestUri));
+
 
         }
 
@@ -74,10 +70,9 @@ namespace RuzTermPaper.Models
         /// <returns></returns>
         public async static Task<IList<Lesson>> GetTimetable(string request)
         {
-            using (var http = new System.Net.Http.HttpClient())
-            {
-                return await Json.ToObjectAsync<IList<Lesson>>(await http.GetStringAsync(request));
-            }
+
+            return await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
+
 
         }
 
