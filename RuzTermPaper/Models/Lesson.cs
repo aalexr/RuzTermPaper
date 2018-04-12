@@ -38,22 +38,35 @@ namespace RuzTermPaper.Models
         #endregion
 
         #region Static Methods
+
+        /// <summary>
+        /// Ищет преподавателя в базе РУЗ по тексту
+        /// </summary>
+        /// <param name="findText">Текст для поиска</param>
+        /// <returns></returns>
         public async static Task<IList<Lecturer>> FindLecturerAsync(string findText)
         {
             requestUri = $"{baseUri}lecturers?findtext={findText}";
             return JsonConvert.DeserializeObject<IList<Lecturer>>(await http.GetStringAsync(requestUri));
         }
 
+        /// <summary>
+        /// Ищет группу в базе РУЗ по тексту
+        /// </summary>
+        /// <param name="findText">Текст для поиска</param>
+        /// <returns></returns>
         public async static Task<IList<Group>> FindGroupAsync(string findText)
         {
             requestUri = $"{baseUri}groups?findtext={findText}";
             return await Json.ToObjectAsync<IList<Group>>(await http.GetStringAsync(requestUri));
         }
 
-        public async static Task<IList<Models.Lesson>> GetTimetable(string request)
-        {
-            return await Json.ToObjectAsync<IList<Models.Lesson>>(await http.GetStringAsync(request));
-        }
+        /// <summary>
+        /// Возвращает список занятий по заданному URI
+        /// </summary>
+        /// <param name="request">Ссылка</param>
+        /// <returns></returns>
+        public async static Task<IList<Lesson>> GetTimetable(string request) => await Json.ToObjectAsync<IList<Lesson>>(await http.GetStringAsync(request));
 
         public static string ConstructRequest(ReceiverType who, DateTime from, DateTime to, string email, Language lang = Language.Russian)
         {
