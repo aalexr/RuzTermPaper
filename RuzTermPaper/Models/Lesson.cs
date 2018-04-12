@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RuzTermPaper.Models
 {
-    public class Lesson
+    public class Lesson : IDisposable
     {
         public static readonly string baseUri = @"http://ruz.hse.ru/RUZService.svc/";
         private static string requestUri;
@@ -76,5 +76,7 @@ namespace RuzTermPaper.Models
 
         public override string ToString() =>
             $"{DayOfWeekString} {DateOfNest.Day:D2}.{DateOfNest.Month:D2}.{DateOfNest.Year % 100} {BeginLesson}-{EndLesson} {Discipline} ауд. {Auditorium}";
+
+        public void Dispose() => http.Dispose();
     }
 }
