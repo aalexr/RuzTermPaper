@@ -1,6 +1,6 @@
 ﻿namespace RuzTermPaper.Models
 {
-    public class LessonRecord
+    public class Lesson
     {
         public string Auditorium { get; set; }
         public int AuditoriumOid { get; set; }

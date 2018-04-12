@@ -25,9 +25,9 @@ namespace RuzTermPaper
             return await Json.ToObjectAsync<IList<Group>>(await http.GetStringAsync(requestUri));
         }
 
-        public async Task<IList<Models.LessonRecord>> GetTimetable (string request)
+        public async Task<IList<Models.Lesson>> GetTimetable (string request)
         {
-            return await Json.ToObjectAsync<IList<Models.LessonRecord>>(await http.GetStringAsync(request));
+            return await Json.ToObjectAsync<IList<Models.Lesson>>(await http.GetStringAsync(request));
         }
 
         public string ConstructRequest(Models.ReceiverType who, DateTime from, DateTime to, string email, Models.Language lang = Models.Language.Russian)
