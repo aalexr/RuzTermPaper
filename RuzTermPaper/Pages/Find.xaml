@@ -7,6 +7,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="8">     
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox PlaceholderText="Email here" Height="24"/>
+
+        <ListView Grid.Row="1">
+            <TextBlock Text="1"/>
+            <TextBlock Text="2"/>
+            <TextBlock Text="3"/>
+        </ListView>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Add lecturer" Margin="4"/>
+            <Button Content="Add group" Margin="4"/>
+        </StackPanel>
+
     </Grid>
 </Page>

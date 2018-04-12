@@ -29,14 +29,14 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock TextAlignment="Left">
-                            <Run Text="{x:Bind DayOfWeekString}"/>
+                        <TextBlock TextAlignment="Left" Margin="4">
+                            <!--<Run Text="{x:Bind DayOfWeekString}"/>-->
                             <Run Text="{x:Bind DateOfNest, Converter={StaticResource DateConverter}}"/>
                         </TextBlock>
 
-                        <TextBlock TextAlignment="Left" Grid.Row="1" Text="{x:Bind BeginLesson}"/>
+                        <TextBlock TextAlignment="Left" Grid.Row="1" Margin="4" Text="{x:Bind BeginLesson}"/>
 
-                        <TextBlock TextWrapping="Wrap" Grid.Column="1" Grid.Row="2">
+                        <TextBlock TextWrapping="Wrap" Margin="4" Grid.Column="1" Grid.Row="2">
                                         <Run Text="{x:Bind KindOfWork}" FontWeight="SemiLight"/> 
                                         <LineBreak/>
                                         <Run Text="{x:Bind Discipline}" FontWeight="Medium"/>
@@ -47,7 +47,7 @@
                                         <Run Text="{x:Bind Auditorium}"/>
                         </TextBlock>
 
-                        <TextBlock Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="3"/>
+                        <TextBlock Margin="4" Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="3"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
