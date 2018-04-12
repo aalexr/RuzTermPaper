@@ -12,17 +12,23 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox PlaceholderText="Email here" Height="24"/>
+        <TextBox Name="box" PlaceholderText="Email here" Height="24" Margin="4"/>
+        <Button Content="Load new timetable by email" Grid.Row="1" Margin="4" HorizontalAlignment="Center"/>
 
-        <ListView Grid.Row="1">
-            <TextBlock Text="1"/>
-            <TextBlock Text="2"/>
-            <TextBlock Text="3"/>
+        <ListView Grid.Row="2" HorizontalAlignment="Center">
+            <TextBlock HorizontalTextAlignment="Center">
+                <Run Text="Current User" FontWeight="Medium"/>
+                <LineBreak/>
+                <Run Text="1"/>
+            </TextBlock >
+            <TextBlock Text="2" HorizontalTextAlignment="Center"/>
+            <TextBlock Text="3" HorizontalTextAlignment="Center"/>
         </ListView>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Add lecturer" Margin="4"/>
             <Button Content="Add group" Margin="4"/>
         </StackPanel>
