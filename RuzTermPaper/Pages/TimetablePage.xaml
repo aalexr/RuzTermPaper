@@ -15,6 +15,20 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ListView Name="timetable">
+
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate x:DataType="models:LessonRecord">
+                            <TextBlock>
+                                <Run Text="{x:Bind DayOfWeekString}"/>
+                                <Run Text="{x:Bind DateOfNest, Converter={StaticResource DateConverter}}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:LessonRecord">
                     <Grid>
