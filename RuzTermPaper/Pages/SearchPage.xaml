@@ -1,0 +1,85 @@
+﻿<Page
+    x:Class="RuzTermPaper.Pages.SearchPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RuzTermPaper"
+    xmlns:pages="using:RuzTermPaper.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0">
+        <Pivot Grid.ColumnSpan="2">
+            
+            
+            <PivotItem Header="Студент">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBox PlaceholderText="Введите почту на @edu.hse.ru"
+                             KeyDown="TextBox_KeyDown"
+                             Tag="Student"/>
+                    <TextBlock Text="Недавние поиски"
+                               Grid.Row="1"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,8,0,8"
+                               FontWeight="Medium"/>
+                    <ListView Name="studentListView" Grid.Row="2" SelectionMode="None"/>
+                </Grid>
+                
+                
+            </PivotItem>
+            <PivotItem Header="Группа">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <AutoSuggestBox Tag="Group"
+                                    TextChanged="AutoSuggestBox_TextChangedAsync"
+                                    PlaceholderText="Найдите группу" SuggestionChosen="AutoSuggestBox_SuggestionChosen"/>
+                    <TextBlock Text="Недавние поиски"
+                               Grid.Row="1"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,8,0,8"
+                               FontWeight="Medium"/>
+                    <ListView Name="groupsListView" Grid.Row="2" SelectionMode="None"/>
+                </Grid>
+            </PivotItem>
+            
+            
+            <PivotItem Header="Преподаватель">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <AutoSuggestBox PlaceholderText="Найдите преподавателя"
+                                    Tag="Lecturer"
+                                    TextChanged="AutoSuggestBox_TextChangedAsync"
+                                    SuggestionChosen="AutoSuggestBox_SuggestionChosen"/>
+                    <TextBlock Text="Недавние поиски"
+                               Grid.Row="1"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,8,0,8"
+                               FontWeight="Medium"/>
+                    <ListView x:Name="lecturersListView" Grid.Row="2" SelectionMode="None"/>
+                </Grid>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>
