@@ -16,15 +16,18 @@ namespace RuzTermPaper.Pages
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             string uri;
+            Uri URI;
 
             switch (e.Parameter)
             {
                 case Group G:
                     StaticData.Lessons.Clear();
-                    uri = $"{Lesson.baseUri}personlessons?fromdate={DateTime.Today.ToString("yyyy.MM.dd")}&todate={DateTime.Today.AddDays(7).ToString("yyyy.MM.dd")}&receivertype=3&groupOid={G.groupOid}";
+                    URI = Lesson.Build(G, DateTime.Today, DateTime.Today.AddDays(7));
+                    //URI = Lesson.ConstructRequest(IdType.groupOid, G.groupOid.ToString(), DateTime.Today, DateTime.Today.AddDays(7));
+                    //uri = $"{Lesson.baseUri}personlessons?fromdate={DateTime.Today.ToString("yyyy.MM.dd")}&todate={DateTime.Today.AddDays(7).ToString("yyyy.MM.dd")}&receivertype=3&groupOid={G.groupOid}";
                     try
                     {
-                        foreach (var p in await Lesson.GetTimetable(uri))
+                        foreach (var p in await Lesson.GetTimetable(URI.ToString()))
                             StaticData.Lessons.Add(p);
                     }
                     catch (Exception ex)
