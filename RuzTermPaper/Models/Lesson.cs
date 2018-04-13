@@ -7,8 +7,8 @@ namespace RuzTermPaper.Models
 {
     public class Lesson
     {
-        public static readonly string baseUri = @"http://ruz.hse.ru/RUZService.svc/";
-        private static string requestUri;
+        public static readonly Uri baseUri = new Uri("http://ruz.hse.ru/RUZService.svc/");
+        private static Uri requestUri;
 
         #region Public Fields
         public string Auditorium { get; set; }
@@ -45,7 +45,7 @@ namespace RuzTermPaper.Models
         /// <returns></returns>
         public async static Task<IList<Lecturer>> FindLecturerAsync(string findText)
         {
-            requestUri = $"{baseUri}lecturers?findtext={findText}";
+            requestUri = new Uri(baseUri, $"lecturers?findtext={findText}");
             return JsonConvert.DeserializeObject<IList<Lecturer>>(await App.http.GetStringAsync(requestUri));
         }
 
@@ -56,7 +56,7 @@ namespace RuzTermPaper.Models
         /// <returns></returns>
         public async static Task<IList<Group>> FindGroupAsync(string findText)
         {
-            requestUri = $"{baseUri}groups?findtext={findText}";
+            requestUri = new Uri(baseUri, $"groups?findtext={findText}");
             return await Json.ToObjectAsync<IList<Group>>(await App.http.GetStringAsync(requestUri));
         }
 
@@ -67,9 +67,12 @@ namespace RuzTermPaper.Models
         /// <returns></returns>
         public async static Task<IList<Lesson>> GetTimetable(string request) => await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
 
-        public static string ConstructRequest(ReceiverType who, DateTime from, DateTime to, string email, Language lang = Language.Russian)
+        public static Uri ConstructRequest(ReceiverType who, DateTime from, DateTime to, string email, Language lang = Language.Russian)
         {
-            return $"{baseUri}personlessons?fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)who}&email={email}&language={(int)lang}";
+            UriBuilder uriBuilder = new UriBuilder(baseUri);
+            uriBuilder.Path += "personlessons";
+            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)who}&email={email}&language={(int)lang}";
+            return uriBuilder.Uri;
         }
         #endregion
 
