@@ -2,6 +2,7 @@
 {
     public class Group : System.IEquatable<Group>
     {
+        public static int receivertype = 3;
         public int chairOid { get; set; }
         public int course { get; set; }
         public string faculty { get; set; }

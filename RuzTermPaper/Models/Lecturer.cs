@@ -3,6 +3,7 @@
 
     public class Lecturer : System.IEquatable<Lecturer>
     {
+        public static int receivertype = 1;
         public string chair { get; set; }
         public int chairOid { get; set; }
         public string fio { get; set; }

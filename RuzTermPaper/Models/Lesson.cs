@@ -65,7 +65,7 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="request">Ссылка</param>
         /// <returns></returns>
-        public async static Task<IList<Lesson>> GetTimetable(string request) => await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
+        public async static Task<IList<Lesson>> GetTimetable(Uri request) => await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
 
         public static Uri Build(Lecturer L, DateTime from, DateTime to, Language lang = Language.Russian)
         {
@@ -73,7 +73,7 @@ namespace RuzTermPaper.Models
             uriBuilder.Path += "personlessons";
             uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
                 $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype={IdType.lecturerOid}" +
+                $"&receivertype={RuzTermPaper.Lecturer.receivertype}" +
                 $"&{nameof(L.lecturerOid)}={L.lecturerOid}";
 
             return uriBuilder.Uri;
@@ -85,7 +85,7 @@ namespace RuzTermPaper.Models
             uriBuilder.Path += "personlessons";
             uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
                 $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype={(int)IdType.groupOid}" +
+                $"&receivertype={RuzTermPaper.Group.receivertype}" +
                 $"&{nameof(G.groupOid)}={G.groupOid}";
 
             return uriBuilder.Uri;
@@ -93,23 +93,19 @@ namespace RuzTermPaper.Models
 
         public static Uri Build(string email, DateTime from, DateTime to, Language lang = Language.Russian)
         {
-            throw new NotImplementedException();
-        }
-
-        public static Uri ConstructRequest(IdType who, string id, DateTime from, DateTime to, Language lang = Language.Russian)
-        {
             UriBuilder uriBuilder = new UriBuilder(baseUri);
             uriBuilder.Path += "personlessons";
             uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
                 $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype={(int)who}" +
-                $"&{who}={id}";
+                $"&receivertype=0" +
+                $"&{nameof(email)}={email}";
 
             return uriBuilder.Uri;
         }
+
         #endregion
 
         public override string ToString() =>
-            $"{DayOfWeekString} {DateOfNest.ToString("DD.MM.YY")} {BeginLesson}-{EndLesson} {Discipline} ауд. {Auditorium}";
+            $"{DayOfWeekString} {DateOfNest.ToString("dd.MM.yy")} {BeginLesson}-{EndLesson} {Discipline} ауд. {Auditorium}";
     }
 }
