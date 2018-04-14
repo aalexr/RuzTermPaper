@@ -42,7 +42,7 @@ namespace RuzTermPaper.Models
         /// Ищет преподавателя в базе РУЗ по тексту
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
-        /// <returns></returns>
+        /// <returns>Список найденных преподавателей</returns>
         public async static Task<IList<Lecturer>> FindLecturerAsync(string findText)
         {
             requestUri = new Uri(baseUri, $"lecturers?findtext={findText}");
@@ -53,7 +53,7 @@ namespace RuzTermPaper.Models
         /// Ищет группу в базе РУЗ по тексту
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
-        /// <returns></returns>
+        /// <returns>Список найденных групп</returns>
         public async static Task<IList<Group>> FindGroupAsync(string findText)
         {
             requestUri = new Uri(baseUri, $"groups?findtext={findText}");
@@ -64,7 +64,7 @@ namespace RuzTermPaper.Models
         /// Возвращает список занятий по заданному URI
         /// </summary>
         /// <param name="request">Ссылка</param>
-        /// <returns></returns>
+        /// <returns>Список найденных занятий</returns>
         public async static Task<IList<Lesson>> GetTimetable(Uri request) => await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
 
         public static Uri Build(Lecturer L, DateTime from, DateTime to, Language lang = Language.Russian)
