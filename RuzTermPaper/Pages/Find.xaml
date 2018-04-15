@@ -7,17 +7,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="8">     
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <TextBox Name="box" PlaceholderText="Email here" Height="24" Margin="4"/>
-        <Button Content="Load new timetable by email" Grid.Row="1" Margin="4" HorizontalAlignment="Center"/>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Orientation="Horizontal">
+            <TextBox Name="emailBox" PlaceholderText="Email goes here" Height="24" Margin="4" IsSpellCheckEnabled="False"/>
+            <Button Margin="4" HorizontalAlignment="Center">
+                <StackPanel>
+                    <SymbolIcon Symbol="Account"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        
         <ListView Grid.Row="2" HorizontalAlignment="Center">
             <TextBlock HorizontalTextAlignment="Center">
                 <Run Text="Current User" FontWeight="Medium"/>
