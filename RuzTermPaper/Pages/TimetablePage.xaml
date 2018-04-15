@@ -14,16 +14,18 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView Name="timetable">
+        <Grid.Resources>
+            <CollectionViewSource x:Name="timetableCVS" IsSourceGrouped="True"/>
+        </Grid.Resources>
+        
+        <ListView Name="timetable" ItemsSource="{Binding Source={StaticResource timetableCVS}}" SelectionMode="None">
 
+            <!--Стиль заголовка-->
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
-                        <DataTemplate x:DataType="models:Lesson">
-                            <TextBlock>
-                                <Run Text="{x:Bind DayOfWeekString}"/>
-                                <Run Text="{x:Bind DateOfNest, Converter={StaticResource DateConverter}}"/>
-                            </TextBlock>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key, Converter={StaticResource DateConverter}}"/>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
@@ -43,14 +45,11 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock TextAlignment="Left" Margin="4">
-                            <!--<Run Text="{x:Bind DayOfWeekString}"/>-->
-                            <Run Text="{x:Bind DateOfNest, Converter={StaticResource DateConverter}}"/>
-                        </TextBlock>
-
-                        <TextBlock TextAlignment="Left" Grid.Row="1" Margin="4" Text="{x:Bind BeginLesson}"/>
-
-                        <TextBlock TextWrapping="Wrap" Margin="4" Grid.Column="1" Grid.Row="2">
+                        <!--Начало пары-->
+                        <TextBlock TextAlignment="Left" Text="{x:Bind BeginLesson}"/>
+                        
+                        <!--Данные о паре-->
+                        <TextBlock TextWrapping="Wrap" Margin="4" Grid.Column="1" Grid.Row="1">
                                         <Run Text="{x:Bind KindOfWork}" FontWeight="SemiLight"/> 
                                         <LineBreak/>
                                         <Run Text="{x:Bind Discipline}" FontWeight="Medium"/>
@@ -60,8 +59,9 @@
                                         <Run Text="{x:Bind Building}"/>
                                         <Run Text="{x:Bind Auditorium}"/>
                         </TextBlock>
-
-                        <TextBlock Margin="4" Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="3"/>
+                        
+                        <!--Конец пары-->
+                        <TextBlock Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="2"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

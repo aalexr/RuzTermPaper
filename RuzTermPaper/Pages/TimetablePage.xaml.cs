@@ -1,5 +1,6 @@
 ﻿using RuzTermPaper.Models;
 using System;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -42,8 +43,12 @@ namespace RuzTermPaper.Pages
                     try
                     {
                         if (URI != null)
-                            foreach (var p in await Lesson.GetTimetable(URI))
-                                StaticData.Lessons.Add(p);
+                        {
+                            var list = await Lesson.GetTimetable(URI);
+                            timetableCVS.Source = (from L in list group L by L.DateOfNest into LL orderby LL.Key select LL);
+                            //foreach (var p in t.ToList())
+                            //    StaticData.Lessons.Add(p);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -58,7 +63,7 @@ namespace RuzTermPaper.Pages
         public TimetablePage()
         {
             this.InitializeComponent();
-            this.timetable.ItemsSource = StaticData.Lessons;
+            //this.timetable.ItemsSource = StaticData.Lessons;
         }
     }
 }

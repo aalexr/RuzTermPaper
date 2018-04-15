@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace RuzTermPaper.Models
 {
     public class Lesson
+
     {
         public static readonly Uri baseUri = new Uri("http://ruz.hse.ru/RUZService.svc/");
         private static Uri requestUri;
@@ -16,7 +17,7 @@ namespace RuzTermPaper.Models
         public string BeginLesson { get; set; }
         public string Building { get; set; }
         public string Date { get; set; }
-        public System.DateTime DateOfNest { get; set; }
+        public DateTime DateOfNest { get; set; }
         public int DayOfWeek { get; set; }
         public string DayOfWeekString { get; set; }
         public string DetailInfo { get; set; }
