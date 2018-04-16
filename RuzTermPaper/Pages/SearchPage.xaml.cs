@@ -47,10 +47,10 @@ namespace RuzTermPaper.Pages
 
                 switch (sender.Tag)
                 {
-                    case "Lecturer":
-                        sender.ItemsSource = await Lesson.FindLecturerAsync(sender.Text);
+                    case "lecturers":
+                        sender.ItemsSource = await Lesson.FindAsync<Lecturer>(sender.Text, sender.Tag.ToString().ToLower());
                         break;
-                    case "Group":
+                    case "groups":
                         sender.ItemsSource = await Lesson.FindGroupAsync(sender.Text);
                         break;
                 }

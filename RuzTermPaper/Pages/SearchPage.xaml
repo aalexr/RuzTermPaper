@@ -45,7 +45,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <AutoSuggestBox Tag="Group"
+                    <AutoSuggestBox Tag="groups"
                                     TextChanged="AutoSuggestBox_TextChangedAsync"
                                     PlaceholderText="Найдите группу" SuggestionChosen="AutoSuggestBox_SuggestionChosen"/>
                     <TextBlock Text="Недавние поиски"
@@ -69,7 +69,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <AutoSuggestBox PlaceholderText="Найдите преподавателя"
-                                    Tag="Lecturer"
+                                    Tag="lecturers"
                                     TextChanged="AutoSuggestBox_TextChangedAsync"
                                     SuggestionChosen="AutoSuggestBox_SuggestionChosen"/>
                     <TextBlock Text="Недавние поиски"

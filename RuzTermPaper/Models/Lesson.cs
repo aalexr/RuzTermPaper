@@ -40,6 +40,19 @@ namespace RuzTermPaper.Models
         #region Static Methods
 
         /// <summary>
+        /// Ищет в базе РУЗ по тексту
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="findText"></param>
+        /// <param name="type"></param>
+        /// <returns>Список найденных</returns>
+        public async static Task<IList<T>> FindAsync<T>(string findText, string type)
+        {
+            requestUri = new Uri(baseUri, $"{type}?findtext={findText}");
+            return JsonConvert.DeserializeObject<IList<T>>(await App.http.GetStringAsync(requestUri));
+        }
+
+        /// <summary>
         /// Ищет преподавателя в базе РУЗ по тексту
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
