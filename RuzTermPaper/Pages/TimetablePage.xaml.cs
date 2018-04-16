@@ -41,8 +41,10 @@ namespace RuzTermPaper.Pages
                     {
                         if (URI != null)
                         {
-                            var list = await Lesson.GetTimetable(URI);
-                            timetableCVS.Source = (from L in list group L by L.DateOfNest into LL orderby LL.Key select LL);
+                            timetableCVS.Source = (from L in await Lesson.GetTimetable(URI)
+                                                   group L by L.DateOfNest
+                                                   into LL orderby LL.Key
+                                                   select LL);
                         }
                     }
                     catch (Exception ex)
