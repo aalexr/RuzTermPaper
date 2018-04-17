@@ -40,24 +40,11 @@ namespace RuzTermPaper.Models
         #region Static Methods
 
         /// <summary>
-        /// Ищет в базе РУЗ по тексту
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="findText"></param>
-        /// <param name="type"></param>
-        /// <returns>Список найденных</returns>
-        public async static Task<IList<T>> FindAsync<T>(string findText, string type)
-        {
-            requestUri = new Uri(baseUri, $"{type}?findtext={findText}");
-            return JsonConvert.DeserializeObject<IList<T>>(await App.http.GetStringAsync(requestUri));
-        }
-
-        /// <summary>
         /// Ищет преподавателя в базе РУЗ по тексту
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
         /// <returns>Список найденных преподавателей</returns>
-        public async static Task<IList<Lecturer>> FindLecturerAsync(string findText)
+        public static async Task<IList<Lecturer>> FindLecturerAsync(string findText)
         {
             requestUri = new Uri(baseUri, $"lecturers?findtext={findText}");
             return JsonConvert.DeserializeObject<IList<Lecturer>>(await App.http.GetStringAsync(requestUri));
@@ -68,7 +55,7 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
         /// <returns>Список найденных групп</returns>
-        public async static Task<IList<Group>> FindGroupAsync(string findText)
+        public static async Task<IList<Group>> FindGroupAsync(string findText)
         {
             requestUri = new Uri(baseUri, $"groups?findtext={findText}");
             return await Json.ToObjectAsync<IList<Group>>(await App.http.GetStringAsync(requestUri));
@@ -79,44 +66,56 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="request">Ссылка</param>
         /// <returns>Список найденных занятий</returns>
-        public async static Task<IList<Lesson>> GetTimetable(Uri request) => await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
-
-        public static Uri Build(Lecturer L, DateTime from, DateTime to, Language lang = Language.Russian)
+        public static async Task<IList<Lesson>> GetTimetable(Uri request)
         {
-            UriBuilder uriBuilder = new UriBuilder(baseUri);
-            uriBuilder.Path += "personlessons";
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
-                $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype={RuzTermPaper.Lecturer.receivertype}" +
-                $"&{nameof(L.lecturerOid)}={L.lecturerOid}";
-
-            return uriBuilder.Uri;
+            return await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
         }
 
-        public static Uri Build(Group G, DateTime from, DateTime to, Language lang = Language.Russian)
+        /// <summary>
+        /// Создает URI-запрос
+        /// </summary>
+        /// <param name="o">Для кого</param>
+        /// <param name="from">Откуда</param>
+        /// <param name="to">Куда</param>
+        /// <param name="lang">Язык</param>
+        /// <returns></returns>
+        public static Uri BuildUri(object o, DateTime from, DateTime to, Language lang = Language.Russian)
         {
             UriBuilder uriBuilder = new UriBuilder(baseUri);
             uriBuilder.Path += "personlessons";
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
+
+            switch (o)
+            {
+                case Group G:
+                    uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
                 $"&todate={to.ToString("yyyy.MM.dd")}" +
                 $"&receivertype={RuzTermPaper.Group.receivertype}" +
-                $"&{nameof(G.groupOid)}={G.groupOid}";
+                $"&groupOid={G.groupOid}";
+                    break;
 
-            return uriBuilder.Uri;
-        }
+                case Lecturer L:
+                    uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
+                $"&todate={to.ToString("yyyy.MM.dd")}" +
+                $"&receivertype={RuzTermPaper.Lecturer.receivertype}" +
+                $"&lecturerOid={L.lecturerOid}";
+                    break;
 
-        public static Uri Build(string email, DateTime from, DateTime to, Language lang = Language.Russian)
-        {
-            UriBuilder uriBuilder = new UriBuilder(baseUri);
-            uriBuilder.Path += "personlessons";
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
+                case string email:
+                    if (string.IsNullOrEmpty(email))
+                        goto default;
+
+                    uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
                 $"&todate={to.ToString("yyyy.MM.dd")}" +
                 $"&receivertype=0" +
-                $"&{nameof(email)}={email}";
+                $"&email=" + email;
+                    break;
+
+                default:
+                    throw new ArgumentException();
+            }
 
             return uriBuilder.Uri;
         }
-
         #endregion
 
         public override string ToString() =>

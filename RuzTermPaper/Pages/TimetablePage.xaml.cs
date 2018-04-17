@@ -15,45 +15,15 @@ namespace RuzTermPaper.Pages
     {
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Uri URI = null;
-            DateTime today = DateTime.Today;
-
-            switch (e.Parameter)
+            if (e.Parameter as string != string.Empty)
             {
-                case Group G:
-                    URI = Lesson.Build(G, today, today.AddDays(7));
-                    goto default;
-
-                case Lecturer L:
-                    URI = Lesson.Build(L, today, today.AddDays(7));
-                    goto default;
-
-                case string S:
-                    if (string.IsNullOrEmpty(S))
-                        break;
-
-                    URI = Lesson.Build(S, today, today.AddDays(7));
-
-                    goto default;
-
-                default:
-                    try
-                    {
-                        if (URI != null)
-                        {
-                            timetableCVS.Source = (from L in await Lesson.GetTimetable(URI)
-                                                   group L by L.DateOfNest
-                                                   into LL orderby LL.Key
-                                                   select LL);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine(ex.Message);
-                    }
-                    break;
+                DateTime today = DateTime.Today;
+                Uri URI = Lesson.BuildUri(e.Parameter, today, today.AddDays(7));
+                timetableCVS.Source = (from L in await Lesson.GetTimetable(URI)
+                                       group L by L.DateOfNest into LL
+                                       orderby LL.Key
+                                       select LL);
             }
-
             base.OnNavigatedTo(e);
         }
 

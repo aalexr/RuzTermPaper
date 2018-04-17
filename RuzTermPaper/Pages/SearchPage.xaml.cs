@@ -48,7 +48,7 @@ namespace RuzTermPaper.Pages
                 switch (sender.Tag)
                 {
                     case "lecturers":
-                        sender.ItemsSource = await Lesson.FindAsync<Lecturer>(sender.Text, sender.Tag.ToString().ToLower());
+                        sender.ItemsSource = await Lesson.FindLecturerAsync(sender.Text);
                         break;
                     case "groups":
                         sender.ItemsSource = await Lesson.FindGroupAsync(sender.Text);
