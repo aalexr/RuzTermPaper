@@ -17,7 +17,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <StackPanel Orientation="Horizontal">
             <TextBox Name="emailBox" PlaceholderText="Email goes here" Height="24" Margin="4" IsSpellCheckEnabled="False"/>
             <Button Margin="4" HorizontalAlignment="Center">
@@ -26,7 +26,7 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-        
+
         <ListView Grid.Row="2" HorizontalAlignment="Center">
             <TextBlock HorizontalTextAlignment="Center">
                 <Run Text="Current User" FontWeight="Medium"/>
@@ -44,3 +44,4 @@
 
     </Grid>
 </Page>
+    

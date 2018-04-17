@@ -58,26 +58,7 @@ namespace RuzTermPaper.Pages
 
         }
 
-        private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
-        {
-            switch (args.SelectedItem)
-            {
-                case string email:
-                    break;
-
-                case Group G:
-                    if (!StaticData.Groups.Contains(G))
-                        StaticData.Groups.Add(G);
-                    (Window.Current.Content as Frame).Navigate(typeof(MainPage), G);
-                    break;
-
-                case Lecturer L:
-                    if (!StaticData.Lecturers.Contains(L))
-                        StaticData.Lecturers.Add(L);
-                    (Window.Current.Content as Frame).Navigate(typeof(MainPage), L);
-                    break;
-            }
-        }
+        private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) => sender.Text = args.SelectedItem.ToString();
 
         private void TextBox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
@@ -90,6 +71,27 @@ namespace RuzTermPaper.Pages
                     StaticData.StudentEmails.Add(text.Text);
 
                 (Window.Current.Content as Frame).Navigate(typeof(MainPage), text.Text);
+            }
+        }
+
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            switch (args.ChosenSuggestion)
+            {
+                case Group G:
+                    if (!StaticData.Groups.Contains(G))
+                        StaticData.Groups.Add(G);
+                    (Window.Current.Content as Frame).Navigate(typeof(MainPage), G);
+                    break;
+
+                case Lecturer L:
+                    if (!StaticData.Lecturers.Contains(L))
+                        StaticData.Lecturers.Add(L);
+                    (Window.Current.Content as Frame).Navigate(typeof(MainPage), L);
+                    break;
+
+                case null:
+                    break;
             }
         }
     }
