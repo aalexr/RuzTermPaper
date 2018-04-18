@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RuzTermPaper
+namespace RuzTermPaper.Models
 {
 
     public class Lecturer : System.IEquatable<Lecturer>

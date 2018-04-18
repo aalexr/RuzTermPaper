@@ -65,14 +65,14 @@ namespace RuzTermPaper.Models
                 case Group G:
                     uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
                 $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype={RuzTermPaper.Group.receivertype}" +
+                $"&receivertype={Models.Group.receivertype}" +
                 $"&groupOid={G.groupOid}";
                     break;
 
                 case Lecturer L:
                     uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
                 $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype={RuzTermPaper.Lecturer.receivertype}" +
+                $"&receivertype={Models.Lecturer.receivertype}" +
                 $"&lecturerOid={L.lecturerOid}";
                     break;
 

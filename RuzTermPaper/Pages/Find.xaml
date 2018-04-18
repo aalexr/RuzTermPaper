@@ -18,6 +18,17 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <ContentDialog x:Name="Dialog" Title="Поиск" PrimaryButtonText="OK">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Тут будет какое-то гавно"/>
+                <AutoSuggestBox x:Name="search"
+                                TextChanged="search_TextChanged"
+                                SuggestionChosen="Search_SuggestionChosen"
+                                QuerySubmitted="search_QuerySubmitted"
+                                QueryIcon="Find"/>
+            </StackPanel>
+        </ContentDialog>
+        
         <StackPanel Orientation="Horizontal">
             <TextBox Name="emailBox" PlaceholderText="Email goes here" Height="24" Margin="4" IsSpellCheckEnabled="False"/>
             <Button Margin="4" HorizontalAlignment="Center">
@@ -27,9 +38,9 @@
             </Button>
         </StackPanel>
 
-        <ListView Grid.Row="2" HorizontalAlignment="Center">
+        <ListView Grid.Row="2" HorizontalAlignment="Center" SelectionMode="None">
             <TextBlock HorizontalTextAlignment="Center">
-                <Run Text="Current User" FontWeight="Medium"/>
+                <Run Text="Текущий пользователь" FontWeight="Medium"/>
                 <LineBreak/>
                 <Run Text="1"/>
             </TextBlock >
@@ -38,8 +49,8 @@
         </ListView>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Add lecturer" Margin="4"/>
-            <Button Content="Add group" Margin="4"/>
+            <Button Content="Добавить преподавателя" Margin="4" Click="Button_Click"/>
+            <Button Content="Добавить группу" Margin="4" Click="Button_Click"/>
         </StackPanel>
 
     </Grid>
