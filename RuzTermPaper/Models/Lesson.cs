@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 namespace RuzTermPaper.Models
 {
     public class Lesson
-
     {
         public static readonly Uri baseUri = new Uri("http://ruz.hse.ru/RUZService.svc/");
-        private static Uri requestUri;
 
         #region Public Fields
         public string Auditorium { get; set; }
@@ -40,35 +38,13 @@ namespace RuzTermPaper.Models
         #region Static Methods
 
         /// <summary>
-        /// Ищет преподавателя в базе РУЗ по тексту
-        /// </summary>
-        /// <param name="findText">Текст для поиска</param>
-        /// <returns>Список найденных преподавателей</returns>
-        public static async Task<IList<Lecturer>> FindLecturerAsync(string findText)
-        {
-            requestUri = new Uri(baseUri, $"lecturers?findtext={findText}");
-            return JsonConvert.DeserializeObject<IList<Lecturer>>(await App.http.GetStringAsync(requestUri));
-        }
-
-        /// <summary>
-        /// Ищет группу в базе РУЗ по тексту
-        /// </summary>
-        /// <param name="findText">Текст для поиска</param>
-        /// <returns>Список найденных групп</returns>
-        public static async Task<IList<Group>> FindGroupAsync(string findText)
-        {
-            requestUri = new Uri(baseUri, $"groups?findtext={findText}");
-            return await Json.ToObjectAsync<IList<Group>>(await App.http.GetStringAsync(requestUri));
-        }
-
-        /// <summary>
         /// Возвращает список занятий по заданному URI
         /// </summary>
         /// <param name="request">Ссылка</param>
         /// <returns>Список найденных занятий</returns>
-        public static async Task<IList<Lesson>> GetTimetable(Uri request)
+        public static async Task<List<Lesson>> GetLessons(Uri request)
         {
-            return await Json.ToObjectAsync<IList<Lesson>>(await App.http.GetStringAsync(request));
+            return await Json.ToObjectAsync<List<Lesson>>(await App.http.GetStringAsync(request));
         }
 
         /// <summary>
@@ -101,8 +77,8 @@ namespace RuzTermPaper.Models
                     break;
 
                 case string email:
-                    if (string.IsNullOrEmpty(email))
-                        goto default;
+                    //if (string.IsNullOrEmpty(email))
+                    //    goto default;
 
                     uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
                 $"&todate={to.ToString("yyyy.MM.dd")}" +

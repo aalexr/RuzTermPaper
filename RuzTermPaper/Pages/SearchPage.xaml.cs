@@ -1,5 +1,6 @@
 ﻿using RuzTermPaper.Models;
 using System.Collections.Generic;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -15,7 +16,8 @@ namespace RuzTermPaper.Pages
     {
         private MainPage page;
         private List<string> EmailSg { get; set; } = new List<string>();
-
+        private List<Group> groups;
+        private List<Lecturer> lecturers;
         public SearchPage()
         {
             this.InitializeComponent();
@@ -24,9 +26,11 @@ namespace RuzTermPaper.Pages
             studentListView.ItemsSource = StaticData.StudentEmails;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             page = e.Parameter as MainPage;
+            groups = await Group.FindGroupAsync();
+            lecturers = await Lecturer.FindLecturerAsync();
             base.OnNavigatedTo(e);
         }
 
@@ -35,7 +39,7 @@ namespace RuzTermPaper.Pages
             base.OnNavigatedFrom(e);
         }
 
-        private async void AutoSuggestBox_TextChangedAsync(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
@@ -48,10 +52,10 @@ namespace RuzTermPaper.Pages
                 switch (sender.Tag)
                 {
                     case "lecturers":
-                        sender.ItemsSource = await Lesson.FindLecturerAsync(sender.Text);
+                        sender.ItemsSource = lecturers?.Where(x => x.fio.Contains(sender.Text,  System.StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
                     case "groups":
-                        sender.ItemsSource = await Lesson.FindGroupAsync(sender.Text);
+                        sender.ItemsSource = groups?.Where(x => x.number.Contains(sender.Text, System.StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
                 }
             }

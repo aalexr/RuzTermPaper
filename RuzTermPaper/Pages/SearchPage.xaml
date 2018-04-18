@@ -46,7 +46,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <AutoSuggestBox Tag="groups"
-                                    TextChanged="AutoSuggestBox_TextChangedAsync"
+                                    TextChanged="AutoSuggestBox_TextChanged"
                                     PlaceholderText="Найдите группу"
                                     SuggestionChosen="AutoSuggestBox_SuggestionChosen"
                                 QuerySubmitted="AutoSuggestBox_QuerySubmitted"/>
@@ -72,7 +72,7 @@
                     </Grid.RowDefinitions>
                     <AutoSuggestBox PlaceholderText="Найдите преподавателя"
                                     Tag="lecturers"
-                                    TextChanged="AutoSuggestBox_TextChangedAsync"
+                                    TextChanged="AutoSuggestBox_TextChanged"
                                     SuggestionChosen="AutoSuggestBox_SuggestionChosen"
                                     QuerySubmitted="AutoSuggestBox_QuerySubmitted"/>
                     <TextBlock Text="Недавние поиски"
