@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 namespace RuzTermPaper.Models
 {
 
-    public class Lecturer : System.IEquatable<Lecturer>
+    public class Lecturer : IEquatable<Lecturer>, IReceiver
     {
-        public static int receivertype = 1;
+        private const ReceiverType receivertype = ReceiverType.lecturerOid;
         public string chair { get; set; }
         public int chairOid { get; set; }
         public string fio { get; set; }
         public int lecturerOid { get; set; }
         public string shortFIO { get; set; }
+
+        [JsonIgnore]
+        public ReceiverType type => receivertype;
+        [JsonIgnore]
+        public object Id { get => lecturerOid; set => lecturerOid = (int)value; }
 
         public bool Equals(Lecturer other) => lecturerOid == other.lecturerOid;
 

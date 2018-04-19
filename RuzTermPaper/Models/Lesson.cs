@@ -50,45 +50,17 @@ namespace RuzTermPaper.Models
         /// <summary>
         /// Создает URI-запрос
         /// </summary>
-        /// <param name="o">Для кого</param>
+        /// <param name="t">Для кого</param>
         /// <param name="from">Откуда</param>
         /// <param name="to">Куда</param>
         /// <param name="lang">Язык</param>
         /// <returns></returns>
-        public static Uri BuildUri(object o, DateTime from, DateTime to, Language lang = Language.Russian)
+        public static Uri BuildUri<T>(T t, DateTime from, DateTime to, Language lang = Language.Russian) where T : IReceiver
         {
             UriBuilder uriBuilder = new UriBuilder(baseUri);
             uriBuilder.Path += "personlessons";
 
-            switch (o)
-            {
-                case Group G:
-                    uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
-                $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype={Models.Group.receivertype}" +
-                $"&groupOid={G.groupOid}";
-                    break;
-
-                case Lecturer L:
-                    uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
-                $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype={Models.Lecturer.receivertype}" +
-                $"&lecturerOid={L.lecturerOid}";
-                    break;
-
-                case string email:
-                    //if (string.IsNullOrEmpty(email))
-                    //    goto default;
-
-                    uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}" +
-                $"&todate={to.ToString("yyyy.MM.dd")}" +
-                $"&receivertype=0" +
-                $"&email=" + email;
-                    break;
-
-                default:
-                    throw new ArgumentException();
-            }
+            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)t.type}&{t.type}={t.Id}";
 
             return uriBuilder.Uri;
         }

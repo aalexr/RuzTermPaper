@@ -50,10 +50,10 @@ namespace RuzTermPaper.Pages
                 switch (sender.Tag)
                 {
                     case "lecturers":
-                        sender.ItemsSource = lecturers?.Where(x => x.fio.Contains(sender.Text, System.StringComparison.OrdinalIgnoreCase)).ToList();
+                        sender.ItemsSource = lecturers?.Where(x => x.fio.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
                     case "groups":
-                        sender.ItemsSource = groups?.Where(x => x.number.Contains(sender.Text, System.StringComparison.OrdinalIgnoreCase)).ToList();
+                        sender.ItemsSource = groups?.Where(x => x.number.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
                 }
             }

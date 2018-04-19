@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="8">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="8" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -28,32 +28,27 @@
                                 QueryIcon="Find"/>
             </StackPanel>
         </ContentDialog>
-        
-        <StackPanel Orientation="Horizontal">
-            <TextBox Name="emailBox" PlaceholderText="Email goes here" Height="24" Margin="4" IsSpellCheckEnabled="False"/>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="sp">
+            <TextBox Name="emailBox"
+                     Header="Your email"
+                     PlaceholderText="example@edu.hse.ru"
+                     Margin="4"
+                     IsSpellCheckEnabled="False"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center"/>
             <Button Margin="4" HorizontalAlignment="Center">
-                <StackPanel>
-                    <SymbolIcon Symbol="Account"/>
-                </StackPanel>
+                <SymbolIcon Symbol="Account" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Button>
         </StackPanel>
 
-        <ListView Grid.Row="2" HorizontalAlignment="Center" SelectionMode="None">
-            <TextBlock HorizontalTextAlignment="Center">
-                <Run Text="Текущий пользователь" FontWeight="Medium"/>
-                <LineBreak/>
-                <Run Text="1"/>
-            </TextBlock >
-            <TextBlock Text="2" HorizontalTextAlignment="Center"/>
-            <TextBlock Text="3" HorizontalTextAlignment="Center"/>
-        </ListView>
-
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Добавить преподавателя" Margin="4" Click="Button_Click"/>
-            <Button Content="Добавить группу" Margin="4" Click="Button_Click"/>
+        <StackPanel Grid.Row="3" Orientation="Vertical" HorizontalAlignment="Center">
+            <HyperlinkButton Content="Добавить преподавателя" Margin="4" Click="Button_Click"/>
+            <HyperlinkButton Content="Добавить группу" Margin="4" Click="Button_Click"/>
+            <RadioButton Content="Ght" IsChecked="True"/>
         </StackPanel>
 
     </Grid>
-    
+
 </Page>
     

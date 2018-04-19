@@ -1,13 +1,15 @@
 ﻿using RuzTermPaper.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RuzTermPaper.Models
 {
-    public class Group : System.IEquatable<Group>
+
+    public class Group : IEquatable<Group>, IReceiver
     {
-        public static int receivertype = 3;
+        private const ReceiverType receivertype = ReceiverType.groupOid;
         public int chairOid { get; set; }
         public int course { get; set; }
         public string faculty { get; set; }
@@ -16,6 +18,11 @@ namespace RuzTermPaper.Models
         public int groupOid { get; set; }
         public string number { get; set; }
         public string speciality { get; set; }
+
+        [JsonIgnore]
+        public ReceiverType type => receivertype;
+        [JsonIgnore]
+        public object Id { get => groupOid; set => groupOid = (int)value; }
 
         public bool Equals(Group other) => groupOid == other.groupOid;
 

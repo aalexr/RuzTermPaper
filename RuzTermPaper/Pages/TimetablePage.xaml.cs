@@ -13,19 +13,19 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class TimetablePage : Page
     {
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (!string.IsNullOrEmpty(e.Parameter as string))
-            {
-                DateTime today = DateTime.Today;
-                Uri URI = Lesson.BuildUri(e.Parameter, today, today.AddDays(7));
-                //timetableCVS.Source = (from L in await Lesson.GetTimetable(URI)
-                //                       group L by L.DateOfNest into LL
-                //                       orderby LL.Key
-                //                       select LL);
+            //if (!string.IsNullOrEmpty(e.Parameter as string))
+            //{
+            //    DateTime today = DateTime.Today;
+            //    Uri URI = Lesson.BuildUri(e.Parameter, today, today.AddDays(7));
+            //    //timetableCVS.Source = (from L in await Lesson.GetTimetable(URI)
+            //    //                       group L by L.DateOfNest into LL
+            //    //                       orderby LL.Key
+            //    //                       select LL);
 
-                timetableCVS.Source = (await Lesson.GetLessons(URI)).GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
-            }
+            //    timetableCVS.Source = (await Lesson.GetLessons(URI)).GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+            
             base.OnNavigatedTo(e);
         }
 
