@@ -56,29 +56,19 @@ namespace RuzTermPaper.Pages
 
         private async void search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            addDialog.Hide();
-            DateTime today = DateTime.Today;
-            Uri URI = null;
-
-            switch (args.ChosenSuggestion)
+            if (args.ChosenSuggestion is Receiver receiver)
             {
-                case Group group:
-                    if (!StaticData.Recent.Contains(group))
-                        StaticData.Recent.Add(group);
+                addDialog.Hide();
+                DateTime today = DateTime.Today;
 
-                    URI = group.BuildUri(today, today.AddDays(7));
-                    break;
+                if (!StaticData.Recent.Contains(receiver))
+                    StaticData.Recent.Add(receiver);
 
-                case Lecturer lecturer:
-                    if (!StaticData.Recent.Contains(lecturer))
-                        StaticData.Recent.Add(lecturer);
+                Uri URI = receiver.BuildUri(today, today.AddDays(7));
 
-                    URI = lecturer.BuildUri(today, today.AddDays(7));
-                    break;
+                StaticData.Lessons = (await Lesson.GetLessons(URI)).GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+                contentFrame.Navigate(typeof(TimetablePage));
             }
-
-            StaticData.Lessons = (await Lesson.GetLessons(URI)).GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
-            contentFrame.Navigate(typeof(TimetablePage));
         }
 
         private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
