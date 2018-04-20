@@ -71,15 +71,9 @@ namespace RuzTermPaper.Pages
             }
         }
 
-        private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
-        {
-            sender.Text = args.SelectedItem.ToString();
-        }
+        private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) => sender.Text = args.SelectedItem.ToString();
 
-        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
-        {
-            await addDialog.ShowAsync();
-        }
+        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e) => await addDialog.ShowAsync();
 
         private void RB_Checked(object sender, RoutedEventArgs e) => search.Text = string.Empty;
 
