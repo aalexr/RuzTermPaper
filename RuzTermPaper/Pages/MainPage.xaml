@@ -16,8 +16,7 @@
             
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Текущее расписание" Icon="Calendar" Tag="timetable"/>
-                <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="search"/>
-                <NavigationViewItem Content="Find" Icon="Find" Tag="NewFind"/>
+                <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="Find"/>
             </NavigationView.MenuItems>
 
             <Frame x:Name="contentFrame">

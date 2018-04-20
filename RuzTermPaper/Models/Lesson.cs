@@ -55,12 +55,12 @@ namespace RuzTermPaper.Models
         /// <param name="to">Куда</param>
         /// <param name="lang">Язык</param>
         /// <returns></returns>
-        public static Uri BuildUri<T>(T t, DateTime from, DateTime to, Language lang = Language.Russian) where T : IReceiver
+        public static Uri BuildUri<T>(T t, DateTime from, DateTime to, Language lang = Language.Russian) where T : Receiver
         {
             UriBuilder uriBuilder = new UriBuilder(baseUri);
             uriBuilder.Path += "personlessons";
 
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)t.type}&{t.type}={t.Id}";
+            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)t.RType}&{t.RType}={t.Id}";
 
             return uriBuilder.Uri;
         }

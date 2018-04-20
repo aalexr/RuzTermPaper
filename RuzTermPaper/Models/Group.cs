@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RuzTermPaper.Models
 {
 
-    public class Group : IEquatable<Group>, IReceiver
+    public class Group : Receiver, IEquatable<Group>
     {
         private const ReceiverType receivertype = ReceiverType.groupOid;
         public int chairOid { get; set; }
@@ -20,9 +20,9 @@ namespace RuzTermPaper.Models
         public string speciality { get; set; }
 
         [JsonIgnore]
-        public ReceiverType type => receivertype;
-        [JsonIgnore]
-        public object Id { get => groupOid; set => groupOid = (int)value; }
+        public override ReceiverType RType => receivertype;
+
+        public override object Id { get => groupOid; set => groupOid = (int)value; }
 
         public bool Equals(Group other) => groupOid == other.groupOid;
 

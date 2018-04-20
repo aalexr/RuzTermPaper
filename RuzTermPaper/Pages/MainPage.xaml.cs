@@ -37,10 +37,7 @@ namespace RuzTermPaper
                     case "timetable":
                         contentFrame.Navigate(typeof(Pages.TimetablePage), this);
                         break;
-                    case "search":
-                        contentFrame.Navigate(typeof(Pages.SearchPage), this);
-                        break;
-                    case "NewFind":
+                    case "Find":
                         contentFrame.Navigate(typeof(Pages.Find), this);
                         break;
                 }

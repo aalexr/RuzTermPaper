@@ -1,6 +1,7 @@
 ﻿using RuzTermPaper.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +18,7 @@ namespace RuzTermPaper.Pages
     {
         private List<Group> groups;
         private List<Lecturer> lecturers;
+        private ObservableCollection<Receiver> Recent { get; set; } = new ObservableCollection<Receiver>();
 
         public Find()
         {
@@ -30,12 +32,6 @@ namespace RuzTermPaper.Pages
             base.OnNavigatedTo(e);
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            search.PlaceholderText = "Поиск";
-            await Dialog.ShowAsync();
-        }
 
         private void search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
@@ -47,14 +43,16 @@ namespace RuzTermPaper.Pages
                     return;
                 }
 
-                switch (sender.Tag)
+                if (LecturerRB.IsChecked == true)
                 {
-                    case "lecturers":
-                        sender.ItemsSource = lecturers?.Where(x => x.fio.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
-                        break;
-                    case "groups":
+                    sender.ItemsSource = lecturers?.Where(x => x.fio.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+                else
+                {
+                    if (GroupRB.IsChecked == true)
+                    {
                         sender.ItemsSource = groups?.Where(x => x.number.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
-                        break;
+                    }
                 }
             }
         }
@@ -64,15 +62,15 @@ namespace RuzTermPaper.Pages
             switch (args.ChosenSuggestion)
             {
                 case Group G:
-                    if (!StaticData.Groups.Contains(G))
-                        StaticData.Groups.Add(G);
-                    (Window.Current.Content as Frame).Navigate(typeof(MainPage), G);
+                    if (!Recent.Contains(G))
+                        Recent.Add(G);
+                    //(Window.Current.Content as Frame).Navigate(typeof(MainPage), G);
                     break;
 
                 case Lecturer L:
-                    if (!StaticData.Lecturers.Contains(L))
-                        StaticData.Lecturers.Add(L);
-                    (Window.Current.Content as Frame).Navigate(typeof(MainPage), L);
+                    if (!Recent.Contains(L))
+                        Recent.Add(L);
+                    //(Window.Current.Content as Frame).Navigate(typeof(MainPage), L);
                     break;
 
                 case null:
@@ -84,5 +82,9 @@ namespace RuzTermPaper.Pages
         {
             sender.Text = args.SelectedItem.ToString();
         }
+
+        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e) => await addDialog.ShowAsync();
+
+        private void RB_Checked(object sender, RoutedEventArgs e) => search.Text = string.Empty;
     }
 }

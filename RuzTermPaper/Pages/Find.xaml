@@ -3,51 +3,66 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RuzTermPaper.Pages"
+    xmlns:models="using:RuzTermPaper.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="8" HorizontalAlignment="Center">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="4">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <ContentDialog x:Name="Dialog" Title="Поиск" PrimaryButtonText="OK">
+        <!--Место для почты-->
+        <TextBox Header="Почта"
+                 PlaceholderText="example@edu.hse.ru"
+                 IsSpellCheckEnabled="False"
+                 Margin="8,0,8,0"/>
+
+        <!--Кнопка поиска расписания-->
+        <HyperlinkButton Click="HyperlinkButton_Click"
+                         Grid.Row="1"
+                         HorizontalAlignment="Right"
+                         Margin="0,0,8,0">
+            <HyperlinkButton.Content>
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Margin="0,0,8,0" Symbol="Add"/>
+                    <TextBlock Text="Или добавьте расписание преподавателя или группы"/>
+                </StackPanel>
+            </HyperlinkButton.Content>
+        </HyperlinkButton>
+
+        <!--Недавние-->
+        <ListView x:Name="recentListView" Header="Недавние поиски" Grid.Row="2" HorizontalAlignment="Center" SelectionMode="None" ItemsSource="{x:Bind Recent}">
+            <TextBlock Text="Тут будут последние поиски" FontWeight="Medium"/>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Receiver">
+                    <TextBlock Text="{x:Bind Id}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ContentDialog x:Name="addDialog" CloseButtonText="Отмена">
+            <ContentDialog.Title>
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Add" Margin="0,0,8,0"/>
+                    <TextBlock Text="Добавить расписание"/>
+                </StackPanel>
+            </ContentDialog.Title>
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Тут будет какое-то гавно"/>
                 <AutoSuggestBox x:Name="search"
+                                PlaceholderText="Поиск"
                                 TextChanged="search_TextChanged"
-                                SuggestionChosen="Search_SuggestionChosen"
                                 QuerySubmitted="search_QuerySubmitted"
                                 QueryIcon="Find"/>
+                <TextBlock Text="Тип расписания" Margin="0,8,0,0" FontWeight="Medium"/>
+                <RadioButton x:Name="LecturerRB" GroupName="Type" Content="Преподаватель" IsChecked="True" Checked="RB_Checked"/>
+                <RadioButton x:Name="GroupRB" Content="Группа" GroupName="Type" Checked="RB_Checked"/>
             </StackPanel>
         </ContentDialog>
-
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="sp">
-            <TextBox Name="emailBox"
-                     Header="Your email"
-                     PlaceholderText="example@edu.hse.ru"
-                     Margin="4"
-                     IsSpellCheckEnabled="False"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Center"/>
-            <Button Margin="4" HorizontalAlignment="Center">
-                <SymbolIcon Symbol="Account" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            </Button>
-        </StackPanel>
-
-        <StackPanel Grid.Row="3" Orientation="Vertical" HorizontalAlignment="Center">
-            <HyperlinkButton Content="Добавить преподавателя" Margin="4" Click="Button_Click"/>
-            <HyperlinkButton Content="Добавить группу" Margin="4" Click="Button_Click"/>
-            <RadioButton Content="Ght" IsChecked="True"/>
-        </StackPanel>
-
     </Grid>
 
 </Page>
