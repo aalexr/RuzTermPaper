@@ -35,8 +35,6 @@ namespace RuzTermPaper.Models
         public int SubGroupOid { get; set; }
         #endregion
 
-        #region Static Methods
-
         /// <summary>
         /// Возвращает список занятий по заданному URI
         /// </summary>
@@ -46,7 +44,6 @@ namespace RuzTermPaper.Models
         {
             return await Json.ToObjectAsync<List<Lesson>>(await App.http.GetStringAsync(request));
         }
-        #endregion
 
         public override string ToString() =>
             $"{DayOfWeekString} {DateOfNest.ToString("dd.MM.yy")} {BeginLesson}-{EndLesson} {Discipline} ауд. {Auditorium}";
