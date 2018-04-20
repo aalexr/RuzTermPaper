@@ -18,7 +18,7 @@ namespace RuzTermPaper.Models
 
         public override ReceiverType RType => receivertype;
 
-        public override object Id { get => lecturerOid; set => lecturerOid = (int)value; }
+        public override string Id { get => lecturerOid.ToString(); }
 
         public bool Equals(Lecturer other) => lecturerOid == other.lecturerOid;
 
@@ -34,5 +34,15 @@ namespace RuzTermPaper.Models
         }
 
         public override string ToString() => fio;
+
+        public override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
+        {
+            UriBuilder uriBuilder = new UriBuilder(Lesson.baseUri);
+            uriBuilder.Path += "personlessons";
+
+            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)RType}&{RType}={Id}";
+
+            return uriBuilder.Uri;
+        }
     }
 }

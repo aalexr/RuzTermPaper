@@ -5,8 +5,11 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -14,6 +17,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using RuzTermPaper.Models;
 
 namespace RuzTermPaper
 {
@@ -38,7 +42,7 @@ namespace RuzTermPaper
         /// например, если приложение запускается для открытия конкретного файла.
         /// </summary>
         /// <param name="e">Сведения о запросе и обработке запуска.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -71,6 +75,15 @@ namespace RuzTermPaper
                 }
                 // Обеспечение активности текущего окна
                 Window.Current.Activate();
+                CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+
+                var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+                viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
+                viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+                viewTitleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
+
+                StaticData.Groups = await Group.FindGroupAsync();
+                StaticData.Lecturers = await Lecturer.FindLecturerAsync();
             }
         }
 

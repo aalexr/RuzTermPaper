@@ -35,13 +35,21 @@ namespace RuzTermPaper
                 switch (item.Tag)
                 {
                     case "timetable":
-                        contentFrame.Navigate(typeof(Pages.TimetablePage), this);
+                        contentFrame.Navigate(typeof(Pages.TimetablePage));
                         break;
                     case "Find":
-                        contentFrame.Navigate(typeof(Pages.Find), this);
+                        contentFrame.Navigate(typeof(Pages.Find), contentFrame);
                         break;
                 }
             }
+        }
+
+        private void navView_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args)
+        {
+            if (args.DisplayMode == NavigationViewDisplayMode.Expanded)
+                AppTitle.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            else
+                AppTitle.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
     }
 }

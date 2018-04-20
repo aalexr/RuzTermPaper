@@ -7,13 +7,22 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <NavigationView
-            x:Name="navView"
-            Header="Расписание"
-            IsSettingsVisible="True"
-            IsTabStop="False"
-            ItemInvoked="navView_ItemInvoked">
-            
+        <TextBlock x:Name="AppTitle"
+                   xmlns:appmodel="using:Windows.ApplicationModel"
+                   Text="{x:Bind appmodel:Package.Current.DisplayName}"
+                   Style="{StaticResource CaptionTextBlockStyle}"
+                   Margin="12,8"
+                   Canvas.ZIndex="1"
+                   IsHitTestVisible="False"/>
+
+        <NavigationView x:Name="navView"
+                        Canvas.ZIndex="0"
+                        DisplayModeChanged="navView_DisplayModeChanged"
+                        Header="Расписание"
+                        IsSettingsVisible="True"
+                        IsTabStop="False"
+                        ItemInvoked="navView_ItemInvoked">
+
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Текущее расписание" Icon="Calendar" Tag="timetable"/>
                 <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="Find"/>

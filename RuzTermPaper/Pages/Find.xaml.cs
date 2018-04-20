@@ -1,7 +1,6 @@
 ﻿using RuzTermPaper.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,19 +15,17 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class Find : Page
     {
-        private List<Group> groups;
-        private List<Lecturer> lecturers;
-        private ObservableCollection<Receiver> Recent { get; set; } = new ObservableCollection<Receiver>();
+        private Frame contentFrame;
 
         public Find()
         {
             this.InitializeComponent();
+            this.recentListView.ItemsSource = StaticData.Recent;
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            groups = await Group.FindGroupAsync();
-            lecturers = await Lecturer.FindLecturerAsync();
+            this.contentFrame = e.Parameter as Frame;
             base.OnNavigatedTo(e);
         }
 
@@ -45,37 +42,43 @@ namespace RuzTermPaper.Pages
 
                 if (LecturerRB.IsChecked == true)
                 {
-                    sender.ItemsSource = lecturers?.Where(x => x.fio.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                    sender.ItemsSource = StaticData.Lecturers?.Where(x => x.fio.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
                 else
                 {
                     if (GroupRB.IsChecked == true)
                     {
-                        sender.ItemsSource = groups?.Where(x => x.number.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                        sender.ItemsSource = StaticData.Groups?.Where(x => x.number.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
                     }
                 }
             }
         }
 
-        private void search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private async void search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
+            addDialog.Hide();
+            DateTime today = DateTime.Today;
+            Uri URI = null;
+
             switch (args.ChosenSuggestion)
             {
-                case Group G:
-                    if (!Recent.Contains(G))
-                        Recent.Add(G);
-                    //(Window.Current.Content as Frame).Navigate(typeof(MainPage), G);
+                case Group group:
+                    if (!StaticData.Recent.Contains(group))
+                        StaticData.Recent.Add(group);
+
+                    URI = group.BuildUri(today, today.AddDays(7));
                     break;
 
-                case Lecturer L:
-                    if (!Recent.Contains(L))
-                        Recent.Add(L);
-                    //(Window.Current.Content as Frame).Navigate(typeof(MainPage), L);
-                    break;
+                case Lecturer lecturer:
+                    if (!StaticData.Recent.Contains(lecturer))
+                        StaticData.Recent.Add(lecturer);
 
-                case null:
+                    URI = lecturer.BuildUri(today, today.AddDays(7));
                     break;
             }
+
+            StaticData.Lessons = (await Lesson.GetLessons(URI)).GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+            contentFrame.Navigate(typeof(TimetablePage));
         }
 
         private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -83,8 +86,12 @@ namespace RuzTermPaper.Pages
             sender.Text = args.SelectedItem.ToString();
         }
 
-        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e) => await addDialog.ShowAsync();
+        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            await addDialog.ShowAsync();
+        }
 
         private void RB_Checked(object sender, RoutedEventArgs e) => search.Text = string.Empty;
+
     }
 }

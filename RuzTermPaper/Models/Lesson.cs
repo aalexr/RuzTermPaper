@@ -46,24 +46,6 @@ namespace RuzTermPaper.Models
         {
             return await Json.ToObjectAsync<List<Lesson>>(await App.http.GetStringAsync(request));
         }
-
-        /// <summary>
-        /// Создает URI-запрос
-        /// </summary>
-        /// <param name="t">Для кого</param>
-        /// <param name="from">Откуда</param>
-        /// <param name="to">Куда</param>
-        /// <param name="lang">Язык</param>
-        /// <returns></returns>
-        public static Uri BuildUri<T>(T t, DateTime from, DateTime to, Language lang = Language.Russian) where T : Receiver
-        {
-            UriBuilder uriBuilder = new UriBuilder(baseUri);
-            uriBuilder.Path += "personlessons";
-
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)t.RType}&{t.RType}={t.Id}";
-
-            return uriBuilder.Uri;
-        }
         #endregion
 
         public override string ToString() =>

@@ -1,8 +1,12 @@
-﻿namespace RuzTermPaper.Models
+﻿using System;
+
+namespace RuzTermPaper.Models
 {
     public abstract class Receiver
     {
-        abstract public ReceiverType RType { get; }
-        abstract public object Id { get; set; }
+        public abstract ReceiverType RType { get; }
+        public abstract string Id { get; }
+        public abstract Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian);
+
     }
 }

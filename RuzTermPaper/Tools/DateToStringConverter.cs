@@ -1,15 +1,19 @@
-﻿namespace RuzTermPaper.Tools
+﻿using System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+
+namespace RuzTermPaper.Tools
 {
     public class DateToStringConverter : Windows.UI.Xaml.Data.IValueConverter
     {
-        public object Convert(object value, System.Type targetType, object parameter, string language)
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return ((System.DateTime)value).ToString("dddd, d MMMM");
+            return ((DateTime)value).ToString("dddd, d MMMM");
         }
 
-        public object ConvertBack(object value, System.Type targetType, object parameter, string language)
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return System.DateTime.Parse((string)value);
+            return DateTime.Parse((string)value);
         }
     }
 }
