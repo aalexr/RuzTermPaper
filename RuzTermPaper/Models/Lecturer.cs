@@ -16,10 +16,6 @@ namespace RuzTermPaper.Models
         public int lecturerOid { get; set; }
         public string shortFIO { get; set; }
 
-        public override ReceiverType RType => receivertype;
-
-        public override string Id { get => lecturerOid.ToString(); }
-
         public bool Equals(Lecturer other) => lecturerOid == other.lecturerOid;
 
         /// <summary>
@@ -40,7 +36,7 @@ namespace RuzTermPaper.Models
             UriBuilder uriBuilder = new UriBuilder(Lesson.baseUri);
             uriBuilder.Path += "personlessons";
 
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)RType}&{RType}={Id}";
+            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)receivertype}&lecturerOid={lecturerOid}";
 
             return uriBuilder.Uri;
         }

@@ -30,7 +30,7 @@ namespace RuzTermPaper.Pages
         }
 
 
-        private void search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private async void search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
@@ -42,13 +42,18 @@ namespace RuzTermPaper.Pages
 
                 if (LecturerRB.IsChecked == true)
                 {
-                    sender.ItemsSource = StaticData.Lecturers?.Where(x => x.fio.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                    //sender.ItemsSource = StaticData.Lecturers?
+                    //    .Where(x => x.fio.Contains(sender.Text, StringComparison.OrdinalIgnoreCase))
+                    //    .ToList();
+
+                    sender.ItemsSource = await Lecturer.FindLecturerAsync(sender.Text);
                 }
                 else
                 {
                     if (GroupRB.IsChecked == true)
                     {
-                        sender.ItemsSource = StaticData.Groups?.Where(x => x.number.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                        //sender.ItemsSource = StaticData.Groups?.Where(x => x.number.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                        sender.ItemsSource = await Group.FindGroupAsync(sender.Text);
                     }
                 }
             }

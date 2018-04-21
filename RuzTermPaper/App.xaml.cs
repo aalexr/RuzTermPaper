@@ -18,6 +18,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using RuzTermPaper.Models;
+using Windows.Storage;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace RuzTermPaper
 {
@@ -71,6 +75,23 @@ namespace RuzTermPaper
                     // Если стек навигации не восстанавливается для перехода к первой странице,
                     // настройка новой страницы путем передачи необходимой информации в качестве параметра
                     // параметр
+                    var deser = await Json.ToObjectAsync<Lesson[]>(await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json")));
+                    StaticData.Lessons = deser.GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+
+                    foreach (var rec in await Json.ToObjectAsync<dynamic>(await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("recent.json"))))
+                    {
+                        if (rec is Group group)
+                        {
+                            StaticData.Recent.Add(group);
+                        }
+                        else
+                        {
+                            if (rec is Lecturer lecturer)
+                            {
+                                StaticData.Recent.Add(lecturer);
+                            }
+                        }
+                    }
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 // Обеспечение активности текущего окна
@@ -82,8 +103,9 @@ namespace RuzTermPaper
                 viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
                 viewTitleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
 
-                StaticData.Groups = await Group.FindGroupAsync();
-                StaticData.Lecturers = await Lecturer.FindLecturerAsync();
+
+                //StaticData.Groups = await Group.FindGroupAsync();
+                //StaticData.Lecturers = await Lecturer.FindLecturerAsync();
             }
         }
 
@@ -104,11 +126,27 @@ namespace RuzTermPaper
         /// </summary>
         /// <param name="sender">Источник запроса приостановки.</param>
         /// <param name="e">Сведения о запросе приостановки.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Сохранить состояние приложения и остановить все фоновые операции
+
+            StorageFolder storage = ApplicationData.Current.LocalFolder;
+
+            if (StaticData.Lessons != null)
+            {
+                await FileIO.WriteTextAsync(await storage.CreateFileAsync("lessons.json", CreationCollisionOption.ReplaceExisting),
+                    await Json.StringifyAsync(StaticData.Lessons.SelectMany(x => x).ToList()));
+            }
+
+            if (StaticData.Recent != null)
+            {
+                await FileIO.WriteTextAsync(await storage.CreateFileAsync("recent.json", CreationCollisionOption.ReplaceExisting),
+                    await Json.StringifyAsync(StaticData.Recent));
+            }
+
             deferral.Complete();
         }
+
     }
 }

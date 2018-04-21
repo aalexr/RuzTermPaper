@@ -19,11 +19,6 @@ namespace RuzTermPaper.Models
         public string number { get; set; }
         public string speciality { get; set; }
 
-        [JsonIgnore]
-        public override ReceiverType RType => receivertype;
-
-        public override string Id { get => groupOid.ToString(); }
-
         public bool Equals(Group other) => groupOid == other.groupOid;
 
         /// <summary>
@@ -44,7 +39,7 @@ namespace RuzTermPaper.Models
             UriBuilder uriBuilder = new UriBuilder(Lesson.baseUri);
             uriBuilder.Path += "personlessons";
 
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)RType}&{RType}={Id}";
+            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)receivertype}&groupOid={groupOid}";
 
             return uriBuilder.Uri;
         }
