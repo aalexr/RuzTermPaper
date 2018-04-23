@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Navigation;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
-namespace RuzTermPaper
+namespace RuzTermPaper.Pages
 {
     /// <summary>
     /// Пустая страница, которую можно использовать саму по себе или для перехода внутри фрейма.
@@ -22,7 +22,7 @@ namespace RuzTermPaper
             base.OnNavigatedTo(e);
         }
 
-        public void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        private void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked)
             {
@@ -44,12 +44,8 @@ namespace RuzTermPaper
             }
         }
 
-        private void navView_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args)
-        {
-            if (args.DisplayMode == NavigationViewDisplayMode.Expanded)
-                AppTitle.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            else
-                AppTitle.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-        }
+        private void navView_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args) => AppTitle.Visibility = args.DisplayMode == NavigationViewDisplayMode.Expanded
+                ? Windows.UI.Xaml.Visibility.Visible
+                : Windows.UI.Xaml.Visibility.Collapsed;
     }
 }

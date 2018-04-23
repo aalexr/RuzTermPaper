@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RuzTermPaper.Tools;
 
 namespace RuzTermPaper.Models
 {
     public class Lesson
     {
-        public static readonly Uri baseUri = new Uri("http://ruz.hse.ru/RUZService.svc/");
+        public static readonly Uri BaseUri = new Uri("http://ruz.hse.ru/RUZService.svc/");
 
         #region Public Fields
         public string Auditorium { get; set; }
@@ -42,10 +42,10 @@ namespace RuzTermPaper.Models
         /// <returns>Список найденных занятий</returns>
         public static async Task<List<Lesson>> GetLessons(Uri request)
         {
-            return await Json.ToObjectAsync<List<Lesson>>(await App.http.GetStringAsync(request));
+            return await Json.ToObjectAsync<List<Lesson>>(await App.Http.GetStringAsync(request));
         }
 
         public override string ToString() =>
-            $"{DayOfWeekString} {DateOfNest.ToString("dd.MM.yy")} {BeginLesson}-{EndLesson} {Discipline} ауд. {Auditorium}";
+            $"{DayOfWeekString} {DateOfNest:dd.MM.yy} {BeginLesson}-{EndLesson} {Discipline} ауд. {Auditorium}";
     }
 }

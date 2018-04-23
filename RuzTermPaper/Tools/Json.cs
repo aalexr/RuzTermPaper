@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
 
-namespace RuzTermPaper
+namespace RuzTermPaper.Tools
 {
     public static class Json
     {

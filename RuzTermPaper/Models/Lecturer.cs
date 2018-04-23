@@ -25,18 +25,18 @@ namespace RuzTermPaper.Models
         /// <returns>Список найденных преподавателей</returns>
         public static async Task<List<Lecturer>> FindLecturerAsync(string findText = "")
         {
-            var requestUri = new Uri(Lesson.baseUri, $"lecturers?findtext={findText}");
-            return JsonConvert.DeserializeObject<List<Lecturer>>(await App.http.GetStringAsync(requestUri));
+            var requestUri = new Uri(Lesson.BaseUri, $"lecturers?findtext={findText}");
+            return JsonConvert.DeserializeObject<List<Lecturer>>(await App.Http.GetStringAsync(requestUri));
         }
 
         public override string ToString() => fio;
 
         public override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
-            UriBuilder uriBuilder = new UriBuilder(Lesson.baseUri);
+            UriBuilder uriBuilder = new UriBuilder(Lesson.BaseUri);
             uriBuilder.Path += "personlessons";
 
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)receivertype}&lecturerOid={lecturerOid}";
+            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype={(int)receivertype}&lecturerOid={lecturerOid}";
 
             return uriBuilder.Uri;
         }

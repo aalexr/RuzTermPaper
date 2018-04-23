@@ -1,8 +1,7 @@
-﻿using RuzTermPaper.Models;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RuzTermPaper.Tools;
 
 namespace RuzTermPaper.Models
 {
@@ -28,15 +27,15 @@ namespace RuzTermPaper.Models
         /// <returns>Список найденных групп</returns>
         public static async Task<List<Group>> FindGroupAsync(string findText = "")
         {
-            var requestUri = new Uri(Lesson.baseUri, $"groups?findtext={findText}");
-            return await Json.ToObjectAsync<List<Group>>(await App.http.GetStringAsync(requestUri));
+            var requestUri = new Uri(Lesson.BaseUri, $"groups?findtext={findText}");
+            return await Json.ToObjectAsync<List<Group>>(await App.Http.GetStringAsync(requestUri));
         }
 
         public override string ToString() => number;
 
         public override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
-            UriBuilder uriBuilder = new UriBuilder(Lesson.baseUri);
+            UriBuilder uriBuilder = new UriBuilder(Lesson.BaseUri);
             uriBuilder.Path += "personlessons";
 
             uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)receivertype}&groupOid={groupOid}";

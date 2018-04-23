@@ -17,6 +17,7 @@
         <!--Место для почты-->
         <TextBox Header="Почта"
                  PlaceholderText="example@edu.hse.ru"
+                 KeyDown="EmailBox_KeyDown"
                  IsSpellCheckEnabled="False"
                  Margin="8,0,8,0"/>
 
@@ -34,7 +35,13 @@
         </HyperlinkButton>
 
         <!--Недавние-->
-        <ListView x:Name="recentListView" Header="Недавние поиски" Grid.Row="2" HorizontalAlignment="Center" SelectionMode="None"/>
+        <ListView x:Name="RecentListView"
+                  Header="Недавние поиски"
+                  ItemClick="RecentListView_OnItemClick"
+                  IsItemClickEnabled="True"
+                  Grid.Row="2"
+                  HorizontalAlignment="Center"
+                  SelectionMode="None"/>
 
 
         <ContentDialog x:Name="addDialog" CloseButtonText="Отмена">
@@ -47,6 +54,7 @@
             <StackPanel Orientation="Vertical">
                 <AutoSuggestBox x:Name="search"
                                 PlaceholderText="Поиск"
+                                SuggestionChosen="Search_SuggestionChosen"
                                 TextChanged="search_TextChanged"
                                 QuerySubmitted="search_QuerySubmitted"
                                 QueryIcon="Find"/>

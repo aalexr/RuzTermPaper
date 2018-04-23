@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using Newtonsoft.Json.Linq;
+using RuzTermPaper.Models;
+using RuzTermPaper.Pages;
+using RuzTermPaper.Tools;
+using System;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Net.Http;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using RuzTermPaper.Models;
-using Windows.Storage;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 
 namespace RuzTermPaper
 {
@@ -30,15 +22,15 @@ namespace RuzTermPaper
     /// </summary>
     sealed partial class App : Application
     {
-        public static System.Net.Http.HttpClient http = new System.Net.Http.HttpClient();
+        public static readonly HttpClient Http = new HttpClient();
         /// <summary>
         /// Инициализирует одноэлементный объект приложения.  Это первая выполняемая строка разрабатываемого
         /// кода; поэтому она является логическим эквивалентом main() или WinMain().
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
         }
 
         /// <summary>
@@ -48,11 +40,9 @@ namespace RuzTermPaper
         /// <param name="e">Сведения о запросе и обработке запуска.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-
             // Не повторяйте инициализацию приложения, если в окне уже имеется содержимое,
             // только обеспечьте активность окна
-            if (rootFrame == null)
+            if (!(Window.Current.Content is Frame rootFrame))
             {
                 // Создание фрейма, который станет контекстом навигации, и переход к первой странице
                 rootFrame = new Frame();
@@ -68,45 +58,45 @@ namespace RuzTermPaper
                 Window.Current.Content = rootFrame;
             }
 
-            if (e.PrelaunchActivated == false)
+            if (e.PrelaunchActivated) return;
+            if (rootFrame.Content == null)
             {
-                if (rootFrame.Content == null)
-                {
-                    // Если стек навигации не восстанавливается для перехода к первой странице,
-                    // настройка новой страницы путем передачи необходимой информации в качестве параметра
-                    // параметр
-                    var deser = await Json.ToObjectAsync<Lesson[]>(await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json")));
-                    StaticData.Lessons = deser.GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+                // Если стек навигации не восстанавливается для перехода к первой странице,
+                // настройка новой страницы путем передачи необходимой информации в качестве параметра
+                // параметр
+                var deser = await Json.ToObjectAsync<Lesson[]>(await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json")));
+                StaticData.Lessons = deser.GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
 
-                    foreach (var rec in await Json.ToObjectAsync<dynamic>(await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("recent.json"))))
+
+                var str =
+                    await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("recent.json"));
+
+                foreach (var token in JArray.Parse(str))
+                {
+                    if (token["groupOid"] != null)
+                        StaticData.Recent.Add(token.ToObject<Group>());
+                    else
                     {
-                        if (rec is Group group)
-                        {
-                            StaticData.Recent.Add(group);
-                        }
+                        if (token["lecturerOid"] != null)
+                            StaticData.Recent.Add(token.ToObject<Lecturer>());
                         else
                         {
-                            if (rec is Lecturer lecturer)
-                            {
-                                StaticData.Recent.Add(lecturer);
-                            }
+                            if (token["Email"] != null)
+                                StaticData.Recent.Add(token.ToObject<Student>());
                         }
                     }
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
-                // Обеспечение активности текущего окна
-                Window.Current.Activate();
-                CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 
-                var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
-                viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
-                viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-                viewTitleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
-
-
-                //StaticData.Groups = await Group.FindGroupAsync();
-                //StaticData.Lecturers = await Lecturer.FindLecturerAsync();
+                rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
+            // Обеспечение активности текущего окна
+            Window.Current.Activate();
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+
+            var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
+            viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
+            viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            viewTitleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
         }
 
         /// <summary>
@@ -131,7 +121,7 @@ namespace RuzTermPaper
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Сохранить состояние приложения и остановить все фоновые операции
 
-            StorageFolder storage = ApplicationData.Current.LocalFolder;
+            var storage = ApplicationData.Current.LocalFolder;
 
             if (StaticData.Lessons != null)
             {

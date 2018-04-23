@@ -7,16 +7,30 @@ namespace RuzTermPaper.Models
         private const ReceiverType receivertype = ReceiverType.email;
         private string email;
 
+        public Student(string email)
+        {
+            if (email.EndsWith("@edu.hse.ru"))
+                this.email = email;
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        public string Email => email;
+
         public override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
-            UriBuilder uriBuilder = new UriBuilder(Lesson.baseUri);
+            UriBuilder uriBuilder = new UriBuilder(Lesson.BaseUri);
             uriBuilder.Path += "personlessons";
 
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)receivertype}&email={email}";
+            uriBuilder.Query =
+                $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype={(int)receivertype}&email={email}";
 
             return uriBuilder.Uri;
         }
 
         public bool Equals(Student other) => email.Equals(other.email);
+        public override string ToString() => Email;
     }
 }

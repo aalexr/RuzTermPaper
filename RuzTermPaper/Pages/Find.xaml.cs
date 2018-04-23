@@ -1,10 +1,12 @@
-﻿using RuzTermPaper.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using Windows.Storage.AccessCache;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
+using RuzTermPaper.Models;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -15,17 +17,17 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class Find : Page
     {
-        private Frame contentFrame;
+        private Frame _contentFrame;
 
         public Find()
         {
-            this.InitializeComponent();
-            this.recentListView.ItemsSource = StaticData.Recent;
+            InitializeComponent();
+            RecentListView.ItemsSource = StaticData.Recent;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.contentFrame = e.Parameter as Frame;
+            _contentFrame = e.Parameter as Frame;
             base.OnNavigatedTo(e);
         }
 
@@ -42,17 +44,12 @@ namespace RuzTermPaper.Pages
 
                 if (LecturerRB.IsChecked == true)
                 {
-                    //sender.ItemsSource = StaticData.Lecturers?
-                    //    .Where(x => x.fio.Contains(sender.Text, StringComparison.OrdinalIgnoreCase))
-                    //    .ToList();
-
                     sender.ItemsSource = await Lecturer.FindLecturerAsync(sender.Text);
                 }
                 else
                 {
                     if (GroupRB.IsChecked == true)
                     {
-                        //sender.ItemsSource = StaticData.Groups?.Where(x => x.number.Contains(sender.Text, StringComparison.OrdinalIgnoreCase)).ToList();
                         sender.ItemsSource = await Group.FindGroupAsync(sender.Text);
                     }
                 }
@@ -69,10 +66,10 @@ namespace RuzTermPaper.Pages
                 if (!StaticData.Recent.Contains(receiver))
                     StaticData.Recent.Add(receiver);
 
-                Uri URI = receiver.BuildUri(today, today.AddDays(7));
+                Uri uri = receiver.BuildUri(today, today.AddDays(7));
 
-                StaticData.Lessons = (await Lesson.GetLessons(URI)).GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
-                contentFrame.Navigate(typeof(TimetablePage));
+                StaticData.Lessons = (await Lesson.GetLessons(uri)).GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+                _contentFrame.Navigate(typeof(TimetablePage));
             }
         }
 
@@ -82,5 +79,36 @@ namespace RuzTermPaper.Pages
 
         private void RB_Checked(object sender, RoutedEventArgs e) => search.Text = string.Empty;
 
+        private async void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is Receiver receiver)
+            {
+                StaticData.Lessons =
+                    (await Lesson.GetLessons(receiver.BuildUri(DateTime.Now, DateTime.Now.AddDays(7))))
+                    .GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+                _contentFrame.Navigate(typeof(TimetablePage));
+            }
+        }
+
+        private async void EmailBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (sender is TextBox textBox && e.Key == VirtualKey.Enter)
+            {
+                Student student;
+                try
+                {
+                    student = new Student(textBox.Text);
+                }
+                catch (ArgumentException)
+                {
+                    return;
+                }
+                StaticData.Recent.Add(student);
+                StaticData.Lessons =
+                    (await Lesson.GetLessons(student.BuildUri(DateTime.Now, DateTime.Now.AddDays(7))))
+                    .GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+                _contentFrame.Navigate(typeof(TimetablePage));
+            }
+        }
     }
 }
