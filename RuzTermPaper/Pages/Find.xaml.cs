@@ -50,7 +50,7 @@ namespace RuzTermPaper.Pages
                 {
                     if (GroupRB.IsChecked == true)
                     {
-                        sender.ItemsSource = await Group.FindGroupAsync(sender.Text);
+                        sender.ItemsSource = await Group.FindAsync(sender.Text);
                     }
                 }
             }

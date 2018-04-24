@@ -25,7 +25,7 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
         /// <returns>Список найденных групп</returns>
-        public static async Task<List<Group>> FindGroupAsync(string findText = "")
+        public static async Task<List<Group>> FindAsync(string findText = "")
         {
             var requestUri = new Uri(Lesson.BaseUri, $"groups?findtext={findText}");
             return await Json.ToObjectAsync<List<Group>>(await App.Http.GetStringAsync(requestUri));
@@ -38,7 +38,7 @@ namespace RuzTermPaper.Models
             UriBuilder uriBuilder = new UriBuilder(Lesson.BaseUri);
             uriBuilder.Path += "personlessons";
 
-            uriBuilder.Query = $"fromdate={from.ToString("yyyy.MM.dd")}&todate={to.ToString("yyyy.MM.dd")}&receivertype={(int)receivertype}&groupOid={groupOid}";
+            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype={(int)receivertype}&groupOid={groupOid}";
 
             return uriBuilder.Uri;
         }

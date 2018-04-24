@@ -23,14 +23,16 @@ namespace RuzTermPaper
     sealed partial class App : Application
     {
         public static readonly HttpClient Http = new HttpClient();
+        /// <inheritdoc />
         /// <summary>
-        /// Инициализирует одноэлементный объект приложения.  Это первая выполняемая строка разрабатываемого
+        /// Инициализирует одноэлементный объект приложения. Это первая выполняемая строка разрабатываемого
         /// кода; поэтому она является логическим эквивалентом main() или WinMain().
         /// </summary>
         public App()
         {
             InitializeComponent();
             Suspending += OnSuspending;
+            Current.Resuming += OnResuming;
         }
 
         /// <summary>
@@ -49,7 +51,8 @@ namespace RuzTermPaper
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated ||
+                    e.PreviousExecutionState == ApplicationExecutionState.ClosedByUser)
                 {
                     //TODO: Загрузить состояние из ранее приостановленного приложения
                 }
@@ -125,18 +128,24 @@ namespace RuzTermPaper
 
             if (StaticData.Lessons != null)
             {
-                await FileIO.WriteTextAsync(await storage.CreateFileAsync("lessons.json", CreationCollisionOption.ReplaceExisting),
+                await FileIO.WriteTextAsync(
+                    await storage.CreateFileAsync("lessons.json", CreationCollisionOption.ReplaceExisting),
                     await Json.StringifyAsync(StaticData.Lessons.SelectMany(x => x).ToList()));
             }
 
             if (StaticData.Recent != null)
             {
-                await FileIO.WriteTextAsync(await storage.CreateFileAsync("recent.json", CreationCollisionOption.ReplaceExisting),
+                await FileIO.WriteTextAsync(
+                    await storage.CreateFileAsync("recent.json", CreationCollisionOption.ReplaceExisting),
                     await Json.StringifyAsync(StaticData.Recent));
             }
 
             deferral.Complete();
         }
 
+        private void OnResuming(object sender, object args)
+        {
+
+        }
     }
 }
