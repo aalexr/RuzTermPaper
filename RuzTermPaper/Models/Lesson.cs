@@ -7,8 +7,6 @@ namespace RuzTermPaper.Models
 {
     public class Lesson
     {
-        public static readonly Uri BaseUri = new Uri("http://ruz.hse.ru/RUZService.svc/");
-
         #region Public Fields
         public string Auditorium { get; set; }
         public int AuditoriumOid { get; set; }
@@ -40,10 +38,8 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="request">Ссылка</param>
         /// <returns>Список найденных занятий</returns>
-        public static async Task<List<Lesson>> GetLessons(Uri request)
-        {
-            return await Json.ToObjectAsync<List<Lesson>>(await App.Http.GetStringAsync(request));
-        }
+        public static async Task<List<Lesson>> GetLessons(Uri request) =>
+            await Json.ToObjectAsync<List<Lesson>>(await App.Http.GetStringAsync(request));
 
         public override string ToString() =>
             $"{DayOfWeekString} {DateOfNest:dd.MM.yy} {BeginLesson}-{EndLesson} {Discipline} ауд. {Auditorium}";

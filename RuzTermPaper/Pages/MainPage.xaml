@@ -16,8 +16,7 @@
                    IsHitTestVisible="False">
         </TextBlock>
 
-        <NavigationView x:Name="NavView"
-                        Canvas.ZIndex="0"
+        <NavigationView Canvas.ZIndex="0"
                         DisplayModeChanged="navView_DisplayModeChanged"
                         Header="Расписание"
                         IsSettingsVisible="True"
@@ -29,7 +28,7 @@
                 <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="Find"/>
             </NavigationView.MenuItems>
 
-            <Frame x:Name="contentFrame">
+            <Frame x:Name="ContentFrame">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition/>

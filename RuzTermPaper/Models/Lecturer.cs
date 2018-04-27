@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace RuzTermPaper.Models
 {
-
-    public class Lecturer : Receiver, IEquatable<Lecturer>
+    public class Lecturer : Receiver
     {
         private const ReceiverType receivertype = ReceiverType.lecturerOid;
         public string chair { get; set; }
@@ -25,7 +24,7 @@ namespace RuzTermPaper.Models
         /// <returns>Список найденных преподавателей</returns>
         public static async Task<List<Lecturer>> FindLecturerAsync(string findText = "")
         {
-            var requestUri = new Uri(Lesson.BaseUri, $"lecturers?findtext={findText}");
+            var requestUri = new Uri(BaseUri, $"lecturers?findtext={findText}");
             return JsonConvert.DeserializeObject<List<Lecturer>>(await App.Http.GetStringAsync(requestUri));
         }
 
@@ -33,12 +32,14 @@ namespace RuzTermPaper.Models
 
         public override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
-            UriBuilder uriBuilder = new UriBuilder(Lesson.BaseUri);
+            UriBuilder uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
 
             uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype={(int)receivertype}&lecturerOid={lecturerOid}";
 
             return uriBuilder.Uri;
         }
+
+        public override bool Equals(Receiver other) => lecturerOid.Equals((other as Lecturer).lecturerOid);
     }
 }

@@ -44,7 +44,7 @@
                   SelectionMode="None"/>
 
 
-        <ContentDialog x:Name="addDialog" CloseButtonText="Отмена">
+        <ContentDialog x:Name="AddDialog" CloseButtonText="Отмена">
             <ContentDialog.Title>
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Add" Margin="0,0,8,0"/>
@@ -52,15 +52,24 @@
                 </StackPanel>
             </ContentDialog.Title>
             <StackPanel Orientation="Vertical">
-                <AutoSuggestBox x:Name="search"
+                <AutoSuggestBox x:Name="Search"
                                 PlaceholderText="Поиск"
                                 SuggestionChosen="Search_SuggestionChosen"
                                 TextChanged="search_TextChanged"
                                 QuerySubmitted="search_QuerySubmitted"
                                 QueryIcon="Find"/>
                 <TextBlock Text="Тип расписания" Margin="0,8,0,0" FontWeight="Medium"/>
-                <RadioButton x:Name="LecturerRB" GroupName="Type" Content="Преподаватель" IsChecked="True" Checked="RB_Checked"/>
-                <RadioButton x:Name="GroupRB" Content="Группа" GroupName="Type" Checked="RB_Checked"/>
+                <RadioButton
+                    x:Name="LecturerRb"
+                    GroupName="Type"
+                    Content="Преподаватель"
+                    IsChecked="True"
+                    Checked="RB_Checked"/>
+                <RadioButton
+                    x:Name="GroupRb"
+                    Content="Группа"
+                    GroupName="Type"
+                    Checked="RB_Checked"/>
             </StackPanel>
         </ContentDialog>
     </Grid>

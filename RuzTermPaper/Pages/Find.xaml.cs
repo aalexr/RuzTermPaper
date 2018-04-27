@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Windows.Storage.AccessCache;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -42,13 +41,13 @@ namespace RuzTermPaper.Pages
                     return;
                 }
 
-                if (LecturerRB.IsChecked == true)
+                if (LecturerRb.IsChecked == true)
                 {
                     sender.ItemsSource = await Lecturer.FindLecturerAsync(sender.Text);
                 }
                 else
                 {
-                    if (GroupRB.IsChecked == true)
+                    if (GroupRb.IsChecked == true)
                     {
                         sender.ItemsSource = await Group.FindAsync(sender.Text);
                     }
@@ -60,7 +59,7 @@ namespace RuzTermPaper.Pages
         {
             if (args.ChosenSuggestion is Receiver receiver)
             {
-                addDialog.Hide();
+                AddDialog.Hide();
                 DateTime today = DateTime.Today;
 
                 if (!StaticData.Recent.Contains(receiver))
@@ -75,9 +74,9 @@ namespace RuzTermPaper.Pages
 
         private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) => sender.Text = args.SelectedItem.ToString();
 
-        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e) => await addDialog.ShowAsync();
+        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e) => await AddDialog.ShowAsync();
 
-        private void RB_Checked(object sender, RoutedEventArgs e) => search.Text = string.Empty;
+        private void RB_Checked(object sender, RoutedEventArgs e) => Search.Text = string.Empty;
 
         private async void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)
         {

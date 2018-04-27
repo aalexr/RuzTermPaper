@@ -70,25 +70,33 @@ namespace RuzTermPaper
                 var deser = await Json.ToObjectAsync<Lesson[]>(await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json")));
                 StaticData.Lessons = deser.GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
 
-
-                var str =
-                    await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("recent.json"));
-
-                foreach (var token in JArray.Parse(str))
+                try
                 {
-                    if (token["groupOid"] != null)
-                        StaticData.Recent.Add(token.ToObject<Group>());
-                    else
+                    StorageFile recent = await ApplicationData.Current.LocalFolder.GetFileAsync("recent.json");
+                    string str = await FileIO.ReadTextAsync(recent);
+
+                    foreach (var token in JArray.Parse(str))
                     {
-                        if (token["lecturerOid"] != null)
-                            StaticData.Recent.Add(token.ToObject<Lecturer>());
+                        if (token["groupOid"] != null)
+                            StaticData.Recent.Add(token.ToObject<Group>());
                         else
                         {
-                            if (token["Email"] != null)
-                                StaticData.Recent.Add(token.ToObject<Student>());
+                            if (token["lecturerOid"] != null)
+                                StaticData.Recent.Add(token.ToObject<Lecturer>());
+                            else
+                            {
+                                if (token["Email"] != null)
+                                    StaticData.Recent.Add(token.ToObject<Student>());
+                            }
                         }
                     }
                 }
+                catch (Exception)
+                {
+
+                }
+
+
 
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }

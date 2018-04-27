@@ -18,7 +18,7 @@ namespace RuzTermPaper.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            contentFrame.Navigate(typeof(Pages.TimetablePage), e.Parameter);
+            ContentFrame.Navigate(typeof(Pages.TimetablePage), e.Parameter);
             base.OnNavigatedTo(e);
         }
 
@@ -26,7 +26,7 @@ namespace RuzTermPaper.Pages
         {
             if (args.IsSettingsInvoked)
             {
-                contentFrame.Navigate(typeof(Pages.SettingsPage));
+                ContentFrame.Navigate(typeof(Pages.SettingsPage));
             }
             else
             {
@@ -35,10 +35,10 @@ namespace RuzTermPaper.Pages
                 switch (item.Tag)
                 {
                     case "timetable":
-                        contentFrame.Navigate(typeof(Pages.TimetablePage));
+                        ContentFrame.Navigate(typeof(Pages.TimetablePage));
                         break;
                     case "Find":
-                        contentFrame.Navigate(typeof(Pages.Find), contentFrame);
+                        ContentFrame.Navigate(typeof(Pages.Find), ContentFrame);
                         break;
                 }
             }
