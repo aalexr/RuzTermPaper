@@ -9,10 +9,6 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class TimetablePage : Page
     {
-        public TimetablePage()
-        {
-            this.InitializeComponent();
-            this.timetableCVS.Source = StaticData.Lessons;
-        }
+        public TimetablePage() => this.InitializeComponent();
     }
 }
