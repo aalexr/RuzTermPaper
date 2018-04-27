@@ -24,13 +24,11 @@
 
         <ProgressRing x:Name="ProgressRing" Width="100" Height="100" IsActive="False"/>
 
-        <ListView Name="timetable" ItemsSource="{Binding Source={StaticResource timetableCVS}}" SelectionMode="None">
-            
-            <ListView.FooterTemplate>
-                <DataTemplate>
-                    <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Margin="8"/>
-                </DataTemplate>
-            </ListView.FooterTemplate>
+        <ListView Name="timetable" ItemsSource="{x:Bind timetableCVS.View, Mode=OneWay}" SelectionMode="None">
+
+            <ListView.Footer>
+                <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Margin="8"/>
+            </ListView.Footer>
 
             <!--Стиль заголовка группы-->
             <ListView.GroupStyle>
