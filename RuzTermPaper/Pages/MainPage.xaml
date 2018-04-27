@@ -9,6 +9,10 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <TextBlock x:Name="AppTitle"
+                   Height="24"
+                   Width="96"
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Left"
                    Text="{x:Bind appmodel:Package.Current.DisplayName}"
                    Style="{StaticResource CaptionTextBlockStyle}"
                    Margin="12,8"

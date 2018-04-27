@@ -18,9 +18,17 @@
             <CollectionViewSource x:Name="timetableCVS" IsSourceGrouped="True"/>
         </Grid.Resources>
 
-        <ListView Name="timetable" ItemsSource="{Binding Source={StaticResource timetableCVS}}" SelectionMode="None">
+        <ProgressRing x:Name="ProgressRing" Width="100" Height="100" IsActive="False"/>
 
-            <!--Стиль заголовка-->
+        <ListView Name="timetable" ItemsSource="{Binding Source={StaticResource timetableCVS}}" SelectionMode="None" >
+
+            <ListView.FooterTemplate>
+                <DataTemplate>
+                    <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Margin="8"/>
+                </DataTemplate>
+            </ListView.FooterTemplate>
+
+            <!--Стиль заголовка группы-->
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
@@ -65,5 +73,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
     </Grid>
 </Page>
