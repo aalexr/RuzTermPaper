@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -67,7 +68,8 @@ namespace RuzTermPaper.Pages
 
                 Uri uri = receiver.BuildUri(today, today.AddDays(7));
 
-                StaticData.Lessons = (await Lesson.GetLessons(uri)).GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+                StaticData.Lessons = new List<ItemsGroup>((await Lesson.GetLessons(uri))
+                    .GroupBy(x => x.DateOfNest, (key, list) => new ItemsGroup(key, list)));
                 _contentFrame.Navigate(typeof(TimetablePage));
             }
         }
@@ -82,9 +84,10 @@ namespace RuzTermPaper.Pages
         {
             if (e.ClickedItem is Receiver receiver)
             {
-                StaticData.Lessons =
+                StaticData.Lessons = new List<ItemsGroup>(
                     (await Lesson.GetLessons(receiver.BuildUri(DateTime.Now, DateTime.Now.AddDays(7))))
-                    .GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+                    .GroupBy(x => x.DateOfNest,
+                    (key, list) => new ItemsGroup(key, list)));
                 _contentFrame.Navigate(typeof(TimetablePage));
             }
         }
@@ -103,9 +106,9 @@ namespace RuzTermPaper.Pages
                     return;
                 }
                 StaticData.Recent.Add(student);
-                StaticData.Lessons =
+                StaticData.Lessons = new List<ItemsGroup>(
                     (await Lesson.GetLessons(student.BuildUri(DateTime.Now, DateTime.Now.AddDays(7))))
-                    .GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+                    .GroupBy(x => x.DateOfNest, (key, list) => new ItemsGroup(key, list)));
                 _contentFrame.Navigate(typeof(TimetablePage));
             }
         }

@@ -3,6 +3,7 @@ using RuzTermPaper.Models;
 using RuzTermPaper.Pages;
 using RuzTermPaper.Tools;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Windows.ApplicationModel;
@@ -67,8 +68,14 @@ namespace RuzTermPaper
                 // Если стек навигации не восстанавливается для перехода к первой странице,
                 // настройка новой страницы путем передачи необходимой информации в качестве параметра
                 // параметр
-                var deser = await Json.ToObjectAsync<Lesson[]>(await FileIO.ReadTextAsync(await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json")));
-                StaticData.Lessons = deser.GroupBy(x => x.DateOfNest).OrderBy(x => x.Key);
+
+                StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json");
+                string value = await FileIO.ReadTextAsync(file);
+                List<ItemsGroup> deser = await Json.ToObjectAsync<List<ItemsGroup>>(value);
+
+                //StaticData.Lessons =
+                //    new List<ItemsGroup>(deser
+                //    .GroupBy(x => x.DateOfNest, (key, list) => new ItemsGroup(key, list)));
 
                 try
                 {
@@ -136,9 +143,9 @@ namespace RuzTermPaper
 
             if (StaticData.Lessons != null)
             {
-                await FileIO.WriteTextAsync(
-                    await storage.CreateFileAsync("lessons.json", CreationCollisionOption.ReplaceExisting),
-                    await Json.StringifyAsync(StaticData.Lessons.SelectMany(x => x).ToList()));
+                string contents = await Json.StringifyAsync(StaticData.Lessons);
+                StorageFile file = await storage.CreateFileAsync("lessons.json", CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(file, contents);
             }
 
             if (StaticData.Recent != null)
