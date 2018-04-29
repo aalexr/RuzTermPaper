@@ -38,7 +38,7 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="request">Ссылка</param>
         /// <returns>Список найденных занятий</returns>
-        public static async Task<List<Lesson>> GetLessons(Uri request) =>
+        public static async Task<List<Lesson>> GetLessonsAsync(Uri request) =>
             await Json.ToObjectAsync<List<Lesson>>(await App.Http.GetStringAsync(request));
 
         public override string ToString() =>

@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using RuzTermPaper.Models;
+using System.Net.Http;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -17,22 +18,13 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class Find : Page
     {
-        private Frame _contentFrame;
+        private NavigationView navigationView;
 
-        public Find()
-        {
-            InitializeComponent();
-            RecentListView.ItemsSource = StaticData.Recent;
-        }
+        public Find() => InitializeComponent();
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            _contentFrame = e.Parameter as Frame;
-            base.OnNavigatedTo(e);
-        }
+        protected override void OnNavigatedTo(NavigationEventArgs e) => navigationView = e.Parameter as NavigationView;
 
-
-        private async void search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private void Search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
@@ -41,54 +33,35 @@ namespace RuzTermPaper.Pages
                     sender.ItemsSource = null;
                     return;
                 }
-
-                if (LecturerRb.IsChecked == true)
-                {
-                    sender.ItemsSource = await Lecturer.FindLecturerAsync(sender.Text);
-                }
-                else
-                {
-                    if (GroupRb.IsChecked == true)
-                    {
-                        sender.ItemsSource = await Group.FindAsync(sender.Text);
-                    }
-                }
             }
         }
 
-        private async void search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private async void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (args.ChosenSuggestion is Receiver receiver)
+            if (args.ChosenSuggestion is Models.User user)
             {
                 AddDialog.Hide();
                 DateTime today = DateTime.Today;
 
-                if (!StaticData.Recent.Contains(receiver))
-                    StaticData.Recent.Add(receiver);
+                if (!StaticData.Recent.Contains(user))
+                    StaticData.Recent.Add(user);
 
-                Uri uri = receiver.BuildUri(today, today.AddDays(7));
-
-                StaticData.Lessons = new List<ItemsGroup>((await Lesson.GetLessons(uri))
-                    .GroupBy(x => x.DateOfNest, (key, list) => new ItemsGroup(key, list)));
-                _contentFrame.Navigate(typeof(TimetablePage));
+                StaticData.Lessons = await user.GetLessonsAsync(today, today.AddDays(7));
+                navigationView.SelectedItem = navigationView.MenuItems[0];
             }
         }
 
-        private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) => sender.Text = args.SelectedItem.ToString();
+        private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) =>
+            sender.Text = (string)args.SelectedItem;
 
-        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e) => await AddDialog.ShowAsync();
-
-        private void RB_Checked(object sender, RoutedEventArgs e) => Search.Text = string.Empty;
 
         private async void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)
         {
-            if (e.ClickedItem is Receiver receiver)
+            if (e.ClickedItem is Models.User user)
             {
-                StaticData.Lessons = new List<ItemsGroup>(
-                    (await Lesson.GetLessons(receiver.BuildUri(DateTime.Now, DateTime.Now.AddDays(7))))
-                    .GroupBy(x => x.DateOfNest,
-                    (key, list) => new ItemsGroup(key, list)));
-                _contentFrame.Navigate(typeof(TimetablePage));
+                StaticData.Lessons = await user.GetLessonsAsync(DateTime.Now, DateTime.Now.AddDays(7));
+
+                navigationView.SelectedItem = navigationView.MenuItems[0];
             }
         }
 
@@ -96,20 +69,50 @@ namespace RuzTermPaper.Pages
         {
             if (sender is TextBox textBox && e.Key == VirtualKey.Enter)
             {
-                Student student;
-                try
+                if (textBox.Text.EndsWith("@edu.hse.ru"))
                 {
-                    student = new Student(textBox.Text);
+                    Student student = new Student(textBox.Text);
+                    if (!StaticData.Recent.Contains(student))
+                        StaticData.Recent.Add(student);
+
+                    try
+                    {
+                        StaticData.Lessons = await student.GetLessonsAsync(DateTime.Now, DateTime.Now.AddDays(7));
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        ContentDialog dialog = new ContentDialog { PrimaryButtonText = "OK", Content = ex.Message, Title = "Ошибка соединения" };
+                        await dialog.ShowAsync();
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        ContentDialog dialog = new ContentDialog { PrimaryButtonText = "OK", Content = ex.Message, Title = "Error" };
+                        await dialog.ShowAsync();
+                        return;
+                    }
+
+                    navigationView.SelectedItem = navigationView.MenuItems[0];
                 }
-                catch (ArgumentException)
+                else
                 {
-                    return;
+
                 }
-                StaticData.Recent.Add(student);
-                StaticData.Lessons = new List<ItemsGroup>(
-                    (await Lesson.GetLessons(student.BuildUri(DateTime.Now, DateTime.Now.AddDays(7))))
-                    .GroupBy(x => x.DateOfNest, (key, list) => new ItemsGroup(key, list)));
-                _contentFrame.Navigate(typeof(TimetablePage));
+            }
+        }
+
+        private async void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            switch (((MenuFlyoutItem)sender).Tag)
+            {
+                case "Group":
+                    await AddDialog.ShowAsync();
+                    break;
+
+                case "Lecturer":
+                    await AddDialog.ShowAsync();
+                    break;
+
             }
         }
     }

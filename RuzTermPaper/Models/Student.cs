@@ -2,7 +2,7 @@
 
 namespace RuzTermPaper.Models
 {
-    public class Student : Receiver
+    public class Student : User
     {
         private const ReceiverType receivertype = ReceiverType.email;
         private string email;
@@ -19,7 +19,7 @@ namespace RuzTermPaper.Models
 
         public string Email => email;
 
-        public override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
+        protected override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
@@ -30,7 +30,7 @@ namespace RuzTermPaper.Models
             return uriBuilder.Uri;
         }
 
-        public override bool Equals(Receiver other) => other is Student student&& email.Equals(student.email);
+        public override bool Equals(User other) => other is Student student && email.Equals(student.email);
 
         public override string ToString() => Email;
     }

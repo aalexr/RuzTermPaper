@@ -5,7 +5,7 @@ using RuzTermPaper.Tools;
 
 namespace RuzTermPaper.Models
 {
-    public class Group : Receiver
+    public class Group : User
     {
         private const ReceiverType receivertype = ReceiverType.groupOid;
         public int chairOid { get; set; }
@@ -30,16 +30,15 @@ namespace RuzTermPaper.Models
 
         public override string ToString() => number;
 
-        public override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
+        protected override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
-
             uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype={(int)receivertype}&groupOid={groupOid}";
 
             return uriBuilder.Uri;
         }
 
-        public override bool Equals(Receiver other) => groupOid.Equals((other as Group).groupOid);
+        public override bool Equals(User other) => groupOid.Equals((other as Group).groupOid);
     }
 }

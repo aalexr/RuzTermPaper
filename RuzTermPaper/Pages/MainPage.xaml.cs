@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -13,39 +14,29 @@ namespace RuzTermPaper.Pages
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            ContentFrame.Navigate(typeof(Pages.TimetablePage), e.Parameter);
-            base.OnNavigatedTo(e);
-        }
+        protected override void OnNavigatedTo(NavigationEventArgs e) => ContentFrame.Navigate(typeof(TimetablePage));
 
-        private void navView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        private void NavView_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args) =>
+            AppTitle.Visibility = args.DisplayMode == NavigationViewDisplayMode.Expanded
+                ? Windows.UI.Xaml.Visibility.Visible
+                : Windows.UI.Xaml.Visibility.Collapsed;
+
+        private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (args.IsSettingsInvoked)
+            if (args.IsSettingsSelected)
             {
-                ContentFrame.Navigate(typeof(Pages.SettingsPage));
+                ContentFrame.Navigate(typeof(SettingsPage));
             }
             else
             {
-                var item = sender.MenuItems.OfType<NavigationViewItem>().First(x => (string)x.Content == (string)args.InvokedItem);
+                var selectedItem = (NavigationViewItem)args.SelectedItem;
+                string pageName = $"RuzTermPaper.Pages.{(string)selectedItem.Tag}";
+                ContentFrame.Navigate(Type.GetType(pageName), NavView);
 
-                switch (item.Tag)
-                {
-                    case "timetable":
-                        ContentFrame.Navigate(typeof(Pages.TimetablePage));
-                        break;
-                    case "Find":
-                        ContentFrame.Navigate(typeof(Pages.Find), ContentFrame);
-                        break;
-                }
             }
         }
-
-        private void navView_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args) => AppTitle.Visibility = args.DisplayMode == NavigationViewDisplayMode.Expanded
-                ? Windows.UI.Xaml.Visibility.Visible
-                : Windows.UI.Xaml.Visibility.Collapsed;
     }
 }

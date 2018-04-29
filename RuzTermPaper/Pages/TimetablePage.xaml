@@ -34,8 +34,10 @@
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Key, Converter={StaticResource DateConverter}}"/>
+                        <DataTemplate x:DataType="models:LessonsGroup">
+                            <Grid>
+                                <TextBlock Text="{x:Bind Key, Converter={StaticResource DateConverter}}"/>
+                            </Grid>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
@@ -45,13 +47,13 @@
                 <DataTemplate x:DataType="models:Lesson">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <!--Начало пары-->

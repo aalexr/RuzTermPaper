@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RuzTermPaper.Models
 {
-    public class Lecturer : Receiver
+    public class Lecturer : User
     {
         private const ReceiverType receivertype = ReceiverType.lecturerOid;
         public string chair { get; set; }
@@ -30,7 +30,7 @@ namespace RuzTermPaper.Models
 
         public override string ToString() => fio;
 
-        public override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
+        protected override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
@@ -40,6 +40,6 @@ namespace RuzTermPaper.Models
             return uriBuilder.Uri;
         }
 
-        public override bool Equals(Receiver other) => lecturerOid.Equals((other as Lecturer).lecturerOid);
+        public override bool Equals(User other) => lecturerOid.Equals((other as Lecturer).lecturerOid);
     }
 }

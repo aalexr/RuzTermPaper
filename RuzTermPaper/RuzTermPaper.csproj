@@ -98,8 +98,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Lesson.cs" />
-    <Compile Include="Models\Receiver.cs" />
+    <Compile Include="Models\LessonGroup.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Pages\Find.xaml.cs">
       <DependentUpon>Find.xaml</DependentUpon>
     </Compile>

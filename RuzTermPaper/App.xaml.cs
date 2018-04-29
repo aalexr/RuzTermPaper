@@ -3,9 +3,9 @@ using RuzTermPaper.Models;
 using RuzTermPaper.Pages;
 using RuzTermPaper.Tools;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
@@ -33,7 +33,6 @@ namespace RuzTermPaper
         {
             InitializeComponent();
             Suspending += OnSuspending;
-            Current.Resuming += OnResuming;
         }
 
         /// <summary>
@@ -52,8 +51,7 @@ namespace RuzTermPaper
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated ||
-                    e.PreviousExecutionState == ApplicationExecutionState.ClosedByUser)
+                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Загрузить состояние из ранее приостановленного приложения
                 }
@@ -62,27 +60,32 @@ namespace RuzTermPaper
                 Window.Current.Content = rootFrame;
             }
 
-            if (e.PrelaunchActivated) return;
+            if (e.PrelaunchActivated)
+                return;
+
+            // Если стек навигации не восстанавливается для перехода к первой странице,
+            // настройка новой страницы путем передачи необходимой информации в качестве параметра
+            // параметр
             if (rootFrame.Content == null)
             {
-                // Если стек навигации не восстанавливается для перехода к первой странице,
-                // настройка новой страницы путем передачи необходимой информации в качестве параметра
-                // параметр
+                #region Restore Lessons List
+                StorageFile lessonsFile = await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json");
+                string value = await FileIO.ReadTextAsync(lessonsFile);
+                Lesson[] deserialized = await Json.ToObjectAsync<Lesson[]>(value);
 
-                StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json");
-                string value = await FileIO.ReadTextAsync(file);
-                List<ItemsGroup> deser = await Json.ToObjectAsync<List<ItemsGroup>>(value);
+                StaticData.Lessons = deserialized
+                    .GroupBy(L => L.DateOfNest)
+                    .Select(G => new LessonsGroup(G.Key, G))
+                    .ToList();
+                #endregion
 
-                //StaticData.Lessons =
-                //    new List<ItemsGroup>(deser
-                //    .GroupBy(x => x.DateOfNest, (key, list) => new ItemsGroup(key, list)));
-
+                #region Restore Recent List
                 try
                 {
-                    StorageFile recent = await ApplicationData.Current.LocalFolder.GetFileAsync("recent.json");
-                    string str = await FileIO.ReadTextAsync(recent);
+                    StorageFile recentFile = await ApplicationData.Current.LocalFolder.GetFileAsync("recent.json");
+                    string recent = await FileIO.ReadTextAsync(recentFile);
 
-                    foreach (var token in JArray.Parse(str))
+                    foreach (var token in JArray.Parse(recent))
                     {
                         if (token["groupOid"] != null)
                             StaticData.Recent.Add(token.ToObject<Group>());
@@ -98,12 +101,16 @@ namespace RuzTermPaper
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    ContentDialog dialog = new ContentDialog
+                    {
+                        Content = ex.Message,
+                        CloseButtonText = "OK"
+                    };
+                    await dialog.ShowAsync();
                 }
-
-
+                #endregion
 
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
@@ -111,10 +118,10 @@ namespace RuzTermPaper
             Window.Current.Activate();
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 
-            var viewTitleBar = ApplicationView.GetForCurrentView().TitleBar;
-            viewTitleBar.ButtonBackgroundColor = Colors.Transparent;
-            viewTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            viewTitleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            titleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
         }
 
         /// <summary>
@@ -136,31 +143,27 @@ namespace RuzTermPaper
         /// <param name="e">Сведения о запросе приостановки.</param>
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Сохранить состояние приложения и остановить все фоновые операции
-
-            var storage = ApplicationData.Current.LocalFolder;
+            SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
 
             if (StaticData.Lessons != null)
             {
-                string contents = await Json.StringifyAsync(StaticData.Lessons);
-                StorageFile file = await storage.CreateFileAsync("lessons.json", CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteTextAsync(file, contents);
+                await SaveAsJsonAsync(StaticData.Lessons.SelectMany(x => x.Elements), "lessons.json");
             }
 
             if (StaticData.Recent != null)
             {
-                await FileIO.WriteTextAsync(
-                    await storage.CreateFileAsync("recent.json", CreationCollisionOption.ReplaceExisting),
-                    await Json.StringifyAsync(StaticData.Recent));
+                await SaveAsJsonAsync(StaticData.Recent, "recent.json");
             }
 
             deferral.Complete();
         }
 
-        private void OnResuming(object sender, object args)
+        private async static Task SaveAsJsonAsync<T>(T obj, string fileName)
         {
-
+            string content = await Json.StringifyAsync(obj);
+            StorageFile file =
+                await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(file, content);
         }
     }
 }

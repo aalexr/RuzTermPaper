@@ -20,19 +20,21 @@
                    IsHitTestVisible="False">
         </TextBlock>
 
-        <NavigationView Canvas.ZIndex="0"
-                        DisplayModeChanged="navView_DisplayModeChanged"
+        <NavigationView AlwaysShowHeader="False" x:Name="NavView"
+                        Canvas.ZIndex="0"
+                        DisplayModeChanged="NavView_DisplayModeChanged"
                         Header="Расписание"
-                        IsSettingsVisible="True"
+                        IsSettingsVisible="False"
                         IsTabStop="False"
-                        ItemInvoked="navView_ItemInvoked">
+                        SelectionChanged="NavView_SelectionChanged">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Текущее расписание" Icon="Calendar" Tag="timetable"/>
+                <NavigationViewItem Content="Текущее расписание" Icon="Calendar" Tag="TimetablePage"/>
                 <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="Find"/>
             </NavigationView.MenuItems>
+            
 
-            <Frame x:Name="ContentFrame">
+            <Frame x:Name="ContentFrame" Margin="8" >
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition/>
