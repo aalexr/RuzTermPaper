@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.Xaml.Controls;
 
 namespace RuzTermPaper.Models
 {
@@ -19,13 +20,15 @@ namespace RuzTermPaper.Models
 
         public string Email => email;
 
+        public override Symbol Symbol => Symbol.Account;
+
         protected override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
 
             uriBuilder.Query =
-                $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype={(int)receivertype}&email={email}";
+                $"fromdate={from:yyyy.M.d}&todate={to:yyyy.M.d}&receivertype={(int)receivertype}&email={email}";
 
             return uriBuilder.Uri;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RuzTermPaper.Tools;
+using Windows.UI.Xaml.Controls;
 
 namespace RuzTermPaper.Models
 {
@@ -16,6 +17,8 @@ namespace RuzTermPaper.Models
         public int groupOid { get; set; }
         public string number { get; set; }
         public string speciality { get; set; }
+
+        public override Symbol Symbol => Symbol.People;
 
         /// <summary>
         /// Ищет группу в базе РУЗ по тексту

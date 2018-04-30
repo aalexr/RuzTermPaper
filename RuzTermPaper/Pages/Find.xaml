@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:main="using:RuzTermPaper"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:RuzTermPaper.Models"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="4">
@@ -20,10 +21,11 @@
                  KeyDown="EmailBox_KeyDown"
                  IsSpellCheckEnabled="False"
                  Margin="8,0,8,0">
+            
             <TextBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Symbol="Mail"/>
-                    <TextBlock Text="Почта" Margin="4,0,0,0"/>
+                    <SymbolIcon Symbol="Find"/>
+                    <TextBlock Text="Найти расписание по почте" Margin="4,0,0,0" FontStyle="Italic"/>
                 </StackPanel>
             </TextBox.Header>
         </TextBox>
@@ -33,7 +35,7 @@
                 <AppBarButton.Flyout>
                     <MenuFlyout Placement="Bottom">
                         <MenuFlyoutItem Text="Группа" Icon="People" Click="MenuFlyoutItem_Click" Tag="Group"/>
-                        <MenuFlyoutItem Text="Преподаватель" Icon="AddFriend" Click="MenuFlyoutItem_Click" Tag="Lecturer"/>
+                        <MenuFlyoutItem Text="Преподаватель" Icon="Contact" Click="MenuFlyoutItem_Click" Tag="Lecturer"/>
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
@@ -49,8 +51,22 @@
                   ItemsSource="{x:Bind main:StaticData.Recent}">
 
             <ListView.Header>
-                <TextBlock Text="Недавние поиски" FontWeight="SemiBold"/>
+                <TextBlock Text="Недавние поиски" FontWeight="SemiBold" HorizontalAlignment="Center"/>
             </ListView.Header>
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:User">
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="{x:Bind Symbol}"/>
+                        <TextBlock Text="{x:Bind Name}" Margin="4,0,0,0"/>
+                        <Button Background="Transparent">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Clear"/>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
         <ContentDialog x:Name="AddDialog" CloseButtonText="Отмена">
@@ -62,11 +78,11 @@
             </ContentDialog.Title>
 
             <AutoSuggestBox x:Name="Search"
-                                PlaceholderText="Поиск"
-                                SuggestionChosen="Search_SuggestionChosen"
-                                TextChanged="Search_TextChanged"
-                                QuerySubmitted="Search_QuerySubmitted"
-                                QueryIcon="Find"/>
+                            PlaceholderText="Поиск"
+                            SuggestionChosen="Search_SuggestionChosen"
+                            TextChanged="Search_TextChanged"
+                            QuerySubmitted="Search_QuerySubmitted"
+                            QueryIcon="Find"/>
         </ContentDialog>
     </Grid>
 

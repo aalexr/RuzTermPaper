@@ -3,6 +3,7 @@ using RuzTermPaper.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace RuzTermPaper.Models
 {
@@ -14,6 +15,8 @@ namespace RuzTermPaper.Models
         public string fio { get; set; }
         public int lecturerOid { get; set; }
         public string shortFIO { get; set; }
+
+        public override Symbol Symbol => Symbol.Contact;
 
         public bool Equals(Lecturer other) => lecturerOid == other.lecturerOid;
 
