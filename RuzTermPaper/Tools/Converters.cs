@@ -1,9 +1,10 @@
 ﻿using System;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
 
 namespace RuzTermPaper.Tools
 {
-    public class DateToStringConverter : Windows.UI.Xaml.Data.IValueConverter
+    public class DateToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -16,7 +17,7 @@ namespace RuzTermPaper.Tools
         }
     }
 
-    public class VisibleWhenEmpty : Windows.UI.Xaml.Data.IValueConverter
+    public class VisibleWhenEmpty : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language) =>
             Equals(0, (int)value) ? Visibility.Visible : Visibility.Collapsed;
