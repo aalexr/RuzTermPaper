@@ -5,20 +5,11 @@ namespace RuzTermPaper.Models
 {
     public class Student : User
     {
-        private const ReceiverType receivertype = ReceiverType.email;
-        private string email;
+        public Student() { }
 
-        public Student(string email)
-        {
-            if (email.EndsWith("@edu.hse.ru"))
-                this.email = email;
-            else
-            {
-                throw new ArgumentException();
-            }
-        }
+        public Student(string email) => Email = email;
 
-        public string Email => email;
+        public string Email { get; set; }
 
         public override Symbol Symbol => Symbol.Account;
 
@@ -28,12 +19,12 @@ namespace RuzTermPaper.Models
             uriBuilder.Path += "personlessons";
 
             uriBuilder.Query =
-                $"fromdate={from:yyyy.M.d}&todate={to:yyyy.M.d}&receivertype={(int)receivertype}&email={email}";
+                $"fromdate={from:yyyy.M.d}&todate={to:yyyy.M.d}&receivertype=0&email={Email}";
 
             return uriBuilder.Uri;
         }
 
-        public override bool Equals(User other) => other is Student student && email.Equals(student.email);
+        public override bool Equals(User other) => other is Student student && Email.Equals(student.Email);
 
         public override string ToString() => Email;
     }

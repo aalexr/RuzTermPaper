@@ -12,6 +12,7 @@
 
     <Page.Resources>
         <tools:DateToStringConverter x:Name="DateConverter"/>
+        <tools:VisibleWhenEmpty x:Name="VisibilityConverter"/>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -19,7 +20,8 @@
             <CollectionViewSource
                 x:Name="timetableCVS"
                 IsSourceGrouped="True"
-                Source="{x:Bind main:StaticData.Lessons, Mode=OneWay}"/>
+                Source="{x:Bind main:StaticData.Lessons, Mode=OneWay}"
+                ItemsPath="Elements"/>
         </Grid.Resources>
 
         <ProgressRing x:Name="ProgressRing" Width="100" Height="100" IsActive="False"/>
@@ -32,12 +34,13 @@
 
             <!--Стиль заголовка группы-->
             <ListView.GroupStyle>
-                <GroupStyle>
+                <GroupStyle HidesIfEmpty="False">
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate x:DataType="models:LessonsGroup">
-                            <Grid>
-                                <TextBlock Text="{x:Bind Key, Converter={StaticResource DateConverter}}"/>
-                            </Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Bind Key, Converter={StaticResource DateConverter}}" Margin="0,0,16,0"/>
+                                <TextBlock Text="нет занятий" Visibility="{x:Bind Elements.Count, Converter={StaticResource VisibilityConverter}}" FontStyle="Italic"/>
+                            </StackPanel>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>

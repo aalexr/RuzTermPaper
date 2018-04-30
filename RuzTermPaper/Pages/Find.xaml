@@ -21,21 +21,20 @@
                  KeyDown="EmailBox_KeyDown"
                  IsSpellCheckEnabled="False"
                  Margin="8,0,8,0">
-            
+
             <TextBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Symbol="Find"/>
                     <TextBlock Text="Найти расписание по почте" Margin="4,0,0,0" FontStyle="Italic"/>
                 </StackPanel>
             </TextBox.Header>
         </TextBox>
 
         <CommandBar Grid.Row="1" Background="Transparent" DefaultLabelPosition="Right">
-            <AppBarButton Icon="Add" Label="Добавить еще">
+            <AppBarButton Icon="Find" Label="Найти еще">
                 <AppBarButton.Flyout>
-                    <MenuFlyout Placement="Bottom">
-                        <MenuFlyoutItem Text="Группа" Icon="People" Click="MenuFlyoutItem_Click" Tag="Group"/>
-                        <MenuFlyoutItem Text="Преподаватель" Icon="Contact" Click="MenuFlyoutItem_Click" Tag="Lecturer"/>
+                    <MenuFlyout Placement="Bottom" x:Name="Flyout">
+                        <MenuFlyoutItem Text="Группа" Icon="People" Click="AddMenuFlyoutItem_Click"/>
+                        <MenuFlyoutItem Text="Преподаватель" Icon="Contact" Click="AddMenuFlyoutItem_Click"/>
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
@@ -56,14 +55,14 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:User">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" x:Name="SP">
+                        <StackPanel.ContextFlyout>
+                            <MenuFlyout Placement="Bottom">
+                                <MenuFlyoutItem Icon="Delete" Text="Delete" Click="DeleteMenuFlyoutItem_Click"/>
+                            </MenuFlyout>
+                        </StackPanel.ContextFlyout>
                         <SymbolIcon Symbol="{x:Bind Symbol}"/>
                         <TextBlock Text="{x:Bind Name}" Margin="4,0,0,0"/>
-                        <Button Background="Transparent">
-                            <Button.Content>
-                                <SymbolIcon Symbol="Clear"/>
-                            </Button.Content>
-                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -72,8 +71,8 @@
         <ContentDialog x:Name="AddDialog" CloseButtonText="Отмена">
             <ContentDialog.Title>
                 <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Symbol="Add" Margin="0,0,8,0"/>
-                    <TextBlock Text="Добавить расписание"/>
+                    <SymbolIcon Symbol="Find" Margin="0,0,8,0"/>
+                    <TextBlock Text="Найти"/>
                 </StackPanel>
             </ContentDialog.Title>
 

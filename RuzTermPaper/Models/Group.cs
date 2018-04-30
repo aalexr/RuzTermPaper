@@ -8,7 +8,6 @@ namespace RuzTermPaper.Models
 {
     public class Group : User
     {
-        private const ReceiverType receivertype = ReceiverType.groupOid;
         public int chairOid { get; set; }
         public int course { get; set; }
         public string faculty { get; set; }
@@ -37,7 +36,7 @@ namespace RuzTermPaper.Models
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
-            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype={(int)receivertype}&groupOid={groupOid}";
+            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype=3&groupOid={groupOid}";
 
             return uriBuilder.Uri;
         }

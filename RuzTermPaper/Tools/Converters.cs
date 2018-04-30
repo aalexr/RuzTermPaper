@@ -1,6 +1,5 @@
 ﻿using System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace RuzTermPaper.Tools
 {
@@ -16,4 +15,13 @@ namespace RuzTermPaper.Tools
             return DateTime.Parse((string)value);
         }
     }
+
+    public class VisibleWhenEmpty : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language) =>
+            Equals(0, (int)value) ? Visibility.Visible : Visibility.Collapsed;
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
+    }
+
 }

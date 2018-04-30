@@ -104,7 +104,7 @@
     <Compile Include="Pages\Find.xaml.cs">
       <DependentUpon>Find.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\DateToStringConverter.cs" />
+    <Compile Include="Tools\Converters.cs" />
     <Compile Include="Tools\Json.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Group.cs" />

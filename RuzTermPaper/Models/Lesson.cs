@@ -5,7 +5,7 @@ using RuzTermPaper.Tools;
 
 namespace RuzTermPaper.Models
 {
-    public class Lesson
+    public class Lesson : IComparable<Lesson>
     {
         #region Public Fields
         public string Auditorium { get; set; }
@@ -40,6 +40,8 @@ namespace RuzTermPaper.Models
         /// <returns>Список найденных занятий</returns>
         public static async Task<List<Lesson>> GetLessonsAsync(Uri request) =>
             await Json.ToObjectAsync<List<Lesson>>(await App.Http.GetStringAsync(request));
+
+        public int CompareTo(Lesson other) => DateOfNest.CompareTo(other.DateOfNest);
 
         public override string ToString() =>
             $"{DayOfWeekString} {DateOfNest:dd.MM.yy} {BeginLesson}-{EndLesson} {Discipline} ауд. {Auditorium}";

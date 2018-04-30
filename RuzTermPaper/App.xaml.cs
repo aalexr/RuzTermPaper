@@ -71,12 +71,13 @@ namespace RuzTermPaper
                 #region Restore Lessons List
                 StorageFile lessonsFile = await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json");
                 string value = await FileIO.ReadTextAsync(lessonsFile);
-                //Lesson[] deserialized = await Json.ToObjectAsync<Lesson[]>(value);
+                Lesson[] deserialized = await Json.ToObjectAsync<Lesson[]>(value);
+                Array.Sort(deserialized);
 
-                //StaticData.Lessons = deserialized
-                //    .GroupBy(L => L.DateOfNest)
-                //    .Select(G => new LessonsGroup(G.Key, G))
-                //    .ToList();
+                StaticData.Lessons = deserialized
+                    .GroupBy(L => L.DateOfNest)
+                    .Select(G => new LessonsGroup(G.Key, G))
+                    .ToList();
                 #endregion
 
                 #region Restore Recent List

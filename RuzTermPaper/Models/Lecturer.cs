@@ -9,7 +9,6 @@ namespace RuzTermPaper.Models
 {
     public class Lecturer : User
     {
-        private const ReceiverType receivertype = ReceiverType.lecturerOid;
         public string chair { get; set; }
         public int chairOid { get; set; }
         public string fio { get; set; }
@@ -25,7 +24,7 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
         /// <returns>Список найденных преподавателей</returns>
-        public static async Task<List<Lecturer>> FindLecturerAsync(string findText = "")
+        public static async Task<List<Lecturer>> FindAsync(string findText = "")
         {
             var requestUri = new Uri(BaseUri, $"lecturers?findtext={findText}");
             return JsonConvert.DeserializeObject<List<Lecturer>>(await App.Http.GetStringAsync(requestUri));
@@ -38,7 +37,7 @@ namespace RuzTermPaper.Models
             UriBuilder uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
 
-            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype={(int)receivertype}&lecturerOid={lecturerOid}";
+            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype=1&lecturerOid={lecturerOid}";
 
             return uriBuilder.Uri;
         }

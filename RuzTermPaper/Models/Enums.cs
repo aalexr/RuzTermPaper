@@ -3,7 +3,7 @@
     /// <summary>
     /// Тип получателя расписания
     /// </summary>
-    public enum ReceiverType { email, lecturerOid, groupOid = 3 }
+    public enum UserType { Student, Lecturer, Group }
 
     /// <summary>
     /// Язык полученного расписания

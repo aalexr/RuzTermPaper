@@ -5,9 +5,13 @@ using System.Linq;
 
 namespace RuzTermPaper.Models
 {
-    public class LessonsGroup : IGrouping<DateTime, Lesson>
+    public class LessonsGroup
     {
-        public LessonsGroup() { }
+        public LessonsGroup(DateTime key)
+        {
+            Key = key;
+            Elements = new List<Lesson>(0);
+        }
         public LessonsGroup(DateTime key, IEnumerable<Lesson> elements)
         {
             Key = key;
@@ -16,9 +20,5 @@ namespace RuzTermPaper.Models
 
         public DateTime Key { get; set; }
         public List<Lesson> Elements { get; set; }
-
-        public IEnumerator<Lesson> GetEnumerator() => Elements.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => Elements.GetEnumerator();
     }
 }

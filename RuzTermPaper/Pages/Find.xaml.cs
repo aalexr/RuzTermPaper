@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using RuzTermPaper.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
-using RuzTermPaper.Models;
-using System.Net.Http;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -20,7 +21,12 @@ namespace RuzTermPaper.Pages
     {
         private NavigationView navigationView;
 
-        public Find() => InitializeComponent();
+        public Find()
+        {
+            InitializeComponent();
+            Flyout.Items[0].Tag = Models.UserType.Group;
+            Flyout.Items[1].Tag = Models.UserType.Lecturer;
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) => navigationView = e.Parameter as NavigationView;
 
@@ -33,6 +39,8 @@ namespace RuzTermPaper.Pages
                     sender.ItemsSource = null;
                     return;
                 }
+
+                sender.ItemsSource = StaticData.Users.Where(x => x.Name.Contains(sender.Text));
             }
         }
 
@@ -46,20 +54,20 @@ namespace RuzTermPaper.Pages
                 if (!StaticData.Recent.Contains(user))
                     StaticData.Recent.Add(user);
 
-                StaticData.Lessons = await user.GetLessonsAsync(today, today.AddDays(7));
+                StaticData.Lessons = await user.GetLessonsAsync(today, 21);
                 navigationView.SelectedItem = navigationView.MenuItems[0];
             }
         }
 
         private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) =>
-            sender.Text = (string)args.SelectedItem;
+            sender.Text = args.SelectedItem.ToString();
 
 
         private async void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)
         {
             if (e.ClickedItem is Models.User user)
             {
-                StaticData.Lessons = await user.GetLessonsAsync(DateTime.Now, DateTime.Now.AddDays(7));
+                StaticData.Lessons = await user.GetLessonsAsync(DateTime.Today, 7);
 
                 navigationView.SelectedItem = navigationView.MenuItems[0];
             }
@@ -77,7 +85,7 @@ namespace RuzTermPaper.Pages
 
                     try
                     {
-                        StaticData.Lessons = await student.GetLessonsAsync(DateTime.Now, DateTime.Now.AddDays(7));
+                        StaticData.Lessons = await student.GetLessonsAsync(DateTime.Today, 7);
                     }
                     catch (HttpRequestException ex)
                     {
@@ -101,19 +109,52 @@ namespace RuzTermPaper.Pages
             }
         }
 
-        private async void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        private async void AddMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            switch (((MenuFlyoutItem)sender).Tag)
-            {
-                case "Group":
-                    await AddDialog.ShowAsync();
-                    break;
+            if (!(sender is MenuFlyoutItem item))
+                return;
 
-                case "Lecturer":
-                    await AddDialog.ShowAsync();
-                    break;
+            try
+            {
+                await Do((Models.UserType)item.Tag);
+            }
+            catch (HttpRequestException ex)
+            {
 
             }
+
+        }
+
+        private async Task Do(Models.UserType type)
+        {
+            if (!(AddDialog.Content is AutoSuggestBox suggestBox))
+                return;
+
+            if (type == Models.UserType.Group)
+            {
+                suggestBox.Header = "Найдите расписание группы по ее номеру";
+                suggestBox.PlaceholderText = "Начните вводить группу";
+                suggestBox.ItemsSource = StaticData.Users = await Group.FindAsync();
+            }
+            else
+            {
+                if (type == Models.UserType.Lecturer)
+                {
+                    suggestBox.Header = "Найдите расписание преподавателя";
+                    suggestBox.PlaceholderText = "Введите имя преподавателя";
+                    suggestBox.ItemsSource = StaticData.Users = await Lecturer.FindAsync();
+                }
+            }
+
+            await AddDialog.ShowAsync();
+        }
+
+        private void DeleteMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is MenuFlyoutItem item))
+                return;
+
+            StaticData.Recent.Remove((Models.User)item.DataContext);
         }
     }
 }
