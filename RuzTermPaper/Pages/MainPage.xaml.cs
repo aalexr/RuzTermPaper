@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -20,9 +20,10 @@ namespace RuzTermPaper.Pages
         protected override void OnNavigatedTo(NavigationEventArgs e) => ContentFrame.Navigate(typeof(TimetablePage));
 
         private void NavView_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args) =>
-            AppTitle.Visibility = args.DisplayMode == NavigationViewDisplayMode.Expanded
-                ? Windows.UI.Xaml.Visibility.Visible
-                : Windows.UI.Xaml.Visibility.Collapsed;
+            AppTitle.Visibility =
+            args.DisplayMode == NavigationViewDisplayMode.Expanded
+            ? Visibility.Visible
+            : Visibility.Collapsed;
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {

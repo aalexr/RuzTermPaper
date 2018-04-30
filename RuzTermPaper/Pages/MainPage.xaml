@@ -23,7 +23,7 @@
         <NavigationView AlwaysShowHeader="False" x:Name="NavView"
                         Canvas.ZIndex="0"
                         DisplayModeChanged="NavView_DisplayModeChanged"
-                        Header="Расписание"
+                        Header="{x:Bind appmodel:Package.Current.DisplayName}"
                         IsSettingsVisible="False"
                         IsTabStop="False"
                         SelectionChanged="NavView_SelectionChanged">
