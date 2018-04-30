@@ -5,8 +5,6 @@ namespace RuzTermPaper.Models
 {
     public class Student : User
     {
-        public Student() { }
-
         public Student(string email) => Email = email;
 
         public string Email { get; set; }
