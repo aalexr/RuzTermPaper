@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using RuzTermPaper.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,6 +41,6 @@ namespace RuzTermPaper.Models
             return uriBuilder.Uri;
         }
 
-        public override bool Equals(User other) => lecturerOid.Equals((other as Lecturer).lecturerOid);
+        public override bool Equals(User other) => other is Lecturer lecturer && this.lecturerOid.Equals(lecturer.lecturerOid);
     }
 }

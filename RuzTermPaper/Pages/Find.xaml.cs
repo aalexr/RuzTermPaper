@@ -115,11 +115,12 @@ namespace RuzTermPaper.Pages
 
             try
             {
+                //ToDo Change name
                 await Do((Models.UserType)item.Tag);
             }
             catch (HttpRequestException ex)
             {
-
+                //ToDo Show useful info
             }
 
         }

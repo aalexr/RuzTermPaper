@@ -41,6 +41,6 @@ namespace RuzTermPaper.Models
             return uriBuilder.Uri;
         }
 
-        public override bool Equals(User other) => groupOid.Equals((other as Group).groupOid);
+        public override bool Equals(User other) => other is Group group && this.groupOid.Equals(group.groupOid);
     }
 }

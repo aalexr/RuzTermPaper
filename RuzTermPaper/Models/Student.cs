@@ -5,9 +5,12 @@ namespace RuzTermPaper.Models
 {
     public class Student : User
     {
-        public Student(string email) => Email = email;
-
+        public string fio { get; set; }
+        public string shortFIO { get; set; }
+        public int studentOid { get; set; }
         public string Email { get; set; }
+
+        public Student(string email) => Email = email;
 
         public override Symbol Symbol => Symbol.Account;
 
@@ -22,7 +25,7 @@ namespace RuzTermPaper.Models
             return uriBuilder.Uri;
         }
 
-        public override bool Equals(User other) => other is Student student && Email.Equals(student.Email);
+        public override bool Equals(User other) => other is Student student && this.Email.Equals(student.Email);
 
         public override string ToString() => Email;
     }
