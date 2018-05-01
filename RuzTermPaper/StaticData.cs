@@ -4,10 +4,10 @@ using System.Collections.ObjectModel;
 
 namespace RuzTermPaper
 {
-
     static class StaticData
     {
-        public static List<LessonsGroup> Lessons { get; set; }
+        public static User CurrentUser { get; set; }
+        public static ObservableCollection<LessonsGroup> Lessons { get; set; } = new ObservableCollection<LessonsGroup>();
         public static ObservableCollection<User> Recent { get; set; } = new ObservableCollection<User>();
         public static IEnumerable<User> Users { get; set; }
     }

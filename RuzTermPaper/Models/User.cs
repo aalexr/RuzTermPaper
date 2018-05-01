@@ -36,7 +36,7 @@ namespace RuzTermPaper.Models
         /// <param name="period">Количество дней начиная с from</param>
         /// <param name="language">Язык расписания</param>
         /// <returns></returns>
-        public async Task<List<LessonsGroup>> GetLessonsAsync(DateTime from, int period, Language language = Language.Russian) =>
+        public async Task<IEnumerable<LessonsGroup>> GetLessonsAsync(DateTime from, int period, Language language = Language.Russian) =>
             await GetLessonsAsync(from, from.AddDays(period), language);
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace RuzTermPaper.Models
         /// <param name="to">Конечная дата</param>
         /// <param name="language">Язык расписания</param>
         /// <returns></returns>
-        public async Task<List<LessonsGroup>> GetLessonsAsync(DateTime from, DateTime to, Language language = Language.Russian)
+        public async Task<IEnumerable<LessonsGroup>> GetLessonsAsync(DateTime from, DateTime to, Language language = Language.Russian)
         {
             List<Lesson> list =
                 await Json.ToObjectAsync<List<Lesson>>

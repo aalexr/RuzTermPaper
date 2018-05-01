@@ -1,5 +1,7 @@
 ﻿using RuzTermPaper.Models;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -52,9 +54,40 @@ namespace RuzTermPaper.Pages
 
                 if (!StaticData.Recent.Contains(user))
                     StaticData.Recent.Add(user);
-
-                StaticData.Lessons = await user.GetLessonsAsync(today, 21);
+                await UpdateLessons(user, today);
                 navigationView.SelectedItem = navigationView.MenuItems[0];
+            }
+        }
+
+        private static async Task UpdateLessons(Models.User user, DateTime today)
+        {
+            StaticData.CurrentUser = user;
+            StaticData.Lessons.Clear();
+            try
+            {
+                foreach (var item in await user.GetLessonsAsync(today, 7))
+                {
+                    StaticData.Lessons.Add(item);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ContentDialog dialog = new ContentDialog { PrimaryButtonText = "OK", Content = ex.Message, Title = "Ошибка соединения" };
+                await dialog.ShowAsync();
+            }
+            catch (Exception ex)
+            {
+                ContentDialog dialog = new ContentDialog { PrimaryButtonText = "OK", Content = ex.Message, Title = "Ошибка" };
+                await dialog.ShowAsync();
+            }
+        }
+
+        public static void UpdateLessons(IEnumerable<LessonsGroup> lessons)
+        {
+            StaticData.Lessons.Clear();
+            foreach (var item in lessons)
+            {
+                StaticData.Lessons.Add(item);
             }
         }
 
@@ -66,9 +99,9 @@ namespace RuzTermPaper.Pages
         {
             if (e.ClickedItem is Models.User user)
             {
-                StaticData.Lessons = await user.GetLessonsAsync(DateTime.Today, 7);
-
+                StaticData.CurrentUser = user;
                 navigationView.SelectedItem = navigationView.MenuItems[0];
+                await UpdateLessons(user, DateTime.Today);
             }
         }
 
@@ -79,31 +112,12 @@ namespace RuzTermPaper.Pages
                 if (textBox.Text.EndsWith("@edu.hse.ru"))
                 {
                     Student student = new Student(textBox.Text);
+
                     if (!StaticData.Recent.Contains(student))
                         StaticData.Recent.Add(student);
 
-                    try
-                    {
-                        StaticData.Lessons = await student.GetLessonsAsync(DateTime.Today, 7);
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        ContentDialog dialog = new ContentDialog { PrimaryButtonText = "OK", Content = ex.Message, Title = "Ошибка соединения" };
-                        await dialog.ShowAsync();
-                        return;
-                    }
-                    catch (Exception ex)
-                    {
-                        ContentDialog dialog = new ContentDialog { PrimaryButtonText = "OK", Content = ex.Message, Title = "Error" };
-                        await dialog.ShowAsync();
-                        return;
-                    }
-
                     navigationView.SelectedItem = navigationView.MenuItems[0];
-                }
-                else
-                {
-
+                    await UpdateLessons(student, DateTime.Today);
                 }
             }
         }
@@ -118,9 +132,11 @@ namespace RuzTermPaper.Pages
                 //ToDo Change name
                 await Do((Models.UserType)item.Tag);
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
             {
                 //ToDo Show useful info
+                var dialog = new ContentDialog { PrimaryButtonText = "OK", Title = "Ошибка", Content = $"Ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее" };
+                await dialog.ShowAsync();
             }
 
         }
@@ -151,10 +167,10 @@ namespace RuzTermPaper.Pages
 
         private void DeleteMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is MenuFlyoutItem item))
+            if (!(sender is MenuFlyoutItem item && item.DataContext is Models.User user))
                 return;
 
-            StaticData.Recent.Remove((Models.User)item.DataContext);
+            StaticData.Recent.Remove(user);
         }
     }
 }

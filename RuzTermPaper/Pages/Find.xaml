@@ -58,7 +58,7 @@
                     <StackPanel Orientation="Horizontal" x:Name="SP">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout Placement="Bottom">
-                                <MenuFlyoutItem Icon="Delete" Text="Delete" Click="DeleteMenuFlyoutItem_Click"/>
+                                <MenuFlyoutItem Icon="Delete" Text="Убрать из списка" Click="DeleteMenuFlyoutItem_Click"/>
                             </MenuFlyout>
                         </StackPanel.ContextFlyout>
                         <SymbolIcon Symbol="{x:Bind Symbol}"/>

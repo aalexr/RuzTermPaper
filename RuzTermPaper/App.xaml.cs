@@ -74,10 +74,10 @@ namespace RuzTermPaper
                 Lesson[] deserialized = await Json.ToObjectAsync<Lesson[]>(value);
                 Array.Sort(deserialized);
 
-                StaticData.Lessons = deserialized
+                Find.UpdateLessons(deserialized
                     .GroupBy(L => L.DateOfNest)
-                    .Select(G => new LessonsGroup(G.Key, G))
-                    .ToList();
+                    .Select(G => new LessonsGroup(G.Key, G)));
+
                 #endregion
 
                 #region Restore Recent List

@@ -26,10 +26,14 @@
 
         <ProgressRing x:Name="ProgressRing" Width="100" Height="100" IsActive="False"/>
 
-        <ListView Name="timetable" ItemsSource="{x:Bind timetableCVS.View, Mode=OneWay}" SelectionMode="None">
+        <ListView Name="TimetableListView"
+                  ItemsSource="{x:Bind timetableCVS.View, Mode=OneWay}"
+                  SelectionMode="None"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.VerticalScrollMode="Auto">
 
             <ListView.Footer>
-                <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Margin="8"/>
+                <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Margin="8" Click="HyperlinkButton_Click"/>
             </ListView.Footer>
 
             <!--Стиль заголовка группы-->
