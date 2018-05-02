@@ -31,7 +31,7 @@ namespace RuzTermPaper.Pages
             else
             {
                 NavigationViewItem selectedItem = (NavigationViewItem)args.SelectedItem;
-                string pageName = $"RuzTermPaper.Pages.{(string)selectedItem.Tag}";
+                string pageName = (string)selectedItem.Tag;
                 ContentFrame.Navigate(Type.GetType(pageName), NavView);
             }
         }

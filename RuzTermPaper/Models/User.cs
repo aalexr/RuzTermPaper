@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Windows.UI.Xaml.Controls;
+using System.Runtime.Serialization;
 
 namespace RuzTermPaper.Models
 {
     public abstract class User : IEquatable<User>
     {
+        [JsonIgnore]
         /// <summary>
         /// Символ пользователя
         /// </summary>
@@ -18,6 +21,7 @@ namespace RuzTermPaper.Models
         /// Базовое URI
         /// </summary>
         protected static readonly Uri BaseUri = new Uri("http://92.242.58.221/RUZService.svc/");
+        [JsonIgnore]
         public string Name => ToString();
 
         /// <summary>

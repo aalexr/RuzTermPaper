@@ -29,8 +29,8 @@
                         SelectionChanged="NavView_SelectionChanged">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Текущее расписание" Icon="Calendar" Tag="TimetablePage"/>
-                <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="Find"/>
+                <NavigationViewItem Content="Текущее расписание" Icon="Calendar" Tag="RuzTermPaper.Pages.TimetablePage"/>
+                <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="RuzTermPaper.Pages.Find"/>
             </NavigationView.MenuItems>
             
 

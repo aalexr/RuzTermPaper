@@ -20,7 +20,7 @@
             <CollectionViewSource
                 x:Name="timetableCVS"
                 IsSourceGrouped="True"
-                Source="{x:Bind main:StaticData.Lessons, Mode=OneWay}"
+                Source="{x:Bind data.Lessons, Mode=OneWay}"
                 ItemsPath="Elements"/>
         </Grid.Resources>
 

@@ -12,14 +12,19 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class TimetablePage : Page
     {
-        public TimetablePage() => this.InitializeComponent();
+        private SingletonData data;
+        public TimetablePage()
+        {
+            InitializeComponent();
+            data = SingletonData.Initialize();
+        }
 
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
-            DateTime lastDate = StaticData.Lessons.Last().Key.AddDays(1);
-            foreach(var l in await StaticData.CurrentUser.GetLessonsAsync(lastDate, 7))
+            DateTime lastDate = data.Lessons.Last().Key.AddDays(1);
+            foreach(var l in await data.CurrentUser.GetLessonsAsync(lastDate, 7))
             {
-                StaticData.Lessons.Add(l);
+                data.Lessons.Add(l);
             }
         }
     }

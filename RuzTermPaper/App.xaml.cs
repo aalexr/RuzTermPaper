@@ -1,11 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using RuzTermPaper.Models;
-using RuzTermPaper.Pages;
+﻿using RuzTermPaper.Pages;
 using RuzTermPaper.Tools;
 using System;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
@@ -24,6 +20,7 @@ namespace RuzTermPaper
     sealed partial class App : Application
     {
         public static readonly HttpClient Http = new HttpClient();
+        private SingletonData data;
         /// <inheritdoc />
         /// <summary>
         /// Инициализирует одноэлементный объект приложения. Это первая выполняемая строка разрабатываемого
@@ -68,50 +65,19 @@ namespace RuzTermPaper
             // параметр
             if (rootFrame.Content == null)
             {
-                #region Restore Lessons List
-                StorageFile lessonsFile = await ApplicationData.Current.LocalFolder.GetFileAsync("lessons.json");
-                string value = await FileIO.ReadTextAsync(lessonsFile);
-                Lesson[] deserialized = await Json.ToObjectAsync<Lesson[]>(value);
-                Array.Sort(deserialized);
-
-                Find.UpdateLessons(deserialized
-                    .GroupBy(L => L.DateOfNest)
-                    .Select(G => new LessonsGroup(G.Key, G)));
-
-                #endregion
-
-                #region Restore Recent List
                 try
                 {
-                    StorageFile recentFile = await ApplicationData.Current.LocalFolder.GetFileAsync("recent.json");
-                    string recent = await FileIO.ReadTextAsync(recentFile);
-
-                    foreach (var token in JArray.Parse(recent))
-                    {
-                        if (token["groupOid"] != null)
-                            StaticData.Recent.Add(token.ToObject<Group>());
-                        else
-                        {
-                            if (token["lecturerOid"] != null)
-                                StaticData.Recent.Add(token.ToObject<Lecturer>());
-                            else
-                            {
-                                if (token["Email"] != null)
-                                    StaticData.Recent.Add(token.ToObject<Student>());
-                            }
-                        }
-                    }
+                    StorageFile dataFile = await ApplicationData.Current.LocalFolder.GetFileAsync("data.json");
+                    data = await SingletonData.Initialize(dataFile);
                 }
-                catch (Exception ex)
+                catch (System.IO.FileNotFoundException)
                 {
-                    ContentDialog dialog = new ContentDialog
-                    {
-                        Content = ex.Message,
-                        CloseButtonText = "OK"
-                    };
-                    await dialog.ShowAsync();
+                    data = SingletonData.Initialize();
                 }
-                #endregion
+                catch (Exception)
+                {
+                    data = SingletonData.Initialize();
+                }
 
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
@@ -146,25 +112,12 @@ namespace RuzTermPaper
         {
             SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
 
-            if (StaticData.Lessons != null)
-            {
-                await SaveAsJsonAsync(StaticData.Lessons.SelectMany(x => x.Elements), "lessons.json");
-            }
-
-            if (StaticData.Recent != null)
-            {
-                await SaveAsJsonAsync(StaticData.Recent, "recent.json");
-            }
+            string serialized = await Json.StringifyAsync(data);
+            StorageFile file =
+                await ApplicationData.Current.LocalFolder.CreateFileAsync("data.json", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(file, serialized);
 
             deferral.Complete();
-        }
-
-        private async static Task SaveAsJsonAsync<T>(T obj, string fileName)
-        {
-            string content = await Json.StringifyAsync(obj);
-            StorageFile file =
-                await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(file, content);
         }
     }
 }

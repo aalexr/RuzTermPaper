@@ -1,6 +1,5 @@
 ﻿using RuzTermPaper.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -21,12 +20,14 @@ namespace RuzTermPaper.Pages
     public sealed partial class Find : Page
     {
         private NavigationView navigationView;
+        private SingletonData data;
 
         public Find()
         {
             InitializeComponent();
             Flyout.Items[0].Tag = Models.UserType.Group;
             Flyout.Items[1].Tag = Models.UserType.Lecturer;
+            data = SingletonData.Initialize();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) => navigationView = e.Parameter as NavigationView;
@@ -41,7 +42,7 @@ namespace RuzTermPaper.Pages
                     return;
                 }
 
-                sender.ItemsSource = StaticData.Users.Where(x => x.Name.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
+                sender.ItemsSource = data.Users.Where(x => x.Name.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
             }
         }
 
@@ -52,22 +53,22 @@ namespace RuzTermPaper.Pages
                 AddDialog.Hide();
                 DateTime today = DateTime.Today;
 
-                if (!StaticData.Recent.Contains(user))
-                    StaticData.Recent.Add(user);
+                if (!data.Recent.Contains(user))
+                    data.Recent.Add(user);
                 await UpdateLessons(user, today);
                 navigationView.SelectedItem = navigationView.MenuItems[0];
             }
         }
 
-        private static async Task UpdateLessons(Models.User user, DateTime today)
+        private async Task UpdateLessons(Models.User user, DateTime today)
         {
-            StaticData.CurrentUser = user;
-            StaticData.Lessons.Clear();
+            data.CurrentUser = user;
+            data.Lessons.Clear();
             try
             {
                 foreach (var item in await user.GetLessonsAsync(today, 7))
                 {
-                    StaticData.Lessons.Add(item);
+                    data.Lessons.Add(item);
                 }
             }
             catch (HttpRequestException ex)
@@ -82,12 +83,12 @@ namespace RuzTermPaper.Pages
             }
         }
 
-        public static void UpdateLessons(IEnumerable<LessonsGroup> lessons)
+        public void UpdateLessons(IEnumerable<LessonsGroup> lessons)
         {
-            StaticData.Lessons.Clear();
+            data.Lessons.Clear();
             foreach (var item in lessons)
             {
-                StaticData.Lessons.Add(item);
+                data.Lessons.Add(item);
             }
         }
 
@@ -99,7 +100,7 @@ namespace RuzTermPaper.Pages
         {
             if (e.ClickedItem is Models.User user)
             {
-                StaticData.CurrentUser = user;
+                data.CurrentUser = user;
                 navigationView.SelectedItem = navigationView.MenuItems[0];
                 await UpdateLessons(user, DateTime.Today);
             }
@@ -113,8 +114,8 @@ namespace RuzTermPaper.Pages
                 {
                     Student student = new Student(textBox.Text);
 
-                    if (!StaticData.Recent.Contains(student))
-                        StaticData.Recent.Add(student);
+                    if (!data.Recent.Contains(student))
+                        data.Recent.Add(student);
 
                     navigationView.SelectedItem = navigationView.MenuItems[0];
                     await UpdateLessons(student, DateTime.Today);
@@ -150,7 +151,7 @@ namespace RuzTermPaper.Pages
             {
                 suggestBox.Header = "Найдите расписание группы по ее номеру";
                 suggestBox.PlaceholderText = "Начните вводить группу";
-                suggestBox.ItemsSource = StaticData.Users = await Group.FindAsync();
+                suggestBox.ItemsSource = data.Users = await Group.FindAsync();
             }
             else
             {
@@ -158,7 +159,7 @@ namespace RuzTermPaper.Pages
                 {
                     suggestBox.Header = "Найдите расписание преподавателя";
                     suggestBox.PlaceholderText = "Введите имя преподавателя";
-                    suggestBox.ItemsSource = StaticData.Users = await Lecturer.FindAsync();
+                    suggestBox.ItemsSource = data.Users = await Lecturer.FindAsync();
                 }
             }
 
@@ -170,7 +171,7 @@ namespace RuzTermPaper.Pages
             if (!(sender is MenuFlyoutItem item && item.DataContext is Models.User user))
                 return;
 
-            StaticData.Recent.Remove(user);
+            data.Recent.Remove(user);
         }
     }
 }
