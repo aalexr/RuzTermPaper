@@ -30,7 +30,7 @@
 
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Текущее расписание" Icon="Calendar" Tag="RuzTermPaper.Pages.TimetablePage"/>
-                <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="RuzTermPaper.Pages.Find"/>
+                <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="RuzTermPaper.Pages.FindPage"/>
             </NavigationView.MenuItems>
             
 

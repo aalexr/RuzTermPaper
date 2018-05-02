@@ -17,12 +17,12 @@ namespace RuzTermPaper.Pages
     /// <summary>
     /// Пустая страница, которую можно использовать саму по себе или для перехода внутри фрейма.
     /// </summary>
-    public sealed partial class Find : Page
+    public sealed partial class FindPage : Page
     {
         private NavigationView navigationView;
         private SingletonData data;
 
-        public Find()
+        public FindPage()
         {
             InitializeComponent();
             Flyout.Items[0].Tag = Models.UserType.Group;
