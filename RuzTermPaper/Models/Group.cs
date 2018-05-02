@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using RuzTermPaper.Tools;
 using Windows.UI.Xaml.Controls;
+// ReSharper disable UnusedMember.Global
 
 namespace RuzTermPaper.Models
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class Group : User
     {
         public int chairOid { get; set; }
@@ -34,7 +36,7 @@ namespace RuzTermPaper.Models
 
         protected override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
         {
-            UriBuilder uriBuilder = new UriBuilder(BaseUri);
+            var uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
             uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype=3&groupOid={groupOid}";
 

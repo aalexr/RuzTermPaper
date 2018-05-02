@@ -1,6 +1,5 @@
 ﻿using RuzTermPaper.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -25,8 +24,12 @@ namespace RuzTermPaper.Pages
         public FindPage()
         {
             InitializeComponent();
-            Flyout.Items[0].Tag = Models.UserType.Group;
-            Flyout.Items[1].Tag = Models.UserType.Lecturer;
+            if (Flyout.Items != null)
+            {
+                Flyout.Items[0].Tag = Models.UserType.Group;
+                Flyout.Items[1].Tag = Models.UserType.Lecturer;
+            }
+
             data = SingletonData.Initialize();
         }
 
@@ -48,16 +51,16 @@ namespace RuzTermPaper.Pages
 
         private async void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (args.ChosenSuggestion is Models.User user)
-            {
-                AddDialog.Hide();
-                DateTime today = DateTime.Today;
+            if (!(args.ChosenSuggestion is Models.User user))
+                return;
 
-                if (!data.Recent.Contains(user))
-                    data.Recent.Add(user);
-                await UpdateLessons(user, today);
-                navigationView.SelectedItem = navigationView.MenuItems[0];
-            }
+            AddDialog.Hide();
+            var today = DateTime.Today;
+
+            if (!data.Recent.Contains(user))
+                data.Recent.Add(user);
+            await UpdateLessons(user, today);
+            navigationView.SelectedItem = navigationView.MenuItems[0];
         }
 
         private async Task UpdateLessons(Models.User user, DateTime today)
@@ -73,22 +76,23 @@ namespace RuzTermPaper.Pages
             }
             catch (HttpRequestException ex)
             {
-                ContentDialog dialog = new ContentDialog { PrimaryButtonText = "OK", Content = ex.Message, Title = "Ошибка соединения" };
+                var dialog = new ContentDialog
+                {
+                    PrimaryButtonText = "OK",
+                    Content = ex.Message,
+                    Title = "Ошибка соединения"
+                };
                 await dialog.ShowAsync();
             }
             catch (Exception ex)
             {
-                ContentDialog dialog = new ContentDialog { PrimaryButtonText = "OK", Content = ex.Message, Title = "Ошибка" };
+                var dialog = new ContentDialog
+                {
+                    PrimaryButtonText = "OK",
+                    Content = ex.Message,
+                    Title = "Ошибка"
+                };
                 await dialog.ShowAsync();
-            }
-        }
-
-        public void UpdateLessons(IEnumerable<LessonsGroup> lessons)
-        {
-            data.Lessons.Clear();
-            foreach (var item in lessons)
-            {
-                data.Lessons.Add(item);
             }
         }
 
@@ -98,29 +102,25 @@ namespace RuzTermPaper.Pages
 
         private async void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)
         {
-            if (e.ClickedItem is Models.User user)
-            {
-                data.CurrentUser = user;
-                navigationView.SelectedItem = navigationView.MenuItems[0];
-                await UpdateLessons(user, DateTime.Today);
-            }
+            if (!(e.ClickedItem is Models.User user))
+                return;
+
+            navigationView.SelectedItem = navigationView.MenuItems[0];
+            await UpdateLessons(user, DateTime.Today);
         }
 
         private async void EmailBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (sender is TextBox textBox && e.Key == VirtualKey.Enter)
-            {
-                if (textBox.Text.EndsWith("@edu.hse.ru"))
-                {
-                    Student student = new Student(textBox.Text);
+            if (!(sender is TextBox textBox) || e.Key != VirtualKey.Enter || !textBox.Text.EndsWith("@edu.hse.ru"))
+                return;
 
-                    if (!data.Recent.Contains(student))
-                        data.Recent.Add(student);
+            var student = new Student(textBox.Text);
 
-                    navigationView.SelectedItem = navigationView.MenuItems[0];
-                    await UpdateLessons(student, DateTime.Today);
-                }
-            }
+            if (!data.Recent.Contains(student))
+                data.Recent.Add(student);
+
+            navigationView.SelectedItem = navigationView.MenuItems[0];
+            await UpdateLessons(student, DateTime.Today);
         }
 
         private async void AddMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -130,37 +130,39 @@ namespace RuzTermPaper.Pages
 
             try
             {
-                //ToDo Change name
-                await Do((Models.UserType)item.Tag);
+
+                await ConfigureDialog((Models.UserType)item.Tag);
             }
             catch (HttpRequestException)
             {
-                //ToDo Show useful info
-                var dialog = new ContentDialog { PrimaryButtonText = "OK", Title = "Ошибка", Content = $"Ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее" };
+                var dialog = new ContentDialog
+                {
+                    PrimaryButtonText = "OK",
+                    Title = "Ошибка",
+                    Content = "Ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее"
+                };
                 await dialog.ShowAsync();
             }
 
         }
 
-        private async Task Do(Models.UserType type)
+        private async Task ConfigureDialog(Models.UserType type)
         {
             if (!(AddDialog.Content is AutoSuggestBox suggestBox))
                 return;
 
-            if (type == Models.UserType.Group)
+            switch (type)
             {
-                suggestBox.Header = "Найдите расписание группы по ее номеру";
-                suggestBox.PlaceholderText = "Начните вводить группу";
-                suggestBox.ItemsSource = data.Users = await Group.FindAsync();
-            }
-            else
-            {
-                if (type == Models.UserType.Lecturer)
-                {
+                case Models.UserType.Group:
+                    suggestBox.Header = "Найдите расписание группы по ее номеру";
+                    suggestBox.PlaceholderText = "Начните вводить группу";
+                    suggestBox.ItemsSource = data.Users = await Group.FindAsync();
+                    break;
+                case Models.UserType.Lecturer:
                     suggestBox.Header = "Найдите расписание преподавателя";
                     suggestBox.PlaceholderText = "Введите имя преподавателя";
                     suggestBox.ItemsSource = data.Users = await Lecturer.FindAsync();
-                }
+                    break;
             }
 
             await AddDialog.ShowAsync();

@@ -8,21 +8,9 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock x:Name="AppTitle"
-                   Height="24"
-                   Width="96"
-                   VerticalAlignment="Top"
-                   HorizontalAlignment="Left"
-                   Text="{x:Bind appmodel:Package.Current.DisplayName}"
-                   Style="{StaticResource CaptionTextBlockStyle}"
-                   Margin="12,8"
-                   Canvas.ZIndex="1"
-                   IsHitTestVisible="False">
-        </TextBlock>
 
         <NavigationView AlwaysShowHeader="False" x:Name="NavView"
                         Canvas.ZIndex="0"
-                        DisplayModeChanged="NavView_DisplayModeChanged"
                         Header="{x:Bind appmodel:Package.Current.DisplayName}"
                         IsSettingsVisible="False"
                         IsTabStop="False"

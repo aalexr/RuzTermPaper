@@ -16,12 +16,6 @@ namespace RuzTermPaper.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e) => ContentFrame.Navigate(typeof(TimetablePage));
 
-        private void NavView_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args) =>
-            AppTitle.Visibility =
-            args.DisplayMode == NavigationViewDisplayMode.Expanded
-            ? Visibility.Visible
-            : Visibility.Collapsed;
-
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected)

@@ -3,10 +3,30 @@
     /// <summary>
     /// Тип получателя расписания
     /// </summary>
-    public enum UserType { Student, Lecturer, Group }
+    public enum UserType
+    {
+        /// <summary>
+        /// Расписание для преподавателя
+        /// </summary>
+        Lecturer,
+        /// <summary>
+        /// Расписание для группы
+        /// </summary>
+        Group
+    }
 
     /// <summary>
     /// Язык полученного расписания
     /// </summary>
-    public enum Language { Russian, English = 2 }
+    public enum Language
+    {
+        /// <summary>
+        /// Русский язык
+        /// </summary>
+        Russian,
+        /// <summary>
+        /// Английский язык
+        /// </summary>
+        English = 2
+    }
 }

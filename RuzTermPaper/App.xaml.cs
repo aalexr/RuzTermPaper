@@ -20,7 +20,7 @@ namespace RuzTermPaper
     sealed partial class App : Application
     {
         public static readonly HttpClient Http = new HttpClient();
-        private SingletonData data;
+        private SingletonData _data;
         /// <inheritdoc />
         /// <summary>
         /// Инициализирует одноэлементный объект приложения. Это первая выполняемая строка разрабатываемого
@@ -68,15 +68,15 @@ namespace RuzTermPaper
                 try
                 {
                     StorageFile dataFile = await ApplicationData.Current.LocalFolder.GetFileAsync("data.json");
-                    data = await SingletonData.Initialize(dataFile);
+                    _data = await SingletonData.Initialize(dataFile);
                 }
                 catch (System.IO.FileNotFoundException)
                 {
-                    data = SingletonData.Initialize();
+                    _data = SingletonData.Initialize();
                 }
                 catch (Exception)
                 {
-                    data = SingletonData.Initialize();
+                    _data = SingletonData.Initialize();
                 }
 
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
@@ -112,7 +112,7 @@ namespace RuzTermPaper
         {
             SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
 
-            string serialized = await Json.StringifyAsync(data);
+            string serialized = await Json.StringifyAsync(_data);
             StorageFile file =
                 await ApplicationData.Current.LocalFolder.CreateFileAsync("data.json", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, serialized);

@@ -20,7 +20,7 @@
             <CollectionViewSource
                 x:Name="timetableCVS"
                 IsSourceGrouped="True"
-                Source="{x:Bind data.Lessons, Mode=OneWay}"
+                Source="{x:Bind _data.Lessons, Mode=OneWay}"
                 ItemsPath="Elements"/>
         </Grid.Resources>
 
@@ -33,7 +33,7 @@
                   ScrollViewer.VerticalScrollMode="Auto">
 
             <ListView.Footer>
-                <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Margin="8" Click="HyperlinkButton_Click"/>
+                <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Click="HyperlinkButton_Click"/>
             </ListView.Footer>
 
             <!--Стиль заголовка группы-->
@@ -41,9 +41,17 @@
                 <GroupStyle HidesIfEmpty="False">
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate x:DataType="models:LessonsGroup">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Bind Key, Converter={StaticResource DateConverter}}" Margin="0,0,16,0"/>
-                                <TextBlock Text="нет занятий" Visibility="{x:Bind Elements.Count, Converter={StaticResource VisibilityConverter}}" FontStyle="Italic"/>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{x:Bind Key, Converter={StaticResource DateConverter}}">
+                                    <TextBlock.Style>
+                                        <StaticResource ResourceKey="SubtitleTextBlockStyle" />
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBlock Text="нет занятий" Visibility="{x:Bind Elements.Count, Converter={StaticResource VisibilityConverter}}">
+                                    <TextBlock.Style>
+                                        <StaticResource ResourceKey="BodyTextBlockStyle" />
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
@@ -52,8 +60,11 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:Lesson">
-                    <Grid>
+                    <Grid Margin="0,4,0,4">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -64,22 +75,19 @@
                         </Grid.ColumnDefinitions>
 
                         <!--Начало пары-->
-                        <TextBlock TextAlignment="Left" Text="{x:Bind BeginLesson}"/>
+                        <TextBlock TextAlignment="Left" Text="{x:Bind BeginLesson}" Margin="0,0,4,0" Grid.Row="0" Grid.Column="0"/>
 
                         <!--Данные о паре-->
-                        <TextBlock TextWrapping="Wrap" Margin="4" Grid.Column="1" Grid.Row="1">
-                                        <Run Text="{x:Bind KindOfWork}" FontWeight="SemiLight"/> 
-                                        <LineBreak/>
-                                        <Run Text="{x:Bind Discipline}" FontWeight="Medium"/>
-                                        <LineBreak/>
-                                        <Run Text="{x:Bind Lecturer}" FontStyle="Italic"/>
-                                        <LineBreak/>
-                                        <Run Text="{x:Bind Building}"/>
-                                        <Run Text="{x:Bind Auditorium}"/>
-                        </TextBlock>
+                        <TextBlock Text="{x:Bind KindOfWork}" Grid.Row="1" Grid.Column="1" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
+                        <TextBlock Text="{x:Bind Discipline}" Style="{StaticResource BaseTextBlockStyle}" Grid.Row="2" Grid.Column="1"/>
+                        <TextBlock Text="{x:Bind Lecturer}" Grid.Row="3" Grid.Column="1" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
+                            <TextBlock Text="{x:Bind Building}" Foreground="#003399" Margin="0,0,4,0"/>
+                            <TextBlock Text="{x:Bind Auditorium}" Foreground="#003399"/>
+                        </StackPanel>
 
                         <!--Конец пары-->
-                        <TextBlock Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="2"/>
+                        <TextBlock Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="5" Margin="0,0,4,0"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -87,3 +95,4 @@
 
     </Grid>
 </Page>
+

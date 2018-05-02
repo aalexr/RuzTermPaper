@@ -12,9 +12,6 @@ namespace RuzTermPaper.Models
     public abstract class User : IEquatable<User>
     {
         [JsonIgnore]
-        /// <summary>
-        /// Символ пользователя
-        /// </summary>
         public abstract Symbol Symbol { get; }
 
         /// <summary>
@@ -52,11 +49,11 @@ namespace RuzTermPaper.Models
         /// <returns></returns>
         public async Task<IEnumerable<LessonsGroup>> GetLessonsAsync(DateTime from, DateTime to, Language language = Language.Russian)
         {
-            List<Lesson> list =
+            var list =
                 await Json.ToObjectAsync<List<Lesson>>
                 (await App.Http.GetStringAsync(BuildUri(from, to, language)));
             list = list.OrderBy(L => L.DateOfNest).ToList();
-            List<LessonsGroup> res = new List<LessonsGroup>();
+            var res = new List<LessonsGroup>();
             for (var i = from; i < to; i = i.AddDays(1))
                 res.Add(new LessonsGroup(i, list.Where(x => x.DateOfNest == i)));
 

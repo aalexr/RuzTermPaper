@@ -7,24 +7,25 @@ using Windows.UI.Xaml.Controls;
 
 namespace RuzTermPaper.Pages
 {
+    /// <inheritdoc />
     /// <summary>
     /// Пустая страница, которую можно использовать саму по себе или для перехода внутри фрейма.
     /// </summary>
     public sealed partial class TimetablePage : Page
     {
-        private SingletonData data;
+        private readonly SingletonData _data;
         public TimetablePage()
         {
             InitializeComponent();
-            data = SingletonData.Initialize();
+            _data = SingletonData.Initialize();
         }
 
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
-            DateTime lastDate = data.Lessons.Last().Key.AddDays(1);
-            foreach(var l in await data.CurrentUser.GetLessonsAsync(lastDate, 7))
+            DateTime lastDate = _data.Lessons.Last().Key.AddDays(1);
+            foreach(var l in await _data.CurrentUser.GetLessonsAsync(lastDate, 7))
             {
-                data.Lessons.Add(l);
+                _data.Lessons.Add(l);
             }
         }
     }
