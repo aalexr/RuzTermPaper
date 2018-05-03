@@ -16,6 +16,7 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
         <Grid.Resources>
             <CollectionViewSource
                 x:Name="timetableCVS"
@@ -30,10 +31,16 @@
                   ItemsSource="{x:Bind timetableCVS.View, Mode=OneWay}"
                   SelectionMode="None"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.VerticalScrollMode="Auto">
+                  ScrollViewer.VerticalScrollMode="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollMode="Auto">
+            
+            <ListView.Header>
+                <TextBlock Text="I am a header" Style="{StaticResource TitleTextBlockStyle}"/>
+            </ListView.Header>
 
             <ListView.Footer>
-                <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Click="HyperlinkButton_Click"/>
+                <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Click="HyperlinkButton_Click" Margin="0,0,0,8"/>
             </ListView.Footer>
 
             <!--Стиль заголовка группы-->
@@ -74,10 +81,9 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!--Начало пары-->
+
                         <TextBlock TextAlignment="Left" Text="{x:Bind BeginLesson}" Margin="0,0,4,0" Grid.Row="0" Grid.Column="0"/>
 
-                        <!--Данные о паре-->
                         <TextBlock Text="{x:Bind KindOfWork}" Grid.Row="1" Grid.Column="1" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
                         <TextBlock Text="{x:Bind Discipline}" Style="{StaticResource BaseTextBlockStyle}" Grid.Row="2" Grid.Column="1"/>
                         <TextBlock Text="{x:Bind Lecturer}" Grid.Row="3" Grid.Column="1" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
@@ -86,7 +92,7 @@
                             <TextBlock Text="{x:Bind Auditorium}" Foreground="#003399"/>
                         </StackPanel>
 
-                        <!--Конец пары-->
+
                         <TextBlock Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="5" Margin="0,0,4,0"/>
                     </Grid>
                 </DataTemplate>

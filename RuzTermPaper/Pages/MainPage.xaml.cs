@@ -12,7 +12,12 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public MainPage() => InitializeComponent();
+        public static NavigationView View;
+        public MainPage()
+        {
+            InitializeComponent();
+            View = NavView;
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e) => ContentFrame.Navigate(typeof(TimetablePage));
 
@@ -26,7 +31,7 @@ namespace RuzTermPaper.Pages
             {
                 NavigationViewItem selectedItem = (NavigationViewItem)args.SelectedItem;
                 string pageName = (string)selectedItem.Tag;
-                ContentFrame.Navigate(Type.GetType(pageName), NavView);
+                ContentFrame.Navigate(Type.GetType(pageName));
             }
         }
     }

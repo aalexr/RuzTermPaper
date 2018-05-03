@@ -83,12 +83,6 @@ namespace RuzTermPaper
             }
             // Обеспечение активности текущего окна
             Window.Current.Activate();
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-
-            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            titleBar.ButtonForegroundColor = (Color)Resources["SystemBaseHighColor"];
         }
 
         /// <summary>

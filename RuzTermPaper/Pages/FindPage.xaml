@@ -18,16 +18,12 @@
 
         <!--Место для почты-->
         <TextBox PlaceholderText="example@edu.hse.ru"
+                 Header="Найти расписание по почте"
                  KeyDown="EmailBox_KeyDown"
                  IsSpellCheckEnabled="False"
-                 Margin="8,0,8,0">
+                 Margin="8,0,8,0"/>
 
-            <TextBox.Header>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Найти расписание по почте" Margin="4,0,0,0" FontStyle="Italic"/>
-                </StackPanel>
-            </TextBox.Header>
-        </TextBox>
+
 
         <CommandBar Grid.Row="1" Background="Transparent" DefaultLabelPosition="Right">
             <AppBarButton Icon="Find" Label="Найти еще">

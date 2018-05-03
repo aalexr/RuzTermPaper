@@ -8,10 +8,10 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        
         <NavigationView AlwaysShowHeader="False" x:Name="NavView"
                         Canvas.ZIndex="0"
-                        Header="{x:Bind appmodel:Package.Current.DisplayName}"
+                        Header=" "
                         IsSettingsVisible="False"
                         IsTabStop="False"
                         SelectionChanged="NavView_SelectionChanged">
@@ -22,7 +22,7 @@
             </NavigationView.MenuItems>
             
 
-            <Frame x:Name="ContentFrame" Margin="8" >
+            <Frame x:Name="ContentFrame">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition/>
