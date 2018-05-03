@@ -31,13 +31,7 @@
                   ItemsSource="{x:Bind timetableCVS.View, Mode=OneWay}"
                   SelectionMode="None"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.VerticalScrollMode="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollMode="Auto">
-            
-            <ListView.Header>
-                <TextBlock Text="I am a header" Style="{StaticResource TitleTextBlockStyle}"/>
-            </ListView.Header>
+                  ScrollViewer.VerticalScrollMode="Auto">
 
             <ListView.Footer>
                 <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Click="HyperlinkButton_Click" Margin="0,0,0,8"/>
