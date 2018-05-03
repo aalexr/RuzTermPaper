@@ -110,10 +110,10 @@ namespace RuzTermPaper
         /// <param name="e">Сведения о запросе приостановки.</param>
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
+            var deferral = e.SuspendingOperation.GetDeferral();
 
-            string serialized = await Json.StringifyAsync(_data);
-            StorageFile file =
+            var serialized = await Json.StringifyAsync(_data);
+            var file =
                 await ApplicationData.Current.LocalFolder.CreateFileAsync("data.json", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, serialized);
 

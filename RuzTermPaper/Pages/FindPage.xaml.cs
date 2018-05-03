@@ -1,5 +1,6 @@
 ﻿using RuzTermPaper.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -57,43 +58,53 @@ namespace RuzTermPaper.Pages
             AddDialog.Hide();
             var today = DateTime.Today;
 
-            if (!data.Recent.Contains(user))
-                data.Recent.Add(user);
-            await UpdateLessons(user, today);
-            navigationView.SelectedItem = navigationView.MenuItems[0];
+            if (await UpdateLessons(user, today))
+            {
+                navigationView.SelectedItem = navigationView.MenuItems[0];
+                if (!data.Recent.Contains(user))
+                    data.Recent.Add(user);
+            }
         }
 
-        private async Task UpdateLessons(Models.User user, DateTime today)
+        private async Task<bool> UpdateLessons(Models.User user, DateTime today)
         {
-            data.CurrentUser = user;
-            data.Lessons.Clear();
+
+            IEnumerable<LessonsGroup> lessons = null;
+
             try
             {
-                foreach (var item in await user.GetLessonsAsync(today, 7))
-                {
-                    data.Lessons.Add(item);
-                }
+                lessons = await user.GetLessonsAsync(today, 7);
             }
             catch (HttpRequestException ex)
             {
                 var dialog = new ContentDialog
                 {
                     PrimaryButtonText = "OK",
-                    Content = ex.Message,
+                    Content = "Произошла ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее. Подробности: " + ex.Message,
                     Title = "Ошибка соединения"
                 };
                 await dialog.ShowAsync();
+                return false;
             }
             catch (Exception ex)
             {
                 var dialog = new ContentDialog
                 {
                     PrimaryButtonText = "OK",
-                    Content = ex.Message,
+                    Content = "Произошла ошибка. Проверьте данные и попробуйте еще раз. Подробности: " + ex.Message,
                     Title = "Ошибка"
                 };
                 await dialog.ShowAsync();
+                return false;
             }
+
+            data.CurrentUser = user;
+            data.Lessons.Clear();
+            foreach (var item in lessons)
+                {
+                    data.Lessons.Add(item);
+                }
+                return true;
         }
 
         private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) =>
@@ -105,8 +116,8 @@ namespace RuzTermPaper.Pages
             if (!(e.ClickedItem is Models.User user))
                 return;
 
-            navigationView.SelectedItem = navigationView.MenuItems[0];
-            await UpdateLessons(user, DateTime.Today);
+            if (await UpdateLessons(user, DateTime.Today))
+                navigationView.SelectedItem = navigationView.MenuItems[0];
         }
 
         private async void EmailBox_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -116,11 +127,13 @@ namespace RuzTermPaper.Pages
 
             var student = new Student(textBox.Text);
 
-            if (!data.Recent.Contains(student))
-                data.Recent.Add(student);
 
-            navigationView.SelectedItem = navigationView.MenuItems[0];
-            await UpdateLessons(student, DateTime.Today);
+            if (await UpdateLessons(student, DateTime.Today))
+            {
+                navigationView.SelectedItem = navigationView.MenuItems[0];
+                if (!data.Recent.Contains(student))
+                    data.Recent.Add(student);
+            }
         }
 
         private async void AddMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -130,7 +143,6 @@ namespace RuzTermPaper.Pages
 
             try
             {
-
                 await ConfigureDialog((Models.UserType)item.Tag);
             }
             catch (HttpRequestException)
@@ -139,7 +151,7 @@ namespace RuzTermPaper.Pages
                 {
                     PrimaryButtonText = "OK",
                     Title = "Ошибка",
-                    Content = "Ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее"
+                    Content = "Произошла ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее."
                 };
                 await dialog.ShowAsync();
             }
