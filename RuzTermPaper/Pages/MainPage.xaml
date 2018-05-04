@@ -8,19 +8,18 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        
+
         <NavigationView AlwaysShowHeader="False" x:Name="NavView"
                         Canvas.ZIndex="0"
-                        Header=" "
+                        Header="Header"
                         IsSettingsVisible="True"
                         IsTabStop="False"
                         SelectionChanged="NavView_SelectionChanged">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Текущее расписание" Icon="Calendar" Tag="RuzTermPaper.Pages.TimetablePage"/>
-                <NavigationViewItem Content="Поиск расписания" Icon="Find" Tag="RuzTermPaper.Pages.FindPage"/>
+                <NavigationViewItem x:Uid="MainPage_NavigationViewItem_Current" Icon="Calendar" Tag="RuzTermPaper.Pages.TimetablePage"/>
+                <NavigationViewItem x:Uid="MainPage_NavigationViewItem_Find" Icon="Find" Tag="RuzTermPaper.Pages.FindPage"/>
             </NavigationView.MenuItems>
-            
 
             <Frame x:Name="ContentFrame">
                 <Frame.ContentTransitions>

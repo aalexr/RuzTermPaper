@@ -7,23 +7,24 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+    <Grid Background="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
             <RelativePanel>
                 <TextBlock x:Name="WelcomeTextBlock"
               Style="{StaticResource HeaderTextBlockStyle}"
               Margin="8,16,8,16"
               HorizontalTextAlignment="Center">
-          <Run Text="Добро пожаловать в приложение"/>
-          <LineBreak/>
-          <Run Text="Расписание ВШЭ"/>
+                    <Run x:Uid="FirstRunPage_WelcomeTextBlock_Welcome"/>
+                    <LineBreak/>
+                    <Run x:Uid="FirstRunPage_WelcomeTextBlock_AppName"/>
                 </TextBlock>
+
                 <TextBlock x:Name="Hint"
-            Margin="8"
-            Text="Давайте настроим приложение для Вас"
-            RelativePanel.Below="WelcomeTextBlock"
-            RelativePanel.AlignHorizontalCenterWithPanel="True"
-            Style="{StaticResource BaseTextBlockStyle}"/>
+                           x:Uid="FirstRunPage_Hint"
+                           Margin="8"
+                           RelativePanel.Below="WelcomeTextBlock"
+                           RelativePanel.AlignHorizontalCenterWithPanel="True"
+                           Style="{StaticResource BaseTextBlockStyle}"/>
 
                 <TextBox x:Name="EmailBlock" x:Load="False"
                          KeyDown="EmailBlock_KeyDown"
@@ -31,7 +32,7 @@
                          PlaceholderText="example@edu.hse.ru"
                          RelativePanel.Below="Hint"
                          RelativePanel.AlignHorizontalCenterWithPanel="True"
-                Width="280">
+                         Width="280">
                     <TextBox.Transitions>
                         <TransitionCollection>
                             <EntranceThemeTransition/>
@@ -41,20 +42,20 @@
 
             </RelativePanel>
             <Button x:Name="StartButton"
-          x:Uid="StartButton"
-          Content="Приступить"
-          Click="Button_Click"
-          HorizontalAlignment="Center"
-          Margin="8"
-          Style="{StaticResource ButtonRevealStyle}"/>
+                    x:Uid="FirstRunPage_StartButton"
+                    Click="Button_Click"
+                    HorizontalAlignment="Center"
+                    Margin="8"
+                    Style="{StaticResource ButtonRevealStyle}"/>
         </StackPanel>
-
+        
         <Button x:Name="ForLecturersButton"
-        Style="{StaticResource TextBlockButtonStyle}"
-        x:Load="False"
-        Content="Вход для преподавателей"
-        HorizontalAlignment="Center"
-        Margin="0,0,0,16"
-        VerticalAlignment="Bottom"/>
+                x:Uid="FirstRunPage_ForLecturersButton"
+                Style="{StaticResource TextBlockButtonStyle}"
+                x:Load="False"
+                Click="ForLecturersButton_Click"
+                HorizontalAlignment="Center"
+                Margin="0,0,0,16"
+                VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

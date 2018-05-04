@@ -34,7 +34,7 @@
                   ScrollViewer.VerticalScrollMode="Auto">
 
             <ListView.Footer>
-                <Button Content="Загрузить еще на неделю"
+                <Button x:Uid="TimetablePage_ListViewFooter_Button"
                         Style="{StaticResource TextBlockButtonStyle}"
                         HorizontalAlignment="Center"
                         Click="HyperlinkButton_Click"
@@ -86,8 +86,8 @@
                         <TextBlock Text="{x:Bind Discipline}" Style="{StaticResource BaseTextBlockStyle}" Grid.Row="2" Grid.Column="1"/>
                         <TextBlock Text="{x:Bind Lecturer}" Grid.Row="3" Grid.Column="1" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
                         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
-                            <TextBlock Text="{x:Bind Building}" Foreground="#003399" Margin="0,0,4,0"/>
-                            <TextBlock Text="{x:Bind Auditorium}" Foreground="#003399"/>
+                            <TextBlock Text="{x:Bind Building}" Margin="0,0,4,0"/>
+                            <TextBlock Text="{x:Bind Auditorium}"/>
                         </StackPanel>
 
 

@@ -28,12 +28,11 @@ namespace RuzTermPaper
         /// Экземпляр класса данных приложения
         /// </summary>
         private SingletonData _data;
+
         /// <summary>
         /// Имя файла с сериализованными данными
         /// </summary>
         private const string dataFileName = "data.json";
-
-        private ApplicationDataContainer LocalSettings { get; } = ApplicationData.Current.LocalSettings;
 
         /// <inheritdoc />
         /// <summary>
@@ -81,33 +80,34 @@ namespace RuzTermPaper
             // параметр
             if (rootFrame.Content == null)
             {
-                #region Восстановление данных из локального хранилища
-                try
-                {
-                    StorageFile dataFile = await ApplicationData.Current.LocalFolder.GetFileAsync(dataFileName);
-                    _data = await SingletonData.Initialize(dataFile);
-                }
-                catch (System.IO.FileNotFoundException)
-                {
-                    _data = SingletonData.Initialize();
-                }
-                catch (Exception)
-                {
-                    _data = SingletonData.Initialize();
-                }
-                #endregion
-
-                if (LocalSettings.Values["FirstRun"] == null)
+                // Если это первый запуск приложения или первоначальная настройка не завершена,
+                // перейти на экран первоначальной настройки
+                if (ApplicationData.Current.LocalSettings.Values["FirstRun"] == null)
                 {
                     rootFrame.Navigate(typeof(FirstRunPage), e.Arguments);
                 }
                 else
                 {
+                    // Иначе перейти к первой странице
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    // И восстановить данные из кэша
+                    #region Восстановление данных из локального хранилища
+                    try
+                    {
+                        StorageFile dataFile = await ApplicationData.Current.LocalFolder.GetFileAsync(dataFileName);
+                        _data = await SingletonData.Initialize(dataFile);
+                    }
+                    catch (System.IO.FileNotFoundException)
+                    {
+                        // Если кэша данных нет, то создаем пустые данные
+                        _data = SingletonData.Initialize();
+                    }
+                    #endregion
                 }
             }
             // Обеспечение активности текущего окна
             Window.Current.Activate();
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
         }
 
         /// <summary>
@@ -128,10 +128,13 @@ namespace RuzTermPaper
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 
-            var serialized = await Json.StringifyAsync(_data);
-            var file =
-                await ApplicationData.Current.LocalFolder.CreateFileAsync(dataFileName, CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(file, serialized);
+            if (_data != null)
+            {
+                var serialized = await Json.StringifyAsync(_data);
+                var file =
+                    await ApplicationData.Current.LocalFolder.CreateFileAsync(dataFileName, CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(file, serialized);
+            }
 
             deferral.Complete();
         }

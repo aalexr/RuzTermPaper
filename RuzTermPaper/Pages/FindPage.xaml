@@ -18,7 +18,7 @@
 
         <!--Место для почты-->
         <TextBox PlaceholderText="example@edu.hse.ru"
-                 Header="Найти расписание по почте"
+                 x:Uid="FindPage_EmailBox"
                  KeyDown="EmailBox_KeyDown"
                  IsSpellCheckEnabled="False"
                  Margin="8,0,8,0"/>
@@ -26,11 +26,19 @@
 
 
         <CommandBar Grid.Row="1" Background="Transparent" DefaultLabelPosition="Right">
-            <AppBarButton Icon="Find" Label="Найти еще">
+            <AppBarButton x:Uid="FindPage_FindMore" Icon="Find">
                 <AppBarButton.Flyout>
                     <MenuFlyout Placement="Bottom" x:Name="Flyout">
-                        <MenuFlyoutItem Text="Группа" Icon="People" Click="AddMenuFlyoutItem_Click"/>
-                        <MenuFlyoutItem Text="Преподаватель" Icon="Contact" Click="AddMenuFlyoutItem_Click"/>
+                        <MenuFlyoutItem x:Uid="FindPage_MenuFlyoutItem_Group" Icon="People" Click="AddMenuFlyoutItem_Click">
+                            <MenuFlyoutItem.Tag>
+                                <models:UserType>Group</models:UserType>
+                            </MenuFlyoutItem.Tag>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="FindPage_MenuFlyoutItem_Lecturer" Icon="Contact" Click="AddMenuFlyoutItem_Click">
+                            <MenuFlyoutItem.Tag>
+                                <models:UserType>Lecturer</models:UserType>
+                            </MenuFlyoutItem.Tag>
+                        </MenuFlyoutItem>
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
@@ -43,10 +51,10 @@
                   Grid.Row="2"
                   HorizontalAlignment="Center"
                   SelectionMode="None"
-                  ItemsSource="{x:Bind data.Recent}">
+                  ItemsSource="{x:Bind Data.Recent}">
 
             <ListView.Header>
-                <TextBlock Text="Недавние поиски" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                <TextBlock x:Uid="FindPage_Recent" FontWeight="SemiBold" HorizontalAlignment="Center"/>
             </ListView.Header>
 
             <ListView.ItemTemplate>
@@ -54,7 +62,7 @@
                     <StackPanel Orientation="Horizontal" x:Name="SP">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout Placement="Bottom">
-                                <MenuFlyoutItem Icon="Delete" Text="Убрать из списка" Click="DeleteMenuFlyoutItem_Click"/>
+                                <MenuFlyoutItem Icon="Delete" x:Uid="FindPage_MenuFlyoutItem_Delete" Click="DeleteMenuFlyoutItem_Click"/>
                             </MenuFlyout>
                         </StackPanel.ContextFlyout>
                         <SymbolIcon Symbol="{x:Bind Symbol}"/>
@@ -63,22 +71,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-        <ContentDialog x:Name="AddDialog" CloseButtonText="Отмена">
-            <ContentDialog.Title>
-                <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Symbol="Find" Margin="0,0,8,0"/>
-                    <TextBlock Text="Найти"/>
-                </StackPanel>
-            </ContentDialog.Title>
-
-            <AutoSuggestBox x:Name="Search"
-                            PlaceholderText="Поиск"
-                            SuggestionChosen="Search_SuggestionChosen"
-                            TextChanged="Search_TextChanged"
-                            QuerySubmitted="Search_QuerySubmitted"
-                            QueryIcon="Find"/>
-        </ContentDialog>
     </Grid>
 
 </Page>

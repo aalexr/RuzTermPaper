@@ -1,6 +1,6 @@
 ﻿using RuzTermPaper.Models;
+using RuzTermPaper.Tools;
 using System;
-using Windows.Storage;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -20,7 +20,7 @@ namespace RuzTermPaper.Pages
         private SolidColorBrush invalidFormat = new SolidColorBrush(Colors.Red);
         public FirstRunPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -30,29 +30,23 @@ namespace RuzTermPaper.Pages
                 this.FindName("ForLecturersButton");
                 this.FindName("EmailBlock");
                 button.Visibility = Visibility.Collapsed;
-                Hint.Text = "Введите корпоративную почту на домене edu.hse.ru и нажмите Enter";
+                Hint.Text = "FirstRunPage_Hint_Text".Localize();
             }
         }
 
-        private async void EmailBlock_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private void EmailBlock_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
-            if (!(sender is TextBox textBox) || e.Key != VirtualKey.Enter)
+            if (!(sender is TextBox textBox) || e.Key != VirtualKey.Enter || !textBox.Text.EndsWith("@edu.hse.ru"))
                 return;
-            Student student;
 
-            if (textBox.Text.EndsWith("@edu.hse.ru")
-                && await data.UpdateLessons(student = new Student(textBox.Text), DateTime.Today)
-                && !data.Recent.Contains(student))
-            {
-                data.Recent.Add(student);
-                ApplicationData.Current.LocalSettings.Values["FirstRun"] = false;
-                Window.Current.Content = new Frame();
-                (Window.Current.Content as Frame).Navigate(typeof(MainPage));
-            }
-            else
-            {
-                textBox.BorderBrush = invalidFormat;
-            }
+            data.CurrentUser = new Student(textBox.Text);
+            ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
+        }
+
+        private async void ForLecturersButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Dialogs.ChooseDialog(Models.UserType.Lecturer);
+            await dialog.ShowAsync();
         }
     }
 }
