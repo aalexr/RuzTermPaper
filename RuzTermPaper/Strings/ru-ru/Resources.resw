@@ -183,4 +183,7 @@
   <data name="TimetablePage_ListViewFooter_Button.Content" xml:space="preserve">
     <value>Загрузить еще на неделю</value>
   </data>
+  <data name="TimetablePage_ListViewGroup_Header_NoClasses.Text" xml:space="preserve">
+    <value>Нет занятий</value>
+  </data>
 </root>

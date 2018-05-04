@@ -52,7 +52,7 @@
                                         <StaticResource ResourceKey="SubtitleTextBlockStyle" />
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <TextBlock Text="нет занятий" Visibility="{x:Bind Elements.Count, Converter={StaticResource VisibilityConverter}}">
+                                <TextBlock x:Uid="TimetablePage_ListViewGroup_Header_NoClasses" Visibility="{x:Bind Elements.Count, Converter={StaticResource VisibilityConverter}}">
                                     <TextBlock.Style>
                                         <StaticResource ResourceKey="BodyTextBlockStyle" />
                                     </TextBlock.Style>
