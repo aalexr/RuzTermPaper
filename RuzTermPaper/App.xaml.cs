@@ -19,8 +19,22 @@ namespace RuzTermPaper
     /// </summary>
     sealed partial class App : Application
     {
-        public static readonly HttpClient Http = new HttpClient();
+        /// <summary>
+        /// Общий экземпляр <see cref="HttpClient"/> для загрузки данных через Интернет
+        /// </summary>
+        public static HttpClient Http { get; } = new HttpClient();
+
+        /// <summary>
+        /// Экземпляр класса данных приложения
+        /// </summary>
         private SingletonData _data;
+        /// <summary>
+        /// Имя файла с сериализованными данными
+        /// </summary>
+        private const string dataFileName = "data.json";
+
+        private ApplicationDataContainer LocalSettings { get; } = ApplicationData.Current.LocalSettings;
+
         /// <inheritdoc />
         /// <summary>
         /// Инициализирует одноэлементный объект приложения. Это первая выполняемая строка разрабатываемого
@@ -39,6 +53,7 @@ namespace RuzTermPaper
         /// <param name="e">Сведения о запросе и обработке запуска.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
+            #region Инициализация фрейма
             // Не повторяйте инициализацию приложения, если в окне уже имеется содержимое,
             // только обеспечьте активность окна
             if (!(Window.Current.Content is Frame rootFrame))
@@ -56,6 +71,7 @@ namespace RuzTermPaper
                 // Размещение фрейма в текущем окне
                 Window.Current.Content = rootFrame;
             }
+            #endregion
 
             if (e.PrelaunchActivated)
                 return;
@@ -65,9 +81,10 @@ namespace RuzTermPaper
             // параметр
             if (rootFrame.Content == null)
             {
+                #region Восстановление данных из локального хранилища
                 try
                 {
-                    StorageFile dataFile = await ApplicationData.Current.LocalFolder.GetFileAsync("data.json");
+                    StorageFile dataFile = await ApplicationData.Current.LocalFolder.GetFileAsync(dataFileName);
                     _data = await SingletonData.Initialize(dataFile);
                 }
                 catch (System.IO.FileNotFoundException)
@@ -78,8 +95,16 @@ namespace RuzTermPaper
                 {
                     _data = SingletonData.Initialize();
                 }
+                #endregion
 
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                if (LocalSettings.Values["FirstRun"] == null)
+                {
+                    rootFrame.Navigate(typeof(FirstRunPage), e.Arguments);
+                }
+                else
+                {
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                }
             }
             // Обеспечение активности текущего окна
             Window.Current.Activate();
@@ -90,10 +115,7 @@ namespace RuzTermPaper
         /// </summary>
         /// <param name="sender">Фрейм, для которого произошел сбой навигации</param>
         /// <param name="e">Сведения о сбое навигации</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
-        }
+        void OnNavigationFailed(object sender, NavigationFailedEventArgs e) => throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
 
         /// <summary>
         /// Вызывается при приостановке выполнения приложения.  Состояние приложения сохраняется
@@ -108,7 +130,7 @@ namespace RuzTermPaper
 
             var serialized = await Json.StringifyAsync(_data);
             var file =
-                await ApplicationData.Current.LocalFolder.CreateFileAsync("data.json", CreationCollisionOption.ReplaceExisting);
+                await ApplicationData.Current.LocalFolder.CreateFileAsync(dataFileName, CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, serialized);
 
             deferral.Complete();

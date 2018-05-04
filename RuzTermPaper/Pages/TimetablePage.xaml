@@ -34,7 +34,11 @@
                   ScrollViewer.VerticalScrollMode="Auto">
 
             <ListView.Footer>
-                <HyperlinkButton Content="Загрузить еще на неделю" HorizontalAlignment="Center" Click="HyperlinkButton_Click" Margin="0,0,0,8"/>
+                <Button Content="Загрузить еще на неделю"
+                        Style="{StaticResource TextBlockButtonStyle}"
+                        HorizontalAlignment="Center"
+                        Click="HyperlinkButton_Click"
+                        Margin="0,0,0,8"/>
             </ListView.Footer>
 
             <!--Стиль заголовка группы-->

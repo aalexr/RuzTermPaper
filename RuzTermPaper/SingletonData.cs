@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
 using RuzTermPaper.Models;
+using RuzTermPaper.Pages;
 using RuzTermPaper.Tools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Xaml.Controls;
 
 namespace RuzTermPaper
 {
@@ -52,6 +55,50 @@ namespace RuzTermPaper
             }
 
             throw new Exception("Уже существует обьект этого класса.");
+        }
+
+        public async Task<bool> UpdateLessons(Models.User user, DateTime date)
+        {
+            IEnumerable<LessonsGroup> lessons = null;
+
+            try
+            {
+                lessons = await user.GetLessonsAsync(date, 7);
+            }
+            catch (HttpRequestException ex)
+            {
+                var dialog = new ContentDialog
+                {
+                    PrimaryButtonText = "OK",
+                    Content = "Произошла ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее. Подробности: " + ex.Message,
+                    Title = "Ошибка соединения"
+                };
+                await dialog.ShowAsync();
+                return false;
+            }
+            catch (Exception ex)
+            {
+                var dialog = new ContentDialog
+                {
+                    PrimaryButtonText = "OK",
+                    Content = "Произошла ошибка. Проверьте данные и попробуйте еще раз. Подробности: " + ex.Message,
+                    Title = "Ошибка"
+                };
+                await dialog.ShowAsync();
+                return false;
+            }
+
+            CurrentUser = user;
+            Lessons.Clear();
+            foreach (var item in lessons)
+            {
+                Lessons.Add(item);
+            }
+            if (MainPage.View != null)
+            {
+                MainPage.View.SelectedItem = MainPage.View.MenuItems[0];
+            }
+            return true;
         }
     }
 }

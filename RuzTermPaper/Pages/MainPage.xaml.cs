@@ -1,5 +1,4 @@
 ﻿using System;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -12,7 +11,10 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public static NavigationView View;
+        /// <summary>
+        /// Экземпляр <see cref="NavigationView"/> главной страницы
+        /// </summary>
+        public static NavigationView View { get; private set; }
         public MainPage()
         {
             InitializeComponent();
@@ -29,8 +31,8 @@ namespace RuzTermPaper.Pages
             }
             else
             {
-                NavigationViewItem selectedItem = (NavigationViewItem)args.SelectedItem;
-                string pageName = (string)selectedItem.Tag;
+                var selectedItem = (NavigationViewItem)args.SelectedItem;
+                var pageName = (string)selectedItem.Tag;
                 ContentFrame.Navigate(Type.GetType(pageName));
             }
         }

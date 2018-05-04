@@ -58,12 +58,12 @@ namespace RuzTermPaper.Pages
             AddDialog.Hide();
             var today = DateTime.Today;
 
-            if (await UpdateLessons(user, today) && !data.Recent.Contains(user))
+            if (await data.UpdateLessons(user, today) && !data.Recent.Contains(user))
                 data.Recent.Add(user);
 
         }
 
-        private void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) =>
+        public void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) =>
             sender.Text = args.SelectedItem.ToString();
 
 
@@ -72,7 +72,7 @@ namespace RuzTermPaper.Pages
             if (!(e.ClickedItem is Models.User user))
                 return;
 
-            await UpdateLessons(user, DateTime.Today);
+            await data.UpdateLessons(user, DateTime.Today);
         }
 
         private async void EmailBox_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -82,7 +82,7 @@ namespace RuzTermPaper.Pages
             Student student;
 
             if (textBox.Text.EndsWith("@edu.hse.ru")
-                && await UpdateLessons(student = new Student(textBox.Text), DateTime.Today)
+                && await data.UpdateLessons(student = new Student(textBox.Text), DateTime.Today)
                 && !data.Recent.Contains(student))
                 data.Recent.Add(student);
             else
@@ -139,47 +139,6 @@ namespace RuzTermPaper.Pages
                 return;
 
             data.Recent.Remove(user);
-        }
-
-        private async Task<bool> UpdateLessons(Models.User user, DateTime date)
-        {
-            IEnumerable<LessonsGroup> lessons = null;
-
-            try
-            {
-                lessons = await user.GetLessonsAsync(date, 7);
-            }
-            catch (HttpRequestException ex)
-            {
-                var dialog = new ContentDialog
-                {
-                    PrimaryButtonText = "OK",
-                    Content = "Произошла ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее. Подробности: " + ex.Message,
-                    Title = "Ошибка соединения"
-                };
-                await dialog.ShowAsync();
-                return false;
-            }
-            catch (Exception ex)
-            {
-                var dialog = new ContentDialog
-                {
-                    PrimaryButtonText = "OK",
-                    Content = "Произошла ошибка. Проверьте данные и попробуйте еще раз. Подробности: " + ex.Message,
-                    Title = "Ошибка"
-                };
-                await dialog.ShowAsync();
-                return false;
-            }
-
-            data.CurrentUser = user;
-            data.Lessons.Clear();
-            foreach (var item in lessons)
-            {
-                data.Lessons.Add(item);
-            }
-            MainPage.View.SelectedItem = MainPage.View.MenuItems[0];
-            return true;
         }
     }
 }

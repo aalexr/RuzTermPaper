@@ -12,7 +12,7 @@
         <NavigationView AlwaysShowHeader="False" x:Name="NavView"
                         Canvas.ZIndex="0"
                         Header=" "
-                        IsSettingsVisible="False"
+                        IsSettingsVisible="True"
                         IsTabStop="False"
                         SelectionChanged="NavView_SelectionChanged">
 
