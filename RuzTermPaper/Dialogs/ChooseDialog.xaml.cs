@@ -51,7 +51,7 @@ namespace RuzTermPaper.Dialogs
             {
                 sender.ItemsSource = string.IsNullOrWhiteSpace(sender.Text)
                     ? null
-                    : _users.Where(x => x.Name.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
+                    : _users?.Where(x => x.Name.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
             }
         }
 
