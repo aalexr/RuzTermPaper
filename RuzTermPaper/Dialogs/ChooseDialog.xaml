@@ -6,10 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    x:Uid="ChooseDialog"
     Loading="ContentDialog_Loading"
-    Title="Поиск"
-    PrimaryButtonText="OK"
-    CloseButtonText="Отмена"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
 
     <AutoSuggestBox x:Name="Search" PlaceholderText="Поиск" QueryIcon="Find" TextChanged="Search_TextChanged" QuerySubmitted="Search_QuerySubmitted" SuggestionChosen="Search_SuggestionChosen"/>
