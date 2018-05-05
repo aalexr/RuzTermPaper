@@ -144,6 +144,18 @@
   <data name="Connection_Error_Details" xml:space="preserve">
     <value>An error occured while connecting to the server. Check connection to the Internet or try later. Details:</value>
   </data>
+  <data name="ContentDialog_AutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Type here</value>
+  </data>
+  <data name="Error.PrimaryButtonText" xml:space="preserve">
+    <value>Primary</value>
+  </data>
+  <data name="ErrorDialog.CloseButtonText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ErrorDialog.Title" xml:space="preserve">
+    <value>TITLE</value>
+  </data>
   <data name="FindPage_EmailBox.Header" xml:space="preserve">
     <value>Find schedule by student's email</value>
   </data>
@@ -162,6 +174,15 @@
   <data name="FindPage_Recent.Text" xml:space="preserve">
     <value>Recent searches</value>
   </data>
+  <data name="FirstRunPage_ButtonGroup.Content" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="FirstRunPage_ButtonLecturer.Content" xml:space="preserve">
+    <value>Lecturer</value>
+  </data>
+  <data name="FirstRunPage_ButtonStudent.Content" xml:space="preserve">
+    <value>Student</value>
+  </data>
   <data name="FirstRunPage_ForLecturersButton.Content" xml:space="preserve">
     <value>For lecturers</value>
   </data>
@@ -169,7 +190,7 @@
     <value>Let's set everything up for you</value>
   </data>
   <data name="FirstRunPage_Hint_Text" xml:space="preserve">
-    <value>Enter corporate mail at edu.hse.ru and press Enter</value>
+    <value>To start let's add schedule for</value>
   </data>
   <data name="FirstRunPage_StartButton.Content" xml:space="preserve">
     <value>Start</value>

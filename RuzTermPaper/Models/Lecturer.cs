@@ -13,9 +13,9 @@ namespace RuzTermPaper.Models
         //public int chairOid { get; set; }
         public string Fio { get; set; }
         public int LecturerOid { get; set; }
-/*
-        public string shortFIO { get; set; }
-*/
+
+        //public string shortFIO { get; set; }
+
 
         public override Symbol Symbol => Symbol.Contact;
 

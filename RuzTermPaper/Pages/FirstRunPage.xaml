@@ -5,15 +5,17 @@
   xmlns:local="using:RuzTermPaper.Pages"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d">
+    xmlns:models="using:RuzTermPaper.Models"
+    mc:Ignorable="d">
 
     <Grid Background="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
             <RelativePanel>
                 <TextBlock x:Name="WelcomeTextBlock"
-              Style="{StaticResource HeaderTextBlockStyle}"
-              Margin="8,16,8,16"
-              HorizontalTextAlignment="Center">
+                           Style="{StaticResource HeaderTextBlockStyle}"
+                           Margin="8,16,8,16"
+                           HorizontalTextAlignment="Center"
+                           RelativePanel.AlignHorizontalCenterWithPanel="True">
                     <Run x:Uid="FirstRunPage_WelcomeTextBlock_Welcome"/>
                     <LineBreak/>
                     <Run x:Uid="FirstRunPage_WelcomeTextBlock_AppName"/>
@@ -21,41 +23,77 @@
 
                 <TextBlock x:Name="Hint"
                            x:Uid="FirstRunPage_Hint"
-                           Margin="8"
+                           Margin="4"
                            RelativePanel.Below="WelcomeTextBlock"
                            RelativePanel.AlignHorizontalCenterWithPanel="True"
                            Style="{StaticResource BaseTextBlockStyle}"/>
 
-                <TextBox x:Name="EmailBlock" x:Load="False"
-                         KeyDown="EmailBlock_KeyDown"
-                         Margin="8"
-                         PlaceholderText="example@edu.hse.ru"
-                         RelativePanel.Below="Hint"
-                         RelativePanel.AlignHorizontalCenterWithPanel="True"
-                         Width="280">
-                    <TextBox.Transitions>
+                <StackPanel x:Name="Buttons" x:Load="False"
+                            Margin="4"
+                            Orientation="Horizontal"
+                            RelativePanel.Below="Hint"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True">
+                    <RadioButton x:Name="StudentRB" x:Uid="FirstRunPage_ButtonStudent" Checked="RadioButton_Checked">
+                        <RadioButton.Tag>
+                            <models:UserType>Student</models:UserType>
+                        </RadioButton.Tag>
+                    </RadioButton>
+                    <RadioButton x:Name="GroupRB" x:Uid="FirstRunPage_ButtonGroup" Checked="RadioButton_Checked">
+                        <RadioButton.Tag>
+                            <models:UserType>Group</models:UserType>
+                        </RadioButton.Tag>
+                    </RadioButton>
+                    <RadioButton x:Name="LecturerRB" x:Uid="FirstRunPage_ButtonLecturer" Checked="RadioButton_Checked">
+                        <RadioButton.Tag>
+                            <models:UserType>Lecturer</models:UserType>
+                        </RadioButton.Tag>
+                    </RadioButton>
+                    <StackPanel.Transitions>
                         <TransitionCollection>
                             <EntranceThemeTransition/>
                         </TransitionCollection>
-                    </TextBox.Transitions>
-                </TextBox>
+                    </StackPanel.Transitions>
+                </StackPanel>
+
+                <AutoSuggestBox x:Name="SearchBox"
+                                x:Load="False"
+                                ItemsSource="{x:Bind _suggestions}"
+                                Margin="4"
+                                RelativePanel.Below="Buttons"
+                                RelativePanel.AlignHorizontalCenterWithPanel="True"
+                                TextChanged="SearchBox_TextChanged"
+                                QuerySubmitted="SearchBox_QuerySubmitted"
+                                QueryIcon="Find"
+                                Width="280">
+                    <AutoSuggestBox.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition/>
+                        </TransitionCollection>
+                    </AutoSuggestBox.Transitions>
+                </AutoSuggestBox>
+                <TextBlock x:Name="ErrorBlock" x:Uid="FirstRunPage_ErrorBlock"
+                           Foreground="Red"
+                           Margin="0,8,0,0"
+                           RelativePanel.Below="SearchBox"
+                           RelativePanel.AlignHorizontalCenterWithPanel="True"
+                           Visibility="Collapsed"/>
 
             </RelativePanel>
+            
             <Button x:Name="StartButton"
                     x:Uid="FirstRunPage_StartButton"
+                    Background="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}"
                     Click="Button_Click"
                     HorizontalAlignment="Center"
                     Margin="8"
                     Style="{StaticResource ButtonRevealStyle}"/>
+
         </StackPanel>
-        
-        <Button x:Name="ForLecturersButton"
-                x:Uid="FirstRunPage_ForLecturersButton"
-                Style="{StaticResource TextBlockButtonStyle}"
-                x:Load="False"
-                Click="ForLecturersButton_Click"
-                HorizontalAlignment="Center"
-                Margin="0,0,0,16"
-                VerticalAlignment="Bottom"/>
+        <Button x:Name="StartOver" x:Load="False" VerticalAlignment="Bottom" HorizontalAlignment="Right" Style="{StaticResource TextBlockButtonStyle}" Margin="8" Click="StartOverButton_Click">
+            <StackPanel Orientation="Horizontal">
+                <SymbolIcon Symbol="Refresh"/>
+                <TextBlock x:Uid="FirstRunPage_StartOverTextBlock" Margin="8,0,0,0"/>
+            </StackPanel>
+        </Button>
     </Grid>
 </Page>

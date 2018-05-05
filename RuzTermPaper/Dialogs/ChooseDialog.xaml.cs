@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // Документацию по шаблону элемента "Диалоговое окно содержимого" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -12,22 +13,23 @@ namespace RuzTermPaper.Dialogs
 {
     public sealed partial class ChooseDialog : ContentDialog
     {
-        private SingletonData data = SingletonData.Initialize();
+        private SingletonData _data = SingletonData.Initialize();
         private UserType _type;
         private IEnumerable<User> _users;
+        private User _choosedUser;
+        private AutoSuggestBox suggestBox;
 
         private ChooseDialog() => InitializeComponent();
         public ChooseDialog(UserType type) : this()
         {
             _type = type;
-            if (!(Content is AutoSuggestBox suggestBox))
-                return;
+            suggestBox = (AutoSuggestBox)Content;
 
             switch (_type)
             {
                 case UserType.Group:
-                    suggestBox.Header = "ChooseDialog_SuggestBox_Header_Group".Localize();;
-                    suggestBox.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Group".Localize();;
+                    suggestBox.Header = "ChooseDialog_SuggestBox_Header_Group".Localize(); ;
+                    suggestBox.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Group".Localize(); ;
                     break;
                 case UserType.Lecturer:
                     suggestBox.Header = "ChooseDialog_SuggestBox_Header_Lecturer".Localize();
@@ -38,10 +40,8 @@ namespace RuzTermPaper.Dialogs
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-        }
-
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
+            if (_choosedUser != null)
+                _data.CurrentUser = _choosedUser;
         }
 
         #region AutoSuggestBox EventHandlers
@@ -52,6 +52,7 @@ namespace RuzTermPaper.Dialogs
                 sender.ItemsSource = string.IsNullOrWhiteSpace(sender.Text)
                     ? null
                     : _users?.Where(x => x.Name.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
+                IsPrimaryButtonEnabled = false;
             }
         }
 
@@ -59,13 +60,9 @@ namespace RuzTermPaper.Dialogs
         {
             if (!(args.ChosenSuggestion is Models.User user))
                 return;
-
-            Hide();
-            data.CurrentUser = user;
+            _choosedUser = user;
+            IsPrimaryButtonEnabled = true;
         }
-
-        public void Search_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) =>
-            sender.Text = args.SelectedItem.ToString();
 
         private async void ContentDialog_Loading(FrameworkElement sender, object args)
         {

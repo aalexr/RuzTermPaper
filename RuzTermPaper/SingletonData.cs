@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json;
-using RuzTermPaper.Models;
+﻿using RuzTermPaper.Models;
 using RuzTermPaper.Pages;
 using RuzTermPaper.Tools;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +14,9 @@ namespace RuzTermPaper
         private static SingletonData instance = null;
         private User _currentUser;
         private event EventHandler<CurrentUserChangedEventArgs> CurrentUserChanged;
+
+        public event EventHandler<TimetableLoadingSuccessedEventArgs> TimetableLoadingSuccessed;
+        public event EventHandler<TimetableLoadingFailedEventArgs> TimetableLoadingFailed;
 
         public User CurrentUser
         {
@@ -39,12 +39,10 @@ namespace RuzTermPaper
             Recent = new ObservableCollection<User>();
             Lessons = new ObservableCollection<LessonsGroup>();
             CurrentUserChanged += OnCurrentUserChanged;
+            //TimetableLoadingFailed += (o, e) => { };
+            //TimetableLoadingSuccessed += (o, e) => { };
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public static SingletonData Initialize()
         {
             if (instance == null)
@@ -76,36 +74,31 @@ namespace RuzTermPaper
             try
             {
                 Lessons = new ObservableCollection<LessonsGroup>(await e.NewUser.GetLessonsAsync(DateTime.Today, 7));
-
-                if (!Recent.Contains(e.NewUser))
-                    Recent.Add(e.NewUser);
-                if (MainPage.View != null)
-                {
-                    MainPage.View.SelectedItem = MainPage.View.MenuItems[0];
-                }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                var dialog = new ContentDialog
-                {
-                    PrimaryButtonText = "OK",
-                    Content = "Connection_Error_Details".Localize() + ex.Message,
-                    Title = "Connection_Error".Localize()
-                };
-                await dialog.ShowAsync();
+                TimetableLoadingFailed(this, new TimetableLoadingFailedEventArgs(ex));
+                return;
             }
-            //catch (Exception ex)
-            //{
-            //    var dialog = new ContentDialog
-            //    {
-            //        PrimaryButtonText = "OK",
-            //        Content = "Произошла ошибка. Проверьте данные и попробуйте еще раз. Подробности: " + ex.Message,
-            //        Title = "Ошибка"
-            //    };
-            //    await dialog.ShowAsync();
-            //}
+            
+            if (!Recent.Contains(e.NewUser))
+                Recent.Add(e.NewUser);
+            TimetableLoadingSuccessed(this, new TimetableLoadingSuccessedEventArgs());
         }
     }
+
+    public class TimetableLoadingSuccessedEventArgs : EventArgs
+    { }
+    public class TimetableLoadingFailedEventArgs : EventArgs
+    {
+        public TimetableLoadingFailedEventArgs(Exception exception = null)
+        {
+            Exception = exception;
+        }
+
+        public Exception Exception { get; private set; }
+    }
+
 
     public class CurrentUserChangedEventArgs : EventArgs
     {

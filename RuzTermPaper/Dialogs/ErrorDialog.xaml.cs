@@ -19,16 +19,15 @@ namespace RuzTermPaper.Dialogs
 {
     public sealed partial class ErrorDialog : ContentDialog
     {
-        public ErrorDialog()
+        private ErrorDialog() => InitializeComponent();
+
+        public ErrorDialog(Exception exception) : this()
         {
-            this.InitializeComponent();
+
+            Content = (string)Content + exception.Message;
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
-
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void ContentDialog_CloseButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
         }
     }

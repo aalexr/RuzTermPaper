@@ -1,14 +1,19 @@
 ﻿<ContentDialog
     x:Class="RuzTermPaper.Dialogs.ChooseDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:RuzTermPaper.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Uid="ChooseDialog"
     Loading="ContentDialog_Loading"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+    DefaultButton="Primary"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    IsPrimaryButtonEnabled="False">
 
-    <AutoSuggestBox x:Name="Search" PlaceholderText="Поиск" QueryIcon="Find" TextChanged="Search_TextChanged" QuerySubmitted="Search_QuerySubmitted" SuggestionChosen="Search_SuggestionChosen"/>
+    <AutoSuggestBox x:Uid="ContentDialog_AutoSuggestBox"
+                    x:Name="Search"
+                    QueryIcon="Find"
+                    TextChanged="Search_TextChanged"
+                    QuerySubmitted="Search_QuerySubmitted"/>
 </ContentDialog>

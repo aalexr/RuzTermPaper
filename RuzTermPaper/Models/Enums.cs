@@ -6,6 +6,10 @@
     public enum UserType
     {
         /// <summary>
+        /// Расписание для студента
+        /// </summary>
+        Student,
+        /// <summary>
         /// Расписание для преподавателя
         /// </summary>
         Lecturer,

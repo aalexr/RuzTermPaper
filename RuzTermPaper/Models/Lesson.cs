@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using RuzTermPaper.Tools;
 
 namespace RuzTermPaper.Models
 {
@@ -32,14 +29,6 @@ namespace RuzTermPaper.Models
         //public object SubGroup { get; set; }
         //public int SubGroupOid { get; set; }
         #endregion
-
-        /// <summary>
-        /// Возвращает список занятий по заданному URI
-        /// </summary>
-        /// <param name="request">Ссылка</param>
-        /// <returns>Список найденных занятий</returns>
-        public static async Task<List<Lesson>> GetLessonsAsync(Uri request) =>
-            await Json.ToObjectAsync<List<Lesson>>(await App.Http.GetStringAsync(request));
 
         public int CompareTo(Lesson other) => DateOfNest.CompareTo(other.DateOfNest);
 

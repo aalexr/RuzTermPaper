@@ -136,13 +136,25 @@
     <value>Начните вводить группу</value>
   </data>
   <data name="ChooseDialog_SuggestBox_Placeholder_Lecturer" xml:space="preserve">
-    <value>Начните вводить имя преподавателя</value>
+    <value>Начните вводить имя</value>
   </data>
   <data name="Connection_Error" xml:space="preserve">
     <value>Ошибка соединения</value>
   </data>
   <data name="Connection_Error_Details" xml:space="preserve">
     <value>Произошла ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее. Подробности:</value>
+  </data>
+  <data name="ContentDialog_AutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="ErrorDialog.CloseButtonText" xml:space="preserve">
+    <value>ОК</value>
+  </data>
+  <data name="ErrorDialog.Content" xml:space="preserve">
+    <value>Произошла ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее. Подробности: </value>
+  </data>
+  <data name="ErrorDialog.Title" xml:space="preserve">
+    <value>Ошибка соединения</value>
   </data>
   <data name="FindPage_EmailBox.Header" xml:space="preserve">
     <value>Найти расписание по почте</value>
@@ -162,6 +174,18 @@
   <data name="FindPage_Recent.Text" xml:space="preserve">
     <value>Недавние поиски</value>
   </data>
+  <data name="FirstRunPage_ButtonGroup.Content" xml:space="preserve">
+    <value>Группы</value>
+  </data>
+  <data name="FirstRunPage_ButtonLecturer.Content" xml:space="preserve">
+    <value>Преподавателя</value>
+  </data>
+  <data name="FirstRunPage_ButtonStudent.Content" xml:space="preserve">
+    <value>Студента</value>
+  </data>
+  <data name="FirstRunPage_ErrorBlock.Text" xml:space="preserve">
+    <value>Неверная почта. Попробуйте еще раз</value>
+  </data>
   <data name="FirstRunPage_ForLecturersButton.Content" xml:space="preserve">
     <value>Вход для преподавателей</value>
   </data>
@@ -169,10 +193,13 @@
     <value>Давайте настроим приложение для Вас</value>
   </data>
   <data name="FirstRunPage_Hint_Text" xml:space="preserve">
-    <value>Введите корпоративную почту на домене edu.hse.ru и нажмите Enter</value>
+    <value>Для начала добавим расписание для</value>
   </data>
   <data name="FirstRunPage_StartButton.Content" xml:space="preserve">
     <value>Приступить</value>
+  </data>
+  <data name="FirstRunPage_StartOverTextBlock.Text" xml:space="preserve">
+    <value>Начать заново</value>
   </data>
   <data name="FirstRunPage_WelcomeTextBlock_AppName.Text" xml:space="preserve">
     <value>Расписание ВШЭ</value>
