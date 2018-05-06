@@ -51,7 +51,7 @@
                   Grid.Row="2"
                   HorizontalAlignment="Center"
                   SelectionMode="None"
-                  ItemsSource="{x:Bind Data.Recent}">
+                  ItemsSource="{x:Bind _data.Recent}">
 
             <ListView.Header>
                 <TextBlock x:Uid="FindPage_Recent" FontWeight="SemiBold" HorizontalAlignment="Center"/>

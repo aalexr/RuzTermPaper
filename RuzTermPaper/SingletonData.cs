@@ -1,11 +1,9 @@
 ﻿using RuzTermPaper.Models;
-using RuzTermPaper.Pages;
 using RuzTermPaper.Tools;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.UI.Xaml.Controls;
 
 namespace RuzTermPaper
 {
@@ -15,7 +13,7 @@ namespace RuzTermPaper
         private User _currentUser;
         private event EventHandler<CurrentUserChangedEventArgs> CurrentUserChanged;
 
-        public event EventHandler<TimetableLoadingSuccessedEventArgs> TimetableLoadingSuccessed;
+        public event EventHandler<EventArgs> TimetableLoadingSuccessed;
         public event EventHandler<TimetableLoadingFailedEventArgs> TimetableLoadingFailed;
 
         public User CurrentUser
@@ -39,8 +37,8 @@ namespace RuzTermPaper
             Recent = new ObservableCollection<User>();
             Lessons = new ObservableCollection<LessonsGroup>();
             CurrentUserChanged += OnCurrentUserChanged;
-            //TimetableLoadingFailed += (o, e) => { };
-            //TimetableLoadingSuccessed += (o, e) => { };
+            TimetableLoadingFailed += (o, e) => { };
+            TimetableLoadingSuccessed += (o, e) => { };
         }
 
         public static SingletonData Initialize()
@@ -69,6 +67,12 @@ namespace RuzTermPaper
             throw new Exception("SingletonAlreadyExistsException".Localize());
         }
 
+        public void ResetEvents()
+        {
+            TimetableLoadingFailed = (o, e) => {};
+            TimetableLoadingSuccessed = (o, e) => {};
+        }
+
         private async void OnCurrentUserChanged(object sender, CurrentUserChangedEventArgs e)
         {
             try
@@ -83,15 +87,13 @@ namespace RuzTermPaper
             
             if (!Recent.Contains(e.NewUser))
                 Recent.Add(e.NewUser);
-            TimetableLoadingSuccessed(this, new TimetableLoadingSuccessedEventArgs());
+            TimetableLoadingSuccessed(this, EventArgs.Empty/*new TimetableLoadingSuccessedEventArgs()*/);
         }
     }
 
-    public class TimetableLoadingSuccessedEventArgs : EventArgs
-    { }
     public class TimetableLoadingFailedEventArgs : EventArgs
     {
-        public TimetableLoadingFailedEventArgs(Exception exception = null)
+        public TimetableLoadingFailedEventArgs(Exception exception)
         {
             Exception = exception;
         }

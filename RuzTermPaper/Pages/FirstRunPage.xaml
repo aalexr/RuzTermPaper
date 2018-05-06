@@ -33,17 +33,17 @@
                             Orientation="Horizontal"
                             RelativePanel.Below="Hint"
                             RelativePanel.AlignHorizontalCenterWithPanel="True">
-                    <RadioButton x:Name="StudentRB" x:Uid="FirstRunPage_ButtonStudent" Checked="RadioButton_Checked">
+                    <RadioButton x:Name="StudentRB" x:Uid="FirstRunPage_ButtonStudent" Checked="RadioButton_Checked" Unchecked="RB_Unchecked">
                         <RadioButton.Tag>
                             <models:UserType>Student</models:UserType>
                         </RadioButton.Tag>
                     </RadioButton>
-                    <RadioButton x:Name="GroupRB" x:Uid="FirstRunPage_ButtonGroup" Checked="RadioButton_Checked">
+                    <RadioButton x:Name="GroupRB" x:Uid="FirstRunPage_ButtonGroup" Checked="RadioButton_Checked" Unchecked="RB_Unchecked">
                         <RadioButton.Tag>
                             <models:UserType>Group</models:UserType>
                         </RadioButton.Tag>
                     </RadioButton>
-                    <RadioButton x:Name="LecturerRB" x:Uid="FirstRunPage_ButtonLecturer" Checked="RadioButton_Checked">
+                    <RadioButton x:Name="LecturerRB" x:Uid="FirstRunPage_ButtonLecturer" Checked="RadioButton_Checked" Unchecked="RB_Unchecked">
                         <RadioButton.Tag>
                             <models:UserType>Lecturer</models:UserType>
                         </RadioButton.Tag>
@@ -55,9 +55,14 @@
                     </StackPanel.Transitions>
                 </StackPanel>
 
+                <ProgressRing x:Name="Progress"
+                              Height="48" Width="48"
+                              IsActive="False"
+                              RelativePanel.Below="Buttons"
+                              RelativePanel.AlignHorizontalCenterWithPanel="True"/>
+
                 <AutoSuggestBox x:Name="SearchBox"
                                 x:Load="False"
-                                ItemsSource="{x:Bind _suggestions}"
                                 Margin="4"
                                 RelativePanel.Below="Buttons"
                                 RelativePanel.AlignHorizontalCenterWithPanel="True"
@@ -79,7 +84,7 @@
                            Visibility="Collapsed"/>
 
             </RelativePanel>
-            
+
             <Button x:Name="StartButton"
                     x:Uid="FirstRunPage_StartButton"
                     Background="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}"
@@ -89,11 +94,5 @@
                     Style="{StaticResource ButtonRevealStyle}"/>
 
         </StackPanel>
-        <Button x:Name="StartOver" x:Load="False" VerticalAlignment="Bottom" HorizontalAlignment="Right" Style="{StaticResource TextBlockButtonStyle}" Margin="8" Click="StartOverButton_Click">
-            <StackPanel Orientation="Horizontal">
-                <SymbolIcon Symbol="Refresh"/>
-                <TextBlock x:Uid="FirstRunPage_StartOverTextBlock" Margin="8,0,0,0"/>
-            </StackPanel>
-        </Button>
     </Grid>
 </Page>

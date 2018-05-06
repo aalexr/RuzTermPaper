@@ -6,8 +6,6 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
-using Windows.UI;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -84,13 +82,13 @@ namespace RuzTermPaper
                 // перейти на экран первоначальной настройки
                 if (ApplicationData.Current.LocalSettings.Values["FirstRun"] == null)
                 {
+                    _data = SingletonData.Initialize();
                     rootFrame.Navigate(typeof(FirstRunPage), e.Arguments);
                 }
                 else
                 {
-                    // Иначе перейти к первой странице
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                    // И восстановить данные из кэша
+
+                    // Иначе попытаться восстановить данные из кэша
                     #region Восстановление данных из локального хранилища
                     try
                     {
@@ -102,6 +100,8 @@ namespace RuzTermPaper
                         // Если кэша данных нет, то создаем пустые данные
                         _data = SingletonData.Initialize();
                     }
+                    // И перейти к первой странице
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
                     #endregion
                 }
             }

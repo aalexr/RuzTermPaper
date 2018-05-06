@@ -21,20 +21,21 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class FindPage : Page
     {
-        private SingletonData Data { get; set; }
+        private SingletonData _data;
 
         public FindPage()
         {
             InitializeComponent();
-
-            Data = SingletonData.Initialize();
+            _data = SingletonData.Initialize();
+            _data.ResetEvents();
+            _data.TimetableLoadingSuccessed += (o, args) => MainPage.View.SelectedItem = MainPage.View.MenuItems[0];
+            _data.TimetableLoadingFailed += async (o, args) => await Task.Delay(0);
         }
 
         private void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)
         {
-            if (!(e.ClickedItem is Models.User user))
-                return;
-            Data.CurrentUser = user;
+            if (e.ClickedItem is Models.User user)
+                _data.CurrentUser = user;
         }
 
         private void EmailBox_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -42,7 +43,7 @@ namespace RuzTermPaper.Pages
             if (!(sender is TextBox textBox) || e.Key != VirtualKey.Enter)
                 return;
             if (textBox.Text.TrimEnd().EndsWith("@edu.hse.ru"))
-                Data.CurrentUser = new Student(textBox.Text);
+                _data.CurrentUser = new Student(textBox.Text);
         }
 
         private async void AddMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -72,7 +73,7 @@ namespace RuzTermPaper.Pages
             if (!(sender is MenuFlyoutItem item && item.DataContext is Models.User user))
                 return;
 
-            Data.Recent.Remove(user);
+            _data.Recent.Remove(user);
         }
     }
 }

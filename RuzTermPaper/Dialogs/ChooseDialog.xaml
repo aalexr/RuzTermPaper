@@ -15,5 +15,6 @@
                     x:Name="Search"
                     QueryIcon="Find"
                     TextChanged="Search_TextChanged"
-                    QuerySubmitted="Search_QuerySubmitted"/>
+                    QuerySubmitted="Search_QuerySubmitted"
+                    Width="320"/>
 </ContentDialog>

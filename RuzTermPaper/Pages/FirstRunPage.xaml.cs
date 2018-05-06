@@ -1,6 +1,7 @@
 ﻿using RuzTermPaper.Models;
 using RuzTermPaper.Tools;
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.System;
@@ -41,10 +42,13 @@ namespace RuzTermPaper.Pages
         {
             if (sender is RadioButton radio)
             {
+                _type = (Models.UserType)radio.Tag;
                 try
                 {
-                    _type = (Models.UserType)radio.Tag;
-                    await SetSuggestionsList(_type);
+                    Progress.IsActive = true;
+                    await SetSuggestionsList(_type, string.Empty);
+                    if (SearchBox == null)
+                        FindName("SearchBox");
                 }
                 catch (Exception ex)
                 {
@@ -52,39 +56,61 @@ namespace RuzTermPaper.Pages
                     await new Dialogs.ErrorDialog(ex).ShowAsync();
                     return;
                 }
+                finally
+                {
+                    Progress.IsActive = false;
+                }
             }
-
-            if (SearchBox == null)
-                FindName("SearchBox");
         }
 
         private void StartOverButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame frame = new Frame();
-            Window.Current.Content = frame;
-            frame.Navigate(typeof(FirstRunPage));
+            ((Frame)Window.Current.Content).Navigate(typeof(FirstRunPage));
         }
 
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (StudentRB.IsChecked == true && args.QueryText.EndsWith("@edu.hse.ru"))
+            _data.TimetableLoadingSuccessed += (o, e) =>
             {
-                _data.TimetableLoadingSuccessed += (o, e) => ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
-                _data.TimetableLoadingFailed += (o, e) =>
+                ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
+                Windows.Storage.ApplicationData.Current.LocalSettings.Values["FirstRun"] = false;
+            };
+
+            if (_type == Models.UserType.Student)
+            {
+                if (args.QueryText.EndsWith("@edu.hse.ru"))
                 {
-                    sender.Text = string.Empty;
-                    ErrorBlock.Visibility = Visibility.Visible;
-                };
-                _data.CurrentUser = new Student(args.QueryText);
+                    _data.TimetableLoadingFailed += (o, e) =>
+                    {
+                        sender.Text = string.Empty;
+                        ErrorBlock.Visibility = Visibility.Visible;
+                    };
+                    _data.CurrentUser = new Student(args.QueryText);
+                }
+            }
+            else
+            {
+                if (args.ChosenSuggestion != null)
+                    _data.CurrentUser = (Models.User)args.ChosenSuggestion;
             }
         }
 
-        private async void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            await SetSuggestionsList(_type);
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                if (string.IsNullOrEmpty(sender.Text))
+                    sender.ItemsSource = null;
+
+                sender.ItemsSource = _suggestions?.Where(s => s.ToString().Contains(sender.Text));
+
+                //await SetSuggestionsList(_type, sender.Text);
+                //sender.ItemsSource = _suggestions;
+            }
+
         }
 
-        private async Task SetSuggestionsList(Models.UserType type)
+        private async Task SetSuggestionsList(Models.UserType type, string textToFind)
         {
             switch (type)
             {
@@ -92,12 +118,14 @@ namespace RuzTermPaper.Pages
                     _suggestions = null;
                     break;
                 case Models.UserType.Lecturer:
-                    _suggestions = new ObservableCollection<Models.User>(await Lecturer.FindAsync());
+                    _suggestions = new ObservableCollection<Models.User>(await Lecturer.FindAsync(textToFind));
                     break;
                 case Models.UserType.Group:
-                    _suggestions = new ObservableCollection<Models.User>(await Group.FindAsync());
+                    _suggestions = new ObservableCollection<Models.User>(await Group.FindAsync(textToFind));
                     break;
             }
         }
+
+        private void RB_Unchecked(object sender, RoutedEventArgs e) => _suggestions = null;
     }
 }
