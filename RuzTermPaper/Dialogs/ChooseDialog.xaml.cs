@@ -28,8 +28,8 @@ namespace RuzTermPaper.Dialogs
             switch (_type)
             {
                 case UserType.Group:
-                    suggestBox.Header = "ChooseDialog_SuggestBox_Header_Group".Localize(); ;
-                    suggestBox.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Group".Localize(); ;
+                    suggestBox.Header = "ChooseDialog_SuggestBox_Header_Group".Localize();
+                    suggestBox.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Group".Localize();
                     break;
                 case UserType.Lecturer:
                     suggestBox.Header = "ChooseDialog_SuggestBox_Header_Lecturer".Localize();
@@ -66,7 +66,6 @@ namespace RuzTermPaper.Dialogs
 
         private async void ContentDialog_Loading(FrameworkElement sender, object args)
         {
-            // Все падает!!!
             try
             {
                 if (_type == UserType.Lecturer)

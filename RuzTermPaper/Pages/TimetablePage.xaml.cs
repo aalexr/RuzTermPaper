@@ -25,9 +25,17 @@ namespace RuzTermPaper.Pages
             // Тоже опасно, может скрыть кнопку, если расписания нет?
             DateTime lastDate = _data.Lessons.Last().Key.AddDays(1);
             // Упадет с исключением если нет интернета
-            foreach(var l in await _data.CurrentUser.GetLessonsAsync(lastDate, 7))
+            try
             {
-                _data.Lessons.Add(l);
+                var moreLessons = await _data.CurrentUser.GetLessonsAsync(lastDate, 7);
+                foreach (var item in moreLessons)
+                {
+                    _data.Lessons.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                await new Dialogs.ErrorDialog(ex).ShowAsync();
             }
         }
     }
