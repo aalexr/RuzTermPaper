@@ -22,7 +22,9 @@ namespace RuzTermPaper.Pages
 
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
+            // Тоже опасно, может скрыть кнопку, если расписания нет?
             DateTime lastDate = _data.Lessons.Last().Key.AddDays(1);
+            // Упадет с исключением если нет интернета
             foreach(var l in await _data.CurrentUser.GetLessonsAsync(lastDate, 7))
             {
                 _data.Lessons.Add(l);

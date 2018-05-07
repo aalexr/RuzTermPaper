@@ -1,6 +1,7 @@
 ﻿using RuzTermPaper.Models;
 using RuzTermPaper.Tools;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
@@ -65,10 +66,23 @@ namespace RuzTermPaper.Dialogs
 
         private async void ContentDialog_Loading(FrameworkElement sender, object args)
         {
-            if (_type == UserType.Lecturer)
-                _users = await Lecturer.FindAsync();
-            else
-                _users = await Group.FindAsync();
+            // Все падает!!!
+            try
+            {
+                if (_type == UserType.Lecturer)
+                {
+                    _users = await Lecturer.FindAsync();
+                }
+                else
+                {
+                    _users = await Group.FindAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Hide();
+                await new ErrorDialog(ex).ShowAsync();
+            }
         }
         #endregion
     }
