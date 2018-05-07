@@ -30,7 +30,7 @@ namespace RuzTermPaper.Pages
             _data.ResetEvents();
             _data.TimetableLoadingSuccessed += (o, args) => MainPage.View.SelectedItem = MainPage.View.MenuItems[0];
             // Показ сообщения, если ошибка при загрузке
-            _data.TimetableLoadingFailed += async (o, args) => await Task.Delay(0);
+            _data.TimetableLoadingFailed += async (o, args) => await new Dialogs.ErrorDialog(args.Exception).ShowAsync();
         }
 
         private void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)

@@ -136,6 +136,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Graph1.dgml" />
     <None Include="RuzTermPaper_TemporaryKey.pfx" />
     <PRIResource Include="Strings\ru-ru\Resources.resw" />
     <PRIResource Include="Strings\en-us\Resources.resw" />

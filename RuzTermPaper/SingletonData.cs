@@ -11,7 +11,7 @@ namespace RuzTermPaper
     {
         private static SingletonData instance = null;
         private User _currentUser;
-        private event EventHandler<CurrentUserChangedEventArgs> CurrentUserChanged;
+        private event EventHandler<CurrentUserSetEventArgs> CurrentUserSet;
 
         public event EventHandler<EventArgs> TimetableLoadingSuccessed;
         public event EventHandler<TimetableLoadingFailedEventArgs> TimetableLoadingFailed;
@@ -19,15 +19,7 @@ namespace RuzTermPaper
         public User CurrentUser
         {
             get => _currentUser;
-            set
-            {
-                if (_currentUser?.Equals(value) == true)
-                    return;
-
-                CurrentUserChanged(this, new CurrentUserChangedEventArgs(_currentUser, value));
-                _currentUser = value;
-
-            }
+            set => CurrentUserSet(this, new CurrentUserSetEventArgs(_currentUser, _currentUser = value));
         }
         public ObservableCollection<LessonsGroup> Lessons { get; set; }
         public ObservableCollection<User> Recent { get; set; }
@@ -36,7 +28,7 @@ namespace RuzTermPaper
         {
             Recent = new ObservableCollection<User>();
             Lessons = new ObservableCollection<LessonsGroup>();
-            CurrentUserChanged += OnCurrentUserChanged;
+            CurrentUserSet += OnCurrentUserChanged;
             TimetableLoadingFailed += (o, e) => { };
             TimetableLoadingSuccessed += (o, e) => { };
         }
@@ -73,7 +65,7 @@ namespace RuzTermPaper
             TimetableLoadingSuccessed = (o, e) => {};
         }
 
-        private async void OnCurrentUserChanged(object sender, CurrentUserChangedEventArgs e)
+        private async void OnCurrentUserChanged(object sender, CurrentUserSetEventArgs e)
         {
             try
             {
@@ -102,14 +94,14 @@ namespace RuzTermPaper
     }
 
 
-    public class CurrentUserChangedEventArgs : EventArgs
+    public class CurrentUserSetEventArgs : EventArgs
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="previousUser">Предыдущий пользователь</param>
         /// <param name="newUser">Новый пользователь</param>
-        public CurrentUserChangedEventArgs(User previousUser, User newUser)
+        public CurrentUserSetEventArgs(User previousUser, User newUser)
         {
             PreviousUser = previousUser;
             NewUser = newUser;
@@ -117,6 +109,7 @@ namespace RuzTermPaper
 
         public User PreviousUser { get; private set; }
         public User NewUser { get; private set; }
+        public bool IsAnother => PreviousUser.Equals(NewUser);
     }
 
 }
