@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using RuzTermPaper.Tools;
 using Windows.UI.Xaml.Controls;
@@ -25,10 +26,14 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
         /// <returns>Список найденных групп</returns>
-        public static async Task<List<Group>> FindAsync(string findText = "")
+        public static async Task<List<Group>> FindAsync(string findText, CancellationToken cancellationToken)
         {
             var requestUri = new Uri(BaseUri, $"groups?findtext={findText}");
-            return await Json.ToObjectAsync<List<Group>>(await App.Http.GetStringAsync(requestUri));
+            var response = await App.Http.GetAsync(requestUri, cancellationToken);
+            if (response.IsSuccessStatusCode)
+                return await Json.ToObjectAsync<List<Group>>(await response.Content.ReadAsStringAsync(), cancellationToken);
+            else
+                throw new System.Net.Http.HttpRequestException($"Error Code {(int)response.StatusCode} - {response.ReasonPhrase}");
         }
 
         public override string ToString() => Number;

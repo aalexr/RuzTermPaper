@@ -222,4 +222,10 @@
   <data name="TimetablePage_ListViewGroup_Header_NoClasses.Text" xml:space="preserve">
     <value>Нет занятий</value>
   </data>
+  <data name="Today" xml:space="preserve">
+    <value>сегодня</value>
+  </data>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>завтра</value>
+  </data>
 </root>

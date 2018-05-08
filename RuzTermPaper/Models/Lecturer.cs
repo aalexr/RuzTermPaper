@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using RuzTermPaper.Tools;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 // ReSharper disable MemberCanBePrivate.Global
@@ -13,7 +14,6 @@ namespace RuzTermPaper.Models
         //public int chairOid { get; set; }
         public string Fio { get; set; }
         public int LecturerOid { get; set; }
-
         //public string shortFIO { get; set; }
 
 
@@ -24,10 +24,14 @@ namespace RuzTermPaper.Models
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
         /// <returns>Список найденных преподавателей</returns>
-        public static async Task<List<Lecturer>> FindAsync(string findText = "")
+        public static async Task<List<Lecturer>> FindAsync(string findText, CancellationToken cancellationToken)
         {
             var requestUri = new Uri(BaseUri, $"lecturers?findtext={findText}");
-            return JsonConvert.DeserializeObject<List<Lecturer>>(await App.Http.GetStringAsync(requestUri));
+            var response = await App.Http.GetAsync(requestUri, cancellationToken);
+            if (response.IsSuccessStatusCode)
+                return await Json.ToObjectAsync<List<Lecturer>>(await response.Content.ReadAsStringAsync(), cancellationToken);
+            else
+                throw new System.Net.Http.HttpRequestException($"Error Code {(int)response.StatusCode} - {response.ReasonPhrase}");
         }
 
         public override string ToString() => Fio;

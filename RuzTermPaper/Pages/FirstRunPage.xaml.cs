@@ -4,7 +4,6 @@ using System;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -21,8 +20,8 @@ namespace RuzTermPaper.Pages
     {
         private SingletonData _data;
         private SolidColorBrush _invalidFormat;
-        private ObservableCollection<Models.User> _suggestions;
-        private Models.UserType _type;
+        private ObservableCollection<User> _suggestions;
+        private UserType _type;
         public FirstRunPage()
         {
             _data = SingletonData.Initialize();
@@ -42,7 +41,7 @@ namespace RuzTermPaper.Pages
         {
             if (sender is RadioButton radio)
             {
-                _type = (Models.UserType)radio.Tag;
+                _type = (UserType)radio.Tag;
                 try
                 {
                     Progress.IsActive = true;
@@ -76,7 +75,7 @@ namespace RuzTermPaper.Pages
                 Windows.Storage.ApplicationData.Current.LocalSettings.Values["FirstRun"] = false;
             };
 
-            if (_type == Models.UserType.Student)
+            if (_type == UserType.Student)
             {
                 if (args.QueryText.EndsWith("@edu.hse.ru"))
                 {
@@ -91,7 +90,7 @@ namespace RuzTermPaper.Pages
             else
             {
                 if (args.ChosenSuggestion != null)
-                    _data.CurrentUser = (Models.User)args.ChosenSuggestion;
+                    _data.CurrentUser = (User)args.ChosenSuggestion;
             }
         }
 
@@ -110,20 +109,20 @@ namespace RuzTermPaper.Pages
 
         }
 
-        private async Task SetSuggestionsList(Models.UserType type, string textToFind)
+        private async Task SetSuggestionsList(UserType type, string textToFind)
         {
-            switch (type)
-            {
-                case Models.UserType.Student:
-                    _suggestions = null;
-                    break;
-                case Models.UserType.Lecturer:
-                    _suggestions = new ObservableCollection<Models.User>(await Lecturer.FindAsync(textToFind));
-                    break;
-                case Models.UserType.Group:
-                    _suggestions = new ObservableCollection<Models.User>(await Group.FindAsync(textToFind));
-                    break;
-            }
+            //switch (type)
+            //{
+            //    case UserType.Student:
+            //        _suggestions = null;
+            //        break;
+            //    case UserType.Lecturer:
+            //        _suggestions = new ObservableCollection<User>(await Lecturer.FindAsync(textToFind));
+            //        break;
+            //    case UserType.Group:
+            //        _suggestions = new ObservableCollection<User>(await Group.FindAsync(textToFind));
+            //        break;
+            //}
         }
 
         private void RB_Unchecked(object sender, RoutedEventArgs e) => _suggestions = null;

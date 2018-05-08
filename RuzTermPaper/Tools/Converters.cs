@@ -8,13 +8,16 @@ namespace RuzTermPaper.Tools
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return ((DateTime)value).ToString("dddd, d MMMM");
+            var val = (DateTime)value;
+            var today = DateTime.Today;
+            if (val == today)
+                return "Today".Localize();
+            if (val == today.AddDays(1))
+                return "Tomorrow".Localize();
+            return val.ToString("dddd, d MMMM");
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            return DateTime.Parse((string)value);
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => DateTime.Parse((string)value);
     }
 
     public class VisibleWhenEmpty : IValueConverter

@@ -6,15 +6,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Uid="ChooseDialog"
-    Loading="ContentDialog_Loading"
     DefaultButton="Primary"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     IsPrimaryButtonEnabled="False">
 
-    <AutoSuggestBox x:Uid="ContentDialog_AutoSuggestBox"
+    <StackPanel Orientation="Vertical">
+        <AutoSuggestBox x:Uid="ContentDialog_AutoSuggestBox"
                     x:Name="Search"
                     QueryIcon="Find"
                     TextChanged="Search_TextChanged"
                     QuerySubmitted="Search_QuerySubmitted"
                     Width="320"/>
+        
+        <StackPanel x:Name="ErrorSP" x:Load="False" Orientation="Horizontal" Margin="0,8,0,0">
+            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE783;" Foreground="Red" Margin="0,0,4,0"/>
+            <TextBlock x:Name="ErrorBlock" Foreground="Red"/>
+        </StackPanel>
+    </StackPanel>
 </ContentDialog>

@@ -17,27 +17,31 @@ namespace RuzTermPaper.Pages
         /// <summary>
         /// Экземпляр <see cref="NavigationView"/> главной страницы
         /// </summary>
-        public static NavigationView View { get; private set; }
+        public static Pivot View { get; private set; }
         public MainPage()
         {
             InitializeComponent();
             View = NavView;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e) => ContentFrame.Navigate(typeof(TimetablePage));
+        protected override void OnNavigatedTo(NavigationEventArgs e) => PivotItem1.Navigate(typeof(TimetablePage));
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected)
             {
-                ContentFrame.Navigate(typeof(SettingsPage));
+                PivotItem1.Navigate(typeof(SettingsPage));
             }
             else
             {
                 var selectedItem = (NavigationViewItem)args.SelectedItem;
                 var pageName = (string)selectedItem.Tag;
-                ContentFrame.Navigate(Type.GetType(pageName));
+                PivotItem1.Navigate(Type.GetType(pageName));
             }
+        }
+
+        private void NavView_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
         }
     }
 }

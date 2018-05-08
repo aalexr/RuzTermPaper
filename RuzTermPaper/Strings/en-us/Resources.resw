@@ -216,4 +216,10 @@
   <data name="TimetablePage_ListViewGroup_Header_NoClasses.Text" xml:space="preserve">
     <value>No classes</value>
   </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>Tomorrow</value>
+  </data>
 </root>

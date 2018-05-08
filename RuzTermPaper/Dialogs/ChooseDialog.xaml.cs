@@ -1,9 +1,9 @@
 ﻿using RuzTermPaper.Models;
 using RuzTermPaper.Tools;
 using System;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -15,25 +15,24 @@ namespace RuzTermPaper.Dialogs
     {
         private SingletonData _data = SingletonData.Initialize();
         private UserType _type;
-        private IEnumerable<User> _users;
         private User _choosedUser;
-        private AutoSuggestBox suggestBox;
+        private CancellationTokenSource tokenSource;
 
         private ChooseDialog() => InitializeComponent();
         public ChooseDialog(UserType type) : this()
         {
             _type = type;
-            suggestBox = (AutoSuggestBox)Content;
+            tokenSource = new CancellationTokenSource();
 
             switch (_type)
             {
                 case UserType.Group:
-                    suggestBox.Header = "ChooseDialog_SuggestBox_Header_Group".Localize();
-                    suggestBox.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Group".Localize();
+                    Search.Header = "ChooseDialog_SuggestBox_Header_Group".Localize();
+                    Search.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Group".Localize();
                     break;
                 case UserType.Lecturer:
-                    suggestBox.Header = "ChooseDialog_SuggestBox_Header_Lecturer".Localize();
-                    suggestBox.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Lecturer".Localize();
+                    Search.Header = "ChooseDialog_SuggestBox_Header_Lecturer".Localize();
+                    Search.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Lecturer".Localize();
                     break;
             }
         }
@@ -45,14 +44,34 @@ namespace RuzTermPaper.Dialogs
         }
 
         #region AutoSuggestBox EventHandlers
-        private void Search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private async void Search_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
+            tokenSource.Cancel();
+            tokenSource = new CancellationTokenSource();
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
-                sender.ItemsSource = string.IsNullOrWhiteSpace(sender.Text)
-                    ? null
-                    : _users?.Where(x => x.Name.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase));
-                IsPrimaryButtonEnabled = false;
+                try
+                {
+                    if (string.IsNullOrEmpty(sender.Text))
+                        return;
+
+                    if (_type == UserType.Lecturer)
+                        sender.ItemsSource = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
+                    else
+                        sender.ItemsSource = await Group.FindAsync(sender.Text, tokenSource.Token);
+
+                    IsPrimaryButtonEnabled = false;
+                }
+                catch (TaskCanceledException)
+                {
+                    // Игнорировать
+                }
+                catch (HttpRequestException ex)
+                {
+                    FindName("ErrorSP");
+                    ErrorBlock.Text = ex.Message;
+                }
+                catch (Exception) { }
             }
         }
 
@@ -62,26 +81,6 @@ namespace RuzTermPaper.Dialogs
                 return;
             _choosedUser = user;
             IsPrimaryButtonEnabled = true;
-        }
-
-        private async void ContentDialog_Loading(FrameworkElement sender, object args)
-        {
-            try
-            {
-                if (_type == UserType.Lecturer)
-                {
-                    _users = await Lecturer.FindAsync();
-                }
-                else
-                {
-                    _users = await Group.FindAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Hide();
-                await new ErrorDialog(ex).ShowAsync();
-            }
         }
         #endregion
     }

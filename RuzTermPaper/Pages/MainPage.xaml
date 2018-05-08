@@ -7,27 +7,14 @@
     xmlns:appmodel="using:Windows.ApplicationModel"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-        <NavigationView AlwaysShowHeader="False" x:Name="NavView"
-                        Canvas.ZIndex="0"
-                        Header="Header"
-                        IsSettingsVisible="True"
-                        IsTabStop="False"
-                        SelectionChanged="NavView_SelectionChanged">
-
-            <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="MainPage_NavigationViewItem_Current" Icon="Calendar" Tag="RuzTermPaper.Pages.TimetablePage"/>
-                <NavigationViewItem x:Uid="MainPage_NavigationViewItem_Find" Icon="Find" Tag="RuzTermPaper.Pages.FindPage"/>
-            </NavigationView.MenuItems>
-
-            <Frame x:Name="ContentFrame">
-                <Frame.ContentTransitions>
-                    <TransitionCollection>
-                        <NavigationThemeTransition/>
-                    </TransitionCollection>
-                </Frame.ContentTransitions>
-            </Frame>
-        </NavigationView>
-    </Grid>
+    <Pivot x:Name="NavView" Canvas.ZIndex="0" IsTabStop="False" SelectionChanged="NavView_SelectionChanged_1">
+        <Pivot.Items>
+            <PivotItem Header="View" x:Uid="MainPage_NavigationViewItem_Current" Tag="RuzTermPaper.Pages.TimetablePage">
+                <Frame x:Name="PivotItem1"/>
+            </PivotItem>
+            <PivotItem Header="Find" x:Uid="MainPage_NavigationViewItem_Find" Tag="RuzTermPaper.Pages.FindPage">
+                <Frame x:Name="PivotItem2"/>
+            </PivotItem>
+        </Pivot.Items>
+    </Pivot>
 </Page>

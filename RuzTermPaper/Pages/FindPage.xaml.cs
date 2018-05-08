@@ -28,7 +28,7 @@ namespace RuzTermPaper.Pages
             InitializeComponent();
             _data = SingletonData.Initialize();
             _data.ResetEvents();
-            _data.TimetableLoadingSuccessed += (o, args) => MainPage.View.SelectedItem = MainPage.View.MenuItems[0];
+            _data.TimetableLoadingSuccessed += (o, args) => MainPage.View.SelectedItem = MainPage.View.Items[0];
             // Показ сообщения, если ошибка при загрузке
             _data.TimetableLoadingFailed += async (o, args) => await new Dialogs.ErrorDialog(args.Exception).ShowAsync();
         }
