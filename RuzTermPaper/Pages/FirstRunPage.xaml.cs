@@ -1,8 +1,10 @@
 ﻿using RuzTermPaper.Models;
 using RuzTermPaper.Tools;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -20,8 +22,9 @@ namespace RuzTermPaper.Pages
     {
         private SingletonData _data;
         private SolidColorBrush _invalidFormat;
-        private ObservableCollection<User> _suggestions;
         private UserType _type;
+        private CancellationTokenSource tokenSource;
+
         public FirstRunPage()
         {
             _data = SingletonData.Initialize();
@@ -33,38 +36,17 @@ namespace RuzTermPaper.Pages
         {
             StartButton.Visibility = Visibility.Collapsed;
             FindName("Buttons");
-            FindName("StartOver");
             Hint.Text = "FirstRunPage_Hint_Text".Localize();
         }
 
-        private async void RadioButton_Checked(object sender, RoutedEventArgs e)
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is RadioButton radio)
             {
                 _type = (UserType)radio.Tag;
-                try
-                {
-                    Progress.IsActive = true;
-                    await SetSuggestionsList(_type, string.Empty);
-                    if (SearchBox == null)
-                        FindName("SearchBox");
-                }
-                catch (Exception ex)
-                {
-                    radio.IsChecked = false;
-                    await new Dialogs.ErrorDialog(ex).ShowAsync();
-                    return;
-                }
-                finally
-                {
-                    Progress.IsActive = false;
-                }
+                if (SearchBox == null)
+                    FindName("SearchBox");
             }
-        }
-
-        private void StartOverButton_Click(object sender, RoutedEventArgs e)
-        {
-            ((Frame)Window.Current.Content).Navigate(typeof(FirstRunPage));
         }
 
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -94,37 +76,55 @@ namespace RuzTermPaper.Pages
             }
         }
 
-        private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private async void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
-                if (string.IsNullOrEmpty(sender.Text))
-                    sender.ItemsSource = null;
+                try
+                {
+                    if (string.IsNullOrEmpty(sender.Text))
+                        return;
+                    tokenSource?.Cancel();
+                    tokenSource = new CancellationTokenSource();
+                    if (_type == UserType.Lecturer)
+                    {
+                        List<Lecturer> _suggestions = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
+                        if (_suggestions.Count > 0)
+                            sender.ItemsSource = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
+                        else
+                            sender.ItemsSource = new[] { "NoResult".Localize() };
 
-                sender.ItemsSource = _suggestions?.Where(s => s.ToString().Contains(sender.Text));
-
-                //await SetSuggestionsList(_type, sender.Text);
-                //sender.ItemsSource = _suggestions;
+                    }
+                    else
+                    {
+                        List<Group> _suggestions = await Group.FindAsync(sender.Text, tokenSource.Token);
+                        if (_suggestions.Count > 0)
+                            sender.ItemsSource = await Group.FindAsync(sender.Text, tokenSource.Token);
+                        else
+                            sender.ItemsSource = new[] { "NoResult".Localize() };
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    // Игнорировать
+                }
+                catch (HttpRequestException ex)
+                {
+                    // Показать сообщение
+                }
+                catch (Exception) { }
             }
 
         }
 
-        private async Task SetSuggestionsList(UserType type, string textToFind)
-        {
-            //switch (type)
-            //{
-            //    case UserType.Student:
-            //        _suggestions = null;
-            //        break;
-            //    case UserType.Lecturer:
-            //        _suggestions = new ObservableCollection<User>(await Lecturer.FindAsync(textToFind));
-            //        break;
-            //    case UserType.Group:
-            //        _suggestions = new ObservableCollection<User>(await Group.FindAsync(textToFind));
-            //        break;
-            //}
-        }
+        private void RB_Unchecked(object sender, RoutedEventArgs e) => SearchBox.ItemsSource = null;
 
-        private void RB_Unchecked(object sender, RoutedEventArgs e) => _suggestions = null;
+        private void StudentRB_Checked(object sender, RoutedEventArgs e)
+        {
+            if (SearchBox == null)
+                FindName("SearchBox");
+
+            SearchBox.PlaceholderText = "Введите почту на edu.hse.ru";
+        }
     }
 }

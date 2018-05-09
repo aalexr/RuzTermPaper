@@ -205,13 +205,10 @@
     <value>Расписание ВШЭ</value>
   </data>
   <data name="FirstRunPage_WelcomeTextBlock_Welcome.Text" xml:space="preserve">
-    <value>Добро пожаловать в приложение</value>
+    <value>Добро пожаловать</value>
   </data>
-  <data name="MainPage_NavigationViewItem_Current.Content" xml:space="preserve">
-    <value>Текущее расписание</value>
-  </data>
-  <data name="MainPage_NavigationViewItem_Find.Content" xml:space="preserve">
-    <value>Поиск расписания</value>
+  <data name="NoResult" xml:space="preserve">
+    <value>Не найдено</value>
   </data>
   <data name="SingletonAlreadyExistsException" xml:space="preserve">
     <value>Уже существует обьект этого класса.</value>

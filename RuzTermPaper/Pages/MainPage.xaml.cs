@@ -14,34 +14,19 @@ namespace RuzTermPaper.Pages
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        /// <summary>
-        /// Экземпляр <see cref="NavigationView"/> главной страницы
-        /// </summary>
         public static Pivot View { get; private set; }
         public MainPage()
         {
             InitializeComponent();
-            View = NavView;
+            View = PivotView;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e) => PivotItem1.Navigate(typeof(TimetablePage));
-
-        private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (args.IsSettingsSelected)
-            {
-                PivotItem1.Navigate(typeof(SettingsPage));
-            }
-            else
-            {
-                var selectedItem = (NavigationViewItem)args.SelectedItem;
-                var pageName = (string)selectedItem.Tag;
-                PivotItem1.Navigate(Type.GetType(pageName));
-            }
-        }
-
-        private void NavView_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
+            base.OnNavigatedTo(e);
+            ViewPIFrame.Navigate(typeof(TimetablePage));
+            FindPIFrame.Navigate(typeof(FindPage));
+            SetPIFrame.Navigate(typeof(SettingsPage));
         }
     }
 }

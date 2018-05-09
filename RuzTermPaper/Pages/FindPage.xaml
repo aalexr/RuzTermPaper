@@ -20,8 +20,7 @@
         <TextBox PlaceholderText="example@edu.hse.ru"
                  x:Uid="FindPage_EmailBox"
                  KeyDown="EmailBox_KeyDown"
-                 IsSpellCheckEnabled="False"
-                 Margin="8,0,8,0"/>
+                 IsSpellCheckEnabled="False"/>
 
 
 

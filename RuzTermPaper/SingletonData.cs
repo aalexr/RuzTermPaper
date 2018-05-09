@@ -2,35 +2,49 @@
 using RuzTermPaper.Tools;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace RuzTermPaper
 {
-    public class SingletonData
+    public class SingletonData : INotifyPropertyChanged
     {
         private static SingletonData instance = null;
         private User _currentUser;
-        private event EventHandler<CurrentUserSetEventArgs> CurrentUserSet;
+        private ObservableCollection<LessonsGroup> _lessons;
 
         public event EventHandler<EventArgs> TimetableLoadingSuccessed;
         public event EventHandler<TimetableLoadingFailedEventArgs> TimetableLoadingFailed;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public User CurrentUser
         {
             get => _currentUser;
-            set => CurrentUserSet(this, new CurrentUserSetEventArgs(_currentUser, _currentUser = value));
+            set
+            {
+                _currentUser = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentUser)));
+            }
         }
-        public ObservableCollection<LessonsGroup> Lessons { get; set; }
+        public ObservableCollection<LessonsGroup> Lessons
+        {
+            get => _lessons; set
+            {
+                _lessons = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Lessons)));
+            }
+        }
         public ObservableCollection<User> Recent { get; set; }
 
         private SingletonData()
         {
             Recent = new ObservableCollection<User>();
             Lessons = new ObservableCollection<LessonsGroup>();
-            CurrentUserSet += OnCurrentUserChanged;
+            PropertyChanged += OnCurrentUserChanged;
             TimetableLoadingFailed += (o, e) => { };
             TimetableLoadingSuccessed += (o, e) => { };
+            Lessons.CollectionChanged += (o, e) => { };
         }
 
         public static SingletonData Initialize()
@@ -61,25 +75,28 @@ namespace RuzTermPaper
 
         public void ResetEvents()
         {
-            TimetableLoadingFailed = (o, e) => {};
-            TimetableLoadingSuccessed = (o, e) => {};
+            TimetableLoadingFailed = (o, e) => { };
+            TimetableLoadingSuccessed = (o, e) => { };
         }
 
-        private async void OnCurrentUserChanged(object sender, CurrentUserSetEventArgs e)
+        private async void OnCurrentUserChanged(object sender, PropertyChangedEventArgs e)
         {
-            try
+            if (sender is SingletonData data && e.PropertyName == nameof(CurrentUser))
             {
-                Lessons = new ObservableCollection<LessonsGroup>(await e.NewUser.GetLessonsAsync(DateTime.Today, 7));
+                try
+                {
+                    Lessons = new ObservableCollection<LessonsGroup>(await data.CurrentUser.GetLessonsAsync(DateTime.Today, 7));
+                }
+                catch (Exception ex)
+                {
+                    TimetableLoadingFailed(this, new TimetableLoadingFailedEventArgs(ex));
+                    return;
+                }
+
+                if (!Recent.Contains(data.CurrentUser))
+                    Recent.Add(data.CurrentUser);
+                TimetableLoadingSuccessed(this, EventArgs.Empty/*new TimetableLoadingSuccessedEventArgs()*/); 
             }
-            catch (Exception ex)
-            {
-                TimetableLoadingFailed(this, new TimetableLoadingFailedEventArgs(ex));
-                return;
-            }
-            
-            if (!Recent.Contains(e.NewUser))
-                Recent.Add(e.NewUser);
-            TimetableLoadingSuccessed(this, EventArgs.Empty/*new TimetableLoadingSuccessedEventArgs()*/);
         }
     }
 

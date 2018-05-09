@@ -65,33 +65,32 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:Lesson">
-                    <Grid Margin="0,4,0,4">
+                    <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
 
-                        <TextBlock TextAlignment="Left" Text="{x:Bind BeginLesson}" Margin="0,0,4,0" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock TextAlignment="Left" Text="{x:Bind BeginLesson}" Grid.Row="0" Grid.Column="0"/>
 
                         <TextBlock Text="{x:Bind KindOfWork}" Grid.Row="1" Grid.Column="1" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
-                        <TextBlock Text="{x:Bind Discipline}" Style="{StaticResource BaseTextBlockStyle}" Grid.Row="2" Grid.Column="1"/>
-                        <TextBlock Text="{x:Bind Lecturer}" Grid.Row="3" Grid.Column="1" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"/>
-                        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
-                            <TextBlock Text="{x:Bind Building}" Margin="0,0,4,0"/>
-                            <TextBlock Text="{x:Bind Auditorium}"/>
-                        </StackPanel>
+                        <TextBlock Text="{x:Bind Discipline}" Style="{StaticResource BaseTextBlockStyle}" Grid.Row="2" Grid.Column="1" TextWrapping="WrapWholeWords"/>
+                        <TextBlock Text="{x:Bind Lecturer}" Grid.Row="3" Grid.Column="1" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}" TextWrapping="WrapWholeWords"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1">
+                            <Run Text="{x:Bind Building}"/>
+                            <Run Text="{x:Bind Auditorium}"/>
+                        </TextBlock>
 
-
-                        <TextBlock Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="5" Margin="0,0,4,0"/>
+                        <TextBlock Text="{x:Bind EndLesson}" TextAlignment="Left" Grid.Row="5"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

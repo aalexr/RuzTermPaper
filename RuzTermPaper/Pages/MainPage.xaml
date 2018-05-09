@@ -7,13 +7,40 @@
     xmlns:appmodel="using:Windows.ApplicationModel"
     mc:Ignorable="d">
 
-    <Pivot x:Name="NavView" Canvas.ZIndex="0" IsTabStop="False" SelectionChanged="NavView_SelectionChanged_1">
+    <Pivot x:Name="PivotView">
         <Pivot.Items>
-            <PivotItem Header="View" x:Uid="MainPage_NavigationViewItem_Current" Tag="RuzTermPaper.Pages.TimetablePage">
-                <Frame x:Name="PivotItem1"/>
+
+            <!--Item1-->
+            <PivotItem x:Uid="MainPage_PivotViewItem_Current">
+                <PivotItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <SymbolIcon Symbol="Calendar"/>
+                        <TextBlock Text="Расписание" Style="{StaticResource CaptionTextBlockStyle}"/>
+                    </StackPanel>
+                </PivotItem.Header>
+                <Frame x:Name="ViewPIFrame"/>
             </PivotItem>
-            <PivotItem Header="Find" x:Uid="MainPage_NavigationViewItem_Find" Tag="RuzTermPaper.Pages.FindPage">
-                <Frame x:Name="PivotItem2"/>
+
+            <!--Item2-->
+            <PivotItem x:Name="FindPI" x:Uid="MainPage_PivotViewItem_Find">
+                <PivotItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <SymbolIcon Symbol="Find"/>
+                        <TextBlock Text="Поиск" Style="{StaticResource CaptionTextBlockStyle}"/>
+                    </StackPanel>
+                </PivotItem.Header>
+                <Frame x:Name="FindPIFrame"/>
+            </PivotItem>
+
+            <!--Item3-->
+            <PivotItem x:Name="SetPI">
+                <PivotItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <SymbolIcon Symbol="Setting"/>
+                        <TextBlock Text="Настройки" Style="{StaticResource CaptionTextBlockStyle}"/>
+                    </StackPanel>
+                </PivotItem.Header>
+                <Frame x:Name="SetPIFrame"/>
             </PivotItem>
         </Pivot.Items>
     </Pivot>

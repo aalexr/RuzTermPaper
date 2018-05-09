@@ -16,7 +16,7 @@
                     QueryIcon="Find"
                     TextChanged="Search_TextChanged"
                     QuerySubmitted="Search_QuerySubmitted"
-                    Width="320"/>
+                    MaxWidth="320"/>
         
         <StackPanel x:Name="ErrorSP" x:Load="False" Orientation="Horizontal" Margin="0,8,0,0">
             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE783;" Foreground="Red" Margin="0,0,4,0"/>

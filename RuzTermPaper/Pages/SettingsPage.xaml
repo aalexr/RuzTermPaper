@@ -8,6 +8,21 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button Content="Reset First Run" Click="Button_Click"/>
+        
+        <RelativePanel>
+            <StackPanel x:Name="Theme" Orientation="Vertical">
+                <TextBlock Text="Выберите режим"/>
+                <RadioButton Content="Светлая"/>
+                <RadioButton Content="Темная"/>
+                <RadioButton Content="Windows по умолчанию"/>
+            </StackPanel>
+            <ComboBox RelativePanel.Below="Theme" Header="Язык" SelectedIndex="0">
+                <ComboBoxItem Content="русский"/>
+                <ComboBoxItem Content="английский"/>
+                <ComboBoxItem Content="Windows по умолчанию"/>
+            </ComboBox>
+        </RelativePanel>
+        
+        <Button Content="Reset First Run" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
     </Grid>
 </Page>
