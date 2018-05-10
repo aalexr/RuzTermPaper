@@ -14,9 +14,8 @@ namespace RuzTermPaper
         private User _currentUser;
         private ObservableCollection<LessonsGroup> _lessons;
 
-        public event EventHandler<EventArgs> TimetableLoadingSuccessed;
-        public event EventHandler<TimetableLoadingFailedEventArgs> TimetableLoadingFailed;
         public event PropertyChangedEventHandler PropertyChanged;
+
 
         public User CurrentUser
         {
@@ -41,10 +40,6 @@ namespace RuzTermPaper
         {
             Recent = new ObservableCollection<User>();
             Lessons = new ObservableCollection<LessonsGroup>();
-            PropertyChanged += OnCurrentUserChanged;
-            TimetableLoadingFailed += (o, e) => { };
-            TimetableLoadingSuccessed += (o, e) => { };
-            Lessons.CollectionChanged += (o, e) => { };
         }
 
         public static SingletonData Initialize()
@@ -59,7 +54,7 @@ namespace RuzTermPaper
         /// 
         /// </summary>
         /// <param name="file"></param>
-        /// <exception cref="Exception">Возникает при попытки повторно создать экземпляр из файла</exception>
+        /// <exception cref="Exception">Возникает при попытке повторно создать экземпляр из файла</exception>
         /// <returns></returns>
         public static async Task<SingletonData> Initialize(StorageFile file)
         {
@@ -72,61 +67,5 @@ namespace RuzTermPaper
 
             throw new Exception("SingletonAlreadyExistsException".Localize());
         }
-
-        public void ResetEvents()
-        {
-            TimetableLoadingFailed = (o, e) => { };
-            TimetableLoadingSuccessed = (o, e) => { };
-        }
-
-        private async void OnCurrentUserChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (sender is SingletonData data && e.PropertyName == nameof(CurrentUser))
-            {
-                try
-                {
-                    Lessons = new ObservableCollection<LessonsGroup>(await data.CurrentUser.GetLessonsAsync(DateTime.Today, 7));
-                }
-                catch (Exception ex)
-                {
-                    TimetableLoadingFailed(this, new TimetableLoadingFailedEventArgs(ex));
-                    return;
-                }
-
-                if (!Recent.Contains(data.CurrentUser))
-                    Recent.Add(data.CurrentUser);
-                TimetableLoadingSuccessed(this, EventArgs.Empty/*new TimetableLoadingSuccessedEventArgs()*/); 
-            }
-        }
     }
-
-    public class TimetableLoadingFailedEventArgs : EventArgs
-    {
-        public TimetableLoadingFailedEventArgs(Exception exception)
-        {
-            Exception = exception;
-        }
-
-        public Exception Exception { get; private set; }
-    }
-
-
-    public class CurrentUserSetEventArgs : EventArgs
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="previousUser">Предыдущий пользователь</param>
-        /// <param name="newUser">Новый пользователь</param>
-        public CurrentUserSetEventArgs(User previousUser, User newUser)
-        {
-            PreviousUser = previousUser;
-            NewUser = newUser;
-        }
-
-        public User PreviousUser { get; private set; }
-        public User NewUser { get; private set; }
-        public bool IsAnother => PreviousUser.Equals(NewUser);
-    }
-
 }

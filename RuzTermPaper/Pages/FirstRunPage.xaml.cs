@@ -2,7 +2,6 @@
 using RuzTermPaper.Tools;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,9 +27,29 @@ namespace RuzTermPaper.Pages
 
         public FirstRunPage()
         {
-            _data = SingletonData.Initialize();
-            _invalidFormat = new SolidColorBrush(Colors.Red);
             InitializeComponent();
+            _data = SingletonData.Initialize();
+            _data.PropertyChanged += _data_PropertyChanged;
+            _invalidFormat = new SolidColorBrush(Colors.Red);
+        }
+
+        private async void _data_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_data.CurrentUser))
+            {
+                try
+                {
+                    _data.Lessons = await _data.CurrentUser.GetLessonsAsync(DateTime.Today, 7);
+                    ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
+                }
+                catch (Exception ex)
+                {
+                    await new Dialogs.ErrorDialog(ex).ShowAsync();
+                    return;
+                }
+                Windows.Storage.ApplicationData.Current.LocalSettings.Values["FirstRun"] = false;
+                _data.Recent.AddIfNew(_data.CurrentUser);
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -51,28 +71,17 @@ namespace RuzTermPaper.Pages
 
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            _data.TimetableLoadingSuccessed += (o, e) =>
-            {
-                ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
-                Windows.Storage.ApplicationData.Current.LocalSettings.Values["FirstRun"] = false;
-            };
-
             if (_type == UserType.Student)
             {
                 if (args.QueryText.EndsWith("@edu.hse.ru"))
                 {
-                    _data.TimetableLoadingFailed += (o, e) =>
-                    {
-                        sender.Text = string.Empty;
-                        ErrorBlock.Visibility = Visibility.Visible;
-                    };
                     _data.CurrentUser = new Student(args.QueryText);
                 }
             }
             else
             {
-                if (args.ChosenSuggestion != null)
-                    _data.CurrentUser = (User)args.ChosenSuggestion;
+                if (args.ChosenSuggestion != null && args.ChosenSuggestion is User user)
+                    _data.CurrentUser = user;
             }
         }
 
@@ -125,6 +134,12 @@ namespace RuzTermPaper.Pages
                 FindName("SearchBox");
 
             SearchBox.PlaceholderText = "Введите почту на edu.hse.ru";
+        }
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            base.OnNavigatingFrom(e);
+            _data.PropertyChanged -= _data_PropertyChanged;
         }
     }
 }

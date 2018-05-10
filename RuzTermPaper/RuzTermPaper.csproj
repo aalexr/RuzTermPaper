@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="SingletonData.cs" />
     <Compile Include="Tools\Converters.cs" />
+    <Compile Include="Tools\Extensions.cs" />
     <Compile Include="Tools\Json.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Group.cs" />

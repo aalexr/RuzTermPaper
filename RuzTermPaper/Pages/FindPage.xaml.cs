@@ -1,16 +1,12 @@
 ﻿using RuzTermPaper.Models;
 using RuzTermPaper.Tools;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Windows.System;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,10 +23,26 @@ namespace RuzTermPaper.Pages
         {
             InitializeComponent();
             _data = SingletonData.Initialize();
-            _data.ResetEvents();
-            _data.TimetableLoadingSuccessed += (o, args) => MainPage.View.SelectedItem = MainPage.View.Items[0];
-            // Показ сообщения, если ошибка при загрузке
-            _data.TimetableLoadingFailed += async (o, args) => await new Dialogs.ErrorDialog(args.Exception).ShowAsync();
+            _data.PropertyChanged += _data_PropertyChanged;
+        }
+
+        private async void _data_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_data.CurrentUser))
+            {
+                try
+                {
+                    _data.Lessons = await _data.CurrentUser.GetLessonsAsync(DateTime.Today, 7);
+                }
+                catch (Exception ex)
+                {
+                    await new Dialogs.ErrorDialog(ex).ShowAsync();
+                    return;
+                }
+                
+                MainPage.View.SelectedIndex = 0;
+                _data.Recent.AddIfNew(_data.CurrentUser);
+            }
         }
 
         private void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)
@@ -75,6 +87,12 @@ namespace RuzTermPaper.Pages
                 return;
 
             _data.Recent.Remove(user);
+        }
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            base.OnNavigatingFrom(e);
+            _data.PropertyChanged -= _data_PropertyChanged;
         }
     }
 }
