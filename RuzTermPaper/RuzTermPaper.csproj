@@ -17,12 +17,12 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
-    <PackageCertificateKeyFile>RuzTermPaper_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>RuzTermPaper_StoreKey.pfx</PackageCertificateKeyFile>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>30D703955C4328E3456BB4FF4EA31F096FA344AA</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>010D6384882D7FE3C679CA9A3FD5F1E03C614B6E</PackageCertificateThumbprint>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
@@ -145,6 +145,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="Graph1.dgml" />
+    <None Include="RuzTermPaper_StoreKey.pfx" />
     <None Include="RuzTermPaper_TemporaryKey.pfx" />
     <PRIResource Include="Strings\ru-ru\Resources.resw" />
   </ItemGroup>
@@ -194,6 +195,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

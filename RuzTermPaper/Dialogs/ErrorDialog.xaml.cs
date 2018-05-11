@@ -18,9 +18,5 @@ namespace RuzTermPaper.Dialogs
             else
                 Content = exception.Message;
         }
-
-        private void ContentDialog_CloseButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
     }
 }
