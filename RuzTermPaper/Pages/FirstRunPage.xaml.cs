@@ -69,6 +69,16 @@ namespace RuzTermPaper.Pages
             }
         }
 
+        private void StudentRB_Checked(object sender, RoutedEventArgs e)
+        {
+            if (SearchBox == null)
+                FindName("SearchBox");
+
+            _type = UserType.Student;
+            SearchBox.PlaceholderText = "example@edu.hse.ru";
+            SearchBox.ItemsSource = null;
+        }
+
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (_type == UserType.Student)
@@ -95,22 +105,29 @@ namespace RuzTermPaper.Pages
                         return;
                     tokenSource?.Cancel();
                     tokenSource = new CancellationTokenSource();
-                    if (_type == UserType.Lecturer)
-                    {
-                        List<Lecturer> _suggestions = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
-                        if (_suggestions.Count > 0)
-                            sender.ItemsSource = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
-                        else
-                            sender.ItemsSource = new[] { "NoResult".Localize() };
 
-                    }
-                    else
+                    switch (_type)
                     {
-                        List<Group> _suggestions = await Group.FindAsync(sender.Text, tokenSource.Token);
-                        if (_suggestions.Count > 0)
-                            sender.ItemsSource = await Group.FindAsync(sender.Text, tokenSource.Token);
-                        else
-                            sender.ItemsSource = new[] { "NoResult".Localize() };
+                        case UserType.Student:
+                            break;
+                        case UserType.Lecturer:
+                            {
+                                List<Lecturer> _suggestions = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
+                                if (_suggestions.Count > 0)
+                                    sender.ItemsSource = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
+                                else
+                                    sender.ItemsSource = new[] { "NoResult".Localize() };
+                            }
+                            break;
+                        case UserType.Group:
+                            {
+                                List<Group> _suggestions = await Group.FindAsync(sender.Text, tokenSource.Token);
+                                if (_suggestions.Count > 0)
+                                    sender.ItemsSource = await Group.FindAsync(sender.Text, tokenSource.Token);
+                                else
+                                    sender.ItemsSource = new[] { "NoResult".Localize() };
+                            }
+                            break;
                     }
                 }
                 catch (TaskCanceledException)
@@ -119,7 +136,7 @@ namespace RuzTermPaper.Pages
                 }
                 catch (HttpRequestException ex)
                 {
-                    // Показать сообщение
+                    await new Dialogs.ErrorDialog(ex).ShowAsync();
                 }
                 catch (Exception) { }
             }
@@ -127,14 +144,6 @@ namespace RuzTermPaper.Pages
         }
 
         private void RB_Unchecked(object sender, RoutedEventArgs e) => SearchBox.ItemsSource = null;
-
-        private void StudentRB_Checked(object sender, RoutedEventArgs e)
-        {
-            if (SearchBox == null)
-                FindName("SearchBox");
-
-            SearchBox.PlaceholderText = "Введите почту на edu.hse.ru";
-        }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {

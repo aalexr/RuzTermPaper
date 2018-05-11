@@ -8,8 +8,13 @@
     mc:Ignorable="d">
 
     <Pivot x:Name="PivotView">
+        <Pivot.RightHeader>
+            <CommandBar Background="Transparent" DefaultLabelPosition="Collapsed">
+                <AppBarButton Icon="Refresh"/>
+                <AppBarButton Icon="Setting" Click="SettingAppBarButton_Click"/>
+            </CommandBar>
+        </Pivot.RightHeader>
         <Pivot.Items>
-
             <!--Item1-->
             <PivotItem x:Uid="MainPage_PivotViewItem_Current">
                 <PivotItem.Header>
@@ -31,17 +36,7 @@
                 </PivotItem.Header>
                 <Frame x:Name="FindPIFrame"/>
             </PivotItem>
-
-            <!--Item3-->
-            <PivotItem x:Name="SetPI">
-                <PivotItem.Header>
-                    <StackPanel Orientation="Vertical">
-                        <SymbolIcon Symbol="Setting"/>
-                        <TextBlock Text="Настройки" Style="{StaticResource CaptionTextBlockStyle}"/>
-                    </StackPanel>
-                </PivotItem.Header>
-                <Frame x:Name="SetPIFrame"/>
-            </PivotItem>
         </Pivot.Items>
+        
     </Pivot>
 </Page>

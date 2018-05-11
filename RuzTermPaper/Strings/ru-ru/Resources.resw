@@ -150,11 +150,14 @@
   <data name="ErrorDialog.CloseButtonText" xml:space="preserve">
     <value>ОК</value>
   </data>
-  <data name="ErrorDialog.Content" xml:space="preserve">
-    <value>Произошла ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее. Подробности: </value>
-  </data>
   <data name="ErrorDialog.Title" xml:space="preserve">
-    <value>Ошибка соединения</value>
+    <value>Ошибка</value>
+  </data>
+  <data name="ErrorDialog_ErrMsg" xml:space="preserve">
+    <value>Произошла неизвестная ошибка. Подробности: </value>
+  </data>
+  <data name="ErrorDialog_NetErrMsg" xml:space="preserve">
+    <value>Произошла ошибка при обращении к серверу. Возможные причины: введеный email не найден, ошибка на сервере, нет доступа к интернету. Подробности: </value>
   </data>
   <data name="FindPage_EmailBox.Header" xml:space="preserve">
     <value>Найти расписание по почте</value>

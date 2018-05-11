@@ -6,8 +6,11 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
+using Windows.System;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
 namespace RuzTermPaper
@@ -59,6 +62,7 @@ namespace RuzTermPaper
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
+                rootFrame.PointerPressed += On_PointerPressed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -107,7 +111,17 @@ namespace RuzTermPaper
             }
             // Обеспечение активности текущего окна
             Window.Current.Activate();
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
+            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested;
+            
+            //draw into the title bar
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = false;
+
+            //remove the solid-colored backgrounds behind the caption controls and system back button
+            var viewTitleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
+            viewTitleBar.ButtonBackgroundColor = (Windows.UI.Color)Resources["SystemBaseHighColor"];
+            viewTitleBar.ButtonInactiveBackgroundColor = (Windows.UI.Color)Resources["SystemBaseHighColor"];
+            viewTitleBar.ButtonForegroundColor = (Windows.UI.Color)Resources["SystemBaseHighColor"];
         }
 
         /// <summary>
@@ -137,6 +151,21 @@ namespace RuzTermPaper
             }
 
             deferral.Complete();
+        }
+
+        private void App_BackRequested(object sender, Windows.UI.Core.BackRequestedEventArgs e)
+        {
+            //e.Handled = On_BackRequested();
+        }
+
+        private void On_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            bool isXButton1Pressed = e.GetCurrentPoint(sender as UIElement).Properties.PointerUpdateKind == PointerUpdateKind.XButton1Pressed;
+
+            if (isXButton1Pressed)
+            {
+                //e.Handled = On_BackRequested();
+            }
         }
     }
 }
