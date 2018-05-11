@@ -10,7 +10,6 @@
     <Pivot x:Name="PivotView">
         <Pivot.RightHeader>
             <CommandBar Background="Transparent" DefaultLabelPosition="Collapsed">
-                <AppBarButton Icon="Refresh"/>
                 <AppBarButton Icon="Setting" Click="SettingAppBarButton_Click"/>
             </CommandBar>
         </Pivot.RightHeader>

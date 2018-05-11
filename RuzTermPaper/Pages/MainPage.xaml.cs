@@ -23,24 +23,6 @@ namespace RuzTermPaper.Pages
             InitializeComponent();
             View = PivotView;
             currentFrame = (Frame)Window.Current.Content;
-
-            if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily != "Windows.Mobile")
-            {
-                var GoBack = new KeyboardAccelerator
-                {
-                    Key = VirtualKey.GoBack
-                };
-                GoBack.Invoked += BackInvoked;
-                var AltLeft = new KeyboardAccelerator
-                {
-                    Key = VirtualKey.Left
-                };
-                AltLeft.Invoked += BackInvoked;
-                this.KeyboardAccelerators.Add(GoBack);
-                this.KeyboardAccelerators.Add(AltLeft);
-                // ALT routes here
-                AltLeft.Modifiers = VirtualKeyModifiers.Menu; 
-            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -50,28 +32,6 @@ namespace RuzTermPaper.Pages
             FindPIFrame.Navigate(typeof(FindPage));
         }
 
-        private void SettingAppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            currentFrame.Navigate(typeof(SettingsPage));
-        }
-
-        private void Back_Click(object sender, RoutedEventArgs e) => On_BackRequested();
-
-        // Handles system-level BackRequested events and page-level back button Click events
-        private bool On_BackRequested()
-        {
-            if (currentFrame.CanGoBack)
-            {
-                currentFrame.GoBack();
-                return true;
-            }
-            return false;
-        }
-
-        private void BackInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
-        {
-            On_BackRequested();
-            args.Handled = true;
-        }
+        private void SettingAppBarButton_Click(object sender, RoutedEventArgs e) => currentFrame.Navigate(typeof(SettingsPage));
     }
 }

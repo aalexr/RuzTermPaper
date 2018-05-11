@@ -1,7 +1,7 @@
-﻿using Windows.Storage;
+﻿using System.Linq;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -15,21 +15,10 @@ namespace RuzTermPaper.Pages
         private ApplicationDataContainer LocalSettings { get; } = ApplicationData.Current.LocalSettings;
         private Frame currentFrame = (Frame)Window.Current.Content;
 
-
         public SettingsPage()
         {
             this.InitializeComponent();
-            currentFrame.KeyDown += (o, e) =>
-            {
-                if (e.Key == Windows.System.VirtualKey.Back)
-                    On_BackRequested();
-            };
-        }
-
-        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            LocalSettings.Values["FirstRun"] = null;
-            Application.Current.Exit();
+            ThemePanel.Children.Cast<RadioButton>().FirstOrDefault(c => (ElementTheme)c?.Tag == App.CurrentTheme).IsChecked = true;
         }
 
         private void Back_Click(object sender, RoutedEventArgs e) => On_BackRequested();
@@ -45,10 +34,12 @@ namespace RuzTermPaper.Pages
             return false;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void ThemeRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            //Windows.UI.Core.SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = Windows.UI.Core.AppViewBackButtonVisibility.Visible;
-            base.OnNavigatedTo(e);
+            if (sender is RadioButton radio)
+            {
+                App.CurrentTheme = (ElementTheme)radio.Tag;
+            }
         }
     }
 }

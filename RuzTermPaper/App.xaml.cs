@@ -62,7 +62,6 @@ namespace RuzTermPaper
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
-                rootFrame.PointerPressed += On_PointerPressed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -71,6 +70,9 @@ namespace RuzTermPaper
 
                 // Размещение фрейма в текущем окне
                 Window.Current.Content = rootFrame;
+
+                if (ApplicationData.Current.LocalSettings.Values["Theme"] is string savedThemeName)
+                    CurrentTheme = (ElementTheme)Enum.Parse(typeof(ElementTheme), savedThemeName);
             }
             #endregion
 
@@ -111,17 +113,6 @@ namespace RuzTermPaper
             }
             // Обеспечение активности текущего окна
             Window.Current.Activate();
-            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested;
-            
-            //draw into the title bar
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = false;
-
-            //remove the solid-colored backgrounds behind the caption controls and system back button
-            var viewTitleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
-            viewTitleBar.ButtonBackgroundColor = (Windows.UI.Color)Resources["SystemBaseHighColor"];
-            viewTitleBar.ButtonInactiveBackgroundColor = (Windows.UI.Color)Resources["SystemBaseHighColor"];
-            viewTitleBar.ButtonForegroundColor = (Windows.UI.Color)Resources["SystemBaseHighColor"];
         }
 
         /// <summary>
@@ -153,18 +144,19 @@ namespace RuzTermPaper
             deferral.Complete();
         }
 
-        private void App_BackRequested(object sender, Windows.UI.Core.BackRequestedEventArgs e)
+        public static ElementTheme CurrentTheme
         {
-            //e.Handled = On_BackRequested();
-        }
-
-        private void On_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            bool isXButton1Pressed = e.GetCurrentPoint(sender as UIElement).Properties.PointerUpdateKind == PointerUpdateKind.XButton1Pressed;
-
-            if (isXButton1Pressed)
+            get
             {
-                //e.Handled = On_BackRequested();
+                if (Window.Current.Content is FrameworkElement element)
+                    return element.RequestedTheme;
+                return ElementTheme.Default;
+            }
+            set
+            {
+                if (Window.Current.Content is FrameworkElement element)
+                    element.RequestedTheme = value;
+                ApplicationData.Current.LocalSettings.Values["Theme"] = value.ToString();
             }
         }
     }

@@ -12,20 +12,37 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <RelativePanel VerticalAlignment="Top" HorizontalAlignment="Left">
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal">
             <Button x:Name="BackButton" Style="{StaticResource NavigationBackButtonNormalStyle}" Click="Back_Click"/>
-            <TextBlock Text="Настройки" RelativePanel.RightOf="BackButton" Style="{StaticResource TitleTextBlockStyle}"/>
-        </RelativePanel>
-        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <TextBlock Text="Настройки" Style="{StaticResource TitleTextBlockStyle}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="16,4,0,0">
             <TextBlock Text="Выберите режим" Style="{StaticResource SubtitleTextBlockStyle}"/>
-            <RadioButton Content="Светлая"/>
-            <RadioButton Content="Темная"/>
-                <RadioButton Content="Windows по умолчанию"/>
-                <ComboBox RelativePanel.Below="Theme" Header="Язык" SelectedIndex="0">
-            <ComboBoxItem Content="русский"/>
-            <ComboBoxItem Content="английский"/>
-            <ComboBoxItem Content="Windows по умолчанию"/>
-        </ComboBox>
+            <StackPanel x:Name="ThemePanel" Orientation="Vertical">
+                <RadioButton Content="Светлая" Checked="ThemeRadioButton_Checked">
+                    <RadioButton.Tag>
+                        <ElementTheme>Light</ElementTheme>
+                    </RadioButton.Tag>
+                </RadioButton>
+                <RadioButton Content="Темная" Checked="ThemeRadioButton_Checked">
+                    <RadioButton.Tag>
+                        <ElementTheme>Dark</ElementTheme>
+                    </RadioButton.Tag>
+                </RadioButton>
+                <RadioButton Content="Windows по умолчанию" Checked="ThemeRadioButton_Checked">
+                    <RadioButton.Tag>
+                        <ElementTheme>Default</ElementTheme>
+                    </RadioButton.Tag>
+                </RadioButton>
+            </StackPanel>
+            <ComboBox SelectedIndex="0">
+                    <ComboBox.Header>
+                    <TextBlock Text="Язык" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                </ComboBox.Header>
+                    <ComboBoxItem Content="русский"/>
+                    <ComboBoxItem Content="английский"/>
+                    <ComboBoxItem Content="Windows по умолчанию"/>
+                </ComboBox>
         </StackPanel>
     </Grid>
 </Page>
