@@ -70,9 +70,6 @@ namespace RuzTermPaper
 
                 // Размещение фрейма в текущем окне
                 Window.Current.Content = rootFrame;
-
-                if (ApplicationData.Current.LocalSettings.Values["Theme"] is string savedThemeName)
-                    CurrentTheme = (ElementTheme)Enum.Parse(typeof(ElementTheme), savedThemeName);
             }
             #endregion
 
@@ -142,22 +139,6 @@ namespace RuzTermPaper
             }
 
             deferral.Complete();
-        }
-
-        public static ElementTheme CurrentTheme
-        {
-            get
-            {
-                if (Window.Current.Content is FrameworkElement element)
-                    return element.RequestedTheme;
-                return ElementTheme.Default;
-            }
-            set
-            {
-                if (Window.Current.Content is FrameworkElement element)
-                    element.RequestedTheme = value;
-                ApplicationData.Current.LocalSettings.Values["Theme"] = value.ToString();
-            }
         }
     }
 }

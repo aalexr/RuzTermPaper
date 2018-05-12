@@ -1,10 +1,5 @@
-﻿using System;
-using Windows.ApplicationModel.Core;
-using Windows.System;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
@@ -31,7 +26,5 @@ namespace RuzTermPaper.Pages
             ViewPIFrame.Navigate(typeof(TimetablePage));
             FindPIFrame.Navigate(typeof(FindPage));
         }
-
-        private void SettingAppBarButton_Click(object sender, RoutedEventArgs e) => currentFrame.Navigate(typeof(SettingsPage));
     }
 }
