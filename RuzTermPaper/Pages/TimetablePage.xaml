@@ -13,6 +13,7 @@
     <Page.Resources>
         <tools:DateToStringConverter x:Name="DateConverter"/>
         <tools:VisibleWhenEmpty x:Name="VisibilityConverter"/>
+        <tools:ZeroToBoolCOonverter x:Name="ZeroBool"/>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -52,7 +53,7 @@
                                         <StaticResource ResourceKey="SubtitleTextBlockStyle" />
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <TextBlock x:Uid="TimetablePage_ListViewGroup_Header_NoClasses" Visibility="{x:Bind Elements.Count, Converter={StaticResource VisibilityConverter}}">
+                                <TextBlock x:Name="NoClassesTBK" x:Uid="TimetablePage_ListViewGroup_Header_NoClasses" x:Load="{x:Bind Elements.Count, Mode=OneWay, Converter={StaticResource ZeroBool}}">
                                     <TextBlock.Style>
                                         <StaticResource ResourceKey="BodyTextBlockStyle" />
                                     </TextBlock.Style>

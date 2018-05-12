@@ -32,4 +32,12 @@ namespace RuzTermPaper.Tools
         public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
     }
 
+    public class ZeroToBoolCOonverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language) => Equals(0, (int)value);
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
+    }
+
+
 }
