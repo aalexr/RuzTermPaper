@@ -10,14 +10,9 @@ namespace RuzTermPaper.Models
     // ReSharper disable once ClassNeverInstantiated.Global
     public class Group : User
     {
-        //public int chairOid { get; set; }
-        //public int course { get; set; }
-        //public string faculty { get; set; }
-        //public int facultyOid { get; set; }
-        //public string formOfEducation { get; set; }
         public int GroupOid { get; set; }
+
         public string Number { get; set; }
-        //public string speciality { get; set; }
 
         public override Symbol Symbol => Symbol.People;
 
@@ -25,6 +20,7 @@ namespace RuzTermPaper.Models
         /// Ищет группу в базе РУЗ по тексту
         /// </summary>
         /// <param name="findText">Текст для поиска</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>Список найденных групп</returns>
         public static async Task<List<Group>> FindAsync(string findText, CancellationToken cancellationToken)
         {
@@ -36,17 +32,17 @@ namespace RuzTermPaper.Models
                 throw new System.Net.Http.HttpRequestException($"Error Code {(int)response.StatusCode} - {response.ReasonPhrase}");
         }
 
-        public override string ToString() => Number;
-
-        protected override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
+        protected override Uri BuildUri(DateTime from, DateTime to)
         {
             var uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
-            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype=3&groupOid={GroupOid}";
+            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype=3&groupOid={GroupOid}&language={(int)App.Language}";
 
             return uriBuilder.Uri;
         }
 
         public override bool Equals(User other) => other is Group group && this.GroupOid.Equals(group.GroupOid);
+
+        public override string ToString() => Number;
     }
 }

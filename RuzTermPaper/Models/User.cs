@@ -28,7 +28,7 @@ namespace RuzTermPaper.Models
         /// <param name="to">Конечная дата</param>
         /// <param name="language">Язык расписания</param>
         /// <returns></returns>
-        protected abstract Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian);
+        protected abstract Uri BuildUri(DateTime from, DateTime to);
 
         /// <summary>
         /// Получает и группирует по дате занятия
@@ -37,8 +37,8 @@ namespace RuzTermPaper.Models
         /// <param name="period">Количество дней начиная с from</param>
         /// <param name="language">Язык расписания</param>
         /// <returns></returns>
-        public async Task<ObservableCollection<LessonsGroup>> GetLessonsAsync(DateTime from, int period, Language language = Language.Russian) =>
-            await GetLessonsAsync(from, from.AddDays(period), language);
+        public async Task<ObservableCollection<LessonsGroup>> GetLessonsAsync(DateTime from, int period) =>
+            await GetLessonsAsync(from, from.AddDays(period));
 
         /// <summary>
         /// Получает и группирует по дате занятия
@@ -47,11 +47,11 @@ namespace RuzTermPaper.Models
         /// <param name="to">Конечная дата</param>
         /// <param name="language">Язык расписания</param>
         /// <returns></returns>
-        public async Task<ObservableCollection<LessonsGroup>> GetLessonsAsync(DateTime from, DateTime to, Language language = Language.Russian)
+        public async Task<ObservableCollection<LessonsGroup>> GetLessonsAsync(DateTime from, DateTime to)
         {
             var list =
                 await Json.ToObjectAsync<List<Lesson>>
-                (await App.Http.GetStringAsync(BuildUri(from, to, language)));
+                (await App.Http.GetStringAsync(BuildUri(from, to)));
             list = list.OrderBy(L => L.DateOfNest).ToList();
             var res = new List<LessonsGroup>(list.Count);
             for (var i = from; i < to; i = i.AddDays(1))

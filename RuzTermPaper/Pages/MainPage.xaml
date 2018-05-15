@@ -10,11 +10,11 @@
     <Pivot x:Name="PivotView">
         <Pivot.Items>
             <!--Item1-->
-            <PivotItem x:Uid="MainPage_PivotViewItem_Current">
+            <PivotItem>
                 <PivotItem.Header>
                     <StackPanel Orientation="Vertical">
                         <SymbolIcon Symbol="Calendar"/>
-                        <TextBlock Text="Расписание" Style="{StaticResource CaptionTextBlockStyle}"/>
+                        <TextBlock x:Uid="MainPage_TimetablePivotItem" Style="{StaticResource CaptionTextBlockStyle}"/>
                     </StackPanel>
                 </PivotItem.Header>
                 <Frame x:Name="ViewPIFrame"/>
@@ -25,7 +25,7 @@
                 <PivotItem.Header>
                     <StackPanel Orientation="Vertical">
                         <SymbolIcon Symbol="Find"/>
-                        <TextBlock Text="Поиск" Style="{StaticResource CaptionTextBlockStyle}"/>
+                        <TextBlock x:Uid="MainPage_FindPivotItem" Style="{StaticResource CaptionTextBlockStyle}"/>
                     </StackPanel>
                 </PivotItem.Header>
                 <Frame x:Name="FindPIFrame"/>

@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml;
+﻿using RuzTermPaper.Tools;
+using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -13,11 +15,32 @@ namespace RuzTermPaper.Pages
     {
         public static Pivot View { get; private set; }
         private Frame currentFrame;
+        private SingletonData _data = SingletonData.Initialize();
         public MainPage()
         {
             InitializeComponent();
             View = PivotView;
             currentFrame = (Frame)Window.Current.Content;
+            _data.PropertyChanged += _data_PropertyChanged;
+        }
+
+        private async void _data_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_data.CurrentUser))
+            {
+                try
+                {
+                    _data.Lessons = await _data.CurrentUser.GetLessonsAsync(DateTime.Today, 7);
+                }
+                catch (Exception ex)
+                {
+                    await new Dialogs.ErrorDialog(ex).ShowAsync();
+                    return;
+                }
+                
+                MainPage.View.SelectedIndex = 0;
+                _data.Recent.AddIfNew(_data.CurrentUser);
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

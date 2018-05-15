@@ -118,120 +118,120 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChooseDialog.CloseButtonText" xml:space="preserve">
-    <value>Отмена</value>
+    <value>Cancel</value>
   </data>
   <data name="ChooseDialog.PrimaryButtonText" xml:space="preserve">
-    <value>ОК</value>
+    <value>OK</value>
   </data>
   <data name="ChooseDialog.Title" xml:space="preserve">
-    <value>Поиск</value>
+    <value>Search</value>
   </data>
   <data name="ChooseDialog_SuggestBox_Header_Group" xml:space="preserve">
-    <value>Найдите расписание группы по ее номеру</value>
+    <value>Find group's schedule by its number</value>
   </data>
   <data name="ChooseDialog_SuggestBox_Header_Lecturer" xml:space="preserve">
-    <value>Найдите расписание преподавателя</value>
+    <value>Find lecturer's schedule by his or her name</value>
   </data>
   <data name="ChooseDialog_SuggestBox_Placeholder_Group" xml:space="preserve">
-    <value>Начните вводить группу</value>
+    <value>Start typing group number</value>
   </data>
   <data name="ChooseDialog_SuggestBox_Placeholder_Lecturer" xml:space="preserve">
-    <value>Начните вводить имя</value>
+    <value>Start typing leclturer's name</value>
   </data>
   <data name="Connection_Error" xml:space="preserve">
-    <value>Ошибка соединения</value>
+    <value>Connection Error</value>
   </data>
   <data name="Connection_Error_Details" xml:space="preserve">
-    <value>Произошла ошибка при обращении к серверу. Проверьте соединение или попробуйте позднее. Подробности:</value>
+    <value>An error occured while connecting to the server. Check your Internet connection or try again later. Details</value>
   </data>
   <data name="ContentDialog_AutoSuggestBox.PlaceholderText" xml:space="preserve">
-    <value>Поиск</value>
+    <value>Search</value>
   </data>
   <data name="ErrorDialog.CloseButtonText" xml:space="preserve">
-    <value>ОК</value>
+    <value>OK</value>
   </data>
   <data name="ErrorDialog.Title" xml:space="preserve">
-    <value>Ошибка</value>
+    <value>Error</value>
   </data>
   <data name="ErrorDialog_ErrMsg" xml:space="preserve">
-    <value>Произошла неизвестная ошибка. Подробности: </value>
+    <value>Unknown error occured. See details: </value>
   </data>
   <data name="ErrorDialog_NetErrMsg" xml:space="preserve">
-    <value>Произошла ошибка при обращении к серверу. Возможные причины: введеный email не найден, ошибка на сервере, нет доступа к интернету. Подробности: </value>
+    <value>An error occured during the request. Possible reasons: incorrect email entered, error on the server, no Internet connection. See details: </value>
   </data>
   <data name="FindPage_EmailBox.Header" xml:space="preserve">
-    <value>Найти расписание по почте</value>
+    <value>Find schedule by corporate email</value>
   </data>
   <data name="FindPage_FindMore.Label" xml:space="preserve">
-    <value>Найти еще</value>
+    <value>Find more</value>
   </data>
   <data name="FindPage_MenuFlyoutItem_Delete.Text" xml:space="preserve">
-    <value>Убрать из списка</value>
+    <value>Remover from list</value>
   </data>
   <data name="FindPage_MenuFlyoutItem_Group.Text" xml:space="preserve">
-    <value>Группа</value>
+    <value>Group</value>
   </data>
   <data name="FindPage_MenuFlyoutItem_Lecturer.Text" xml:space="preserve">
-    <value>Преподаватель</value>
+    <value>Lecturer</value>
   </data>
   <data name="FindPage_Recent.Text" xml:space="preserve">
-    <value>Недавние поиски</value>
+    <value>Recent</value>
   </data>
   <data name="FirstRunPage_ButtonGroup.Content" xml:space="preserve">
-    <value>Группы</value>
+    <value>Group</value>
   </data>
   <data name="FirstRunPage_ButtonLecturer.Content" xml:space="preserve">
-    <value>Преподавателя</value>
+    <value>Lecturer</value>
   </data>
   <data name="FirstRunPage_ButtonStudent.Content" xml:space="preserve">
-    <value>Студента</value>
+    <value>Student</value>
   </data>
   <data name="FirstRunPage_ErrorBlock.Text" xml:space="preserve">
-    <value>Неверная почта. Попробуйте еще раз</value>
+    <value>Incorrent email. Try again</value>
   </data>
   <data name="FirstRunPage_ForLecturersButton.Content" xml:space="preserve">
-    <value>Вход для преподавателей</value>
+    <value>For lecturers</value>
   </data>
   <data name="FirstRunPage_Hint.Text" xml:space="preserve">
-    <value>Давайте настроим приложение для Вас</value>
+    <value>Let's get started</value>
   </data>
   <data name="FirstRunPage_Hint_Text" xml:space="preserve">
-    <value>Для начала добавим расписание для</value>
+    <value>To begin with add schedule for...</value>
   </data>
   <data name="FirstRunPage_StartButton.Content" xml:space="preserve">
-    <value>Приступить</value>
+    <value>Go!</value>
   </data>
   <data name="FirstRunPage_StartOverTextBlock.Text" xml:space="preserve">
-    <value>Начать заново</value>
+    <value>Start over</value>
   </data>
   <data name="FirstRunPage_WelcomeTextBlock_AppName.Text" xml:space="preserve">
-    <value>Расписание ВШЭ</value>
+    <value>HSE Schedule</value>
   </data>
   <data name="FirstRunPage_WelcomeTextBlock_Welcome.Text" xml:space="preserve">
-    <value>Добро пожаловать</value>
+    <value>Welcome</value>
   </data>
   <data name="MainPage_FindPivotItem.Text" xml:space="preserve">
-    <value>Поиск</value>
+    <value>Find</value>
   </data>
   <data name="MainPage_TimetablePivotItem.Text" xml:space="preserve">
-    <value>Расписание</value>
+    <value>Schedule</value>
   </data>
   <data name="NoResult" xml:space="preserve">
-    <value>Не найдено</value>
+    <value>No matches</value>
   </data>
   <data name="SingletonAlreadyExistsException" xml:space="preserve">
-    <value>Уже существует обьект этого класса.</value>
+    <value>Instance already exists</value>
   </data>
   <data name="TimetablePage_ListViewFooter_Button.Content" xml:space="preserve">
-    <value>Загрузить еще на неделю</value>
+    <value>Load for one week more</value>
   </data>
   <data name="TimetablePage_ListViewGroup_Header_NoClasses.Text" xml:space="preserve">
-    <value>Нет занятий</value>
+    <value>No classes</value>
   </data>
   <data name="Today" xml:space="preserve">
-    <value>сегодня</value>
+    <value>Today</value>
   </data>
   <data name="Tomorrow" xml:space="preserve">
-    <value>завтра</value>
+    <value>Tomorrow</value>
   </data>
 </root>

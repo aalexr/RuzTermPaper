@@ -23,26 +23,6 @@ namespace RuzTermPaper.Pages
         {
             InitializeComponent();
             _data = SingletonData.Initialize();
-            _data.PropertyChanged += _data_PropertyChanged;
-        }
-
-        private async void _data_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(_data.CurrentUser))
-            {
-                try
-                {
-                    _data.Lessons = await _data.CurrentUser.GetLessonsAsync(DateTime.Today, 7);
-                }
-                catch (Exception ex)
-                {
-                    await new Dialogs.ErrorDialog(ex).ShowAsync();
-                    return;
-                }
-                
-                MainPage.View.SelectedIndex = 0;
-                _data.Recent.AddIfNew(_data.CurrentUser);
-            }
         }
 
         private void RecentListView_OnItemClick(object sender, ItemClickEventArgs e)
@@ -87,12 +67,6 @@ namespace RuzTermPaper.Pages
                 return;
 
             _data.Recent.Remove(user);
-        }
-
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        {
-            base.OnNavigatingFrom(e);
-            _data.PropertyChanged -= _data_PropertyChanged;
         }
     }
 }

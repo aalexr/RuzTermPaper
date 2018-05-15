@@ -1,16 +1,13 @@
-﻿using RuzTermPaper.Pages;
+﻿using RuzTermPaper.Models;
+using RuzTermPaper.Pages;
 using RuzTermPaper.Tools;
 using System;
 using System.Net.Http;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Core;
 using Windows.Storage;
-using Windows.System;
-using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
 namespace RuzTermPaper
@@ -24,6 +21,8 @@ namespace RuzTermPaper
         /// Общий экземпляр <see cref="HttpClient"/> для загрузки данных через Интернет
         /// </summary>
         public static HttpClient Http { get; } = new HttpClient();
+
+        public static Language Language { get; private set; }
 
         /// <summary>
         /// Экземпляр класса данных приложения
@@ -108,6 +107,12 @@ namespace RuzTermPaper
                     #endregion
                 }
             }
+
+            if (Windows.System.UserProfile.GlobalizationPreferences.Languages[0] == "ru")
+                Language = Language.Russian;
+            else
+                Language = Language.English;
+
             // Обеспечение активности текущего окна
             Window.Current.Activate();
         }

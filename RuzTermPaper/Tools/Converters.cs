@@ -17,7 +17,7 @@ namespace RuzTermPaper.Tools
             return val.ToString("dddd, d MMMM");
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language) => DateTime.Parse((string)value);
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
     }
 
     public class VisibleWhenEmpty : IValueConverter

@@ -4,18 +4,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
-// ReSharper disable MemberCanBePrivate.Global
 
 namespace RuzTermPaper.Models
 {
     public class Lecturer : User
     {
-        //public string chair { get; set; }
-        //public int chairOid { get; set; }
         public string Fio { get; set; }
-        public int LecturerOid { get; set; }
-        //public string shortFIO { get; set; }
 
+        public int LecturerOid { get; set; }
 
         public override Symbol Symbol => Symbol.Contact;
 
@@ -36,12 +32,12 @@ namespace RuzTermPaper.Models
 
         public override string ToString() => Fio;
 
-        protected override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
+        protected override Uri BuildUri(DateTime from, DateTime to)
         {
             var uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
 
-            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype=1&lecturerOid={LecturerOid}";
+            uriBuilder.Query = $"fromdate={from:yyyy.MM.dd}&todate={to:yyyy.MM.dd}&receivertype=1&lecturerOid={LecturerOid}&language={(int)App.Language}";
 
             return uriBuilder.Uri;
         }

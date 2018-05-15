@@ -11,13 +11,13 @@ namespace RuzTermPaper.Models
 
         public override Symbol Symbol => Symbol.Account;
 
-        protected override Uri BuildUri(DateTime from, DateTime to, Language language = Language.Russian)
+        protected override Uri BuildUri(DateTime from, DateTime to)
         {
             UriBuilder uriBuilder = new UriBuilder(BaseUri);
             uriBuilder.Path += "personlessons";
 
             uriBuilder.Query =
-                $"fromdate={from:yyyy.M.d}&todate={to:yyyy.M.d}&receivertype=0&email={Email}";
+                $"fromdate={from:yyyy.M.d}&todate={to:yyyy.M.d}&receivertype=0&email={Email}&language={(int)App.Language}";
 
             return uriBuilder.Uri;
         }

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="31219RednaxelApps.243550D74D8B0" Publisher="CN=86DAC4A2-0CA6-412F-976E-C2B349F34515" Version="0.1.0.0" />
+  <Identity Name="31219RednaxelApps.243550D74D8B0" Publisher="CN=86DAC4A2-0CA6-412F-976E-C2B349F34515" Version="0.1.1.0" />
   <mp:PhoneIdentity PhoneProductId="fca2082c-d154-4146-b019-1d1f61e31077" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Расписание НИУ ВШЭ</DisplayName>

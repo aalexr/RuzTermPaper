@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RuzTermPaper</RootNamespace>
     <AssemblyName>RuzTermPaper</AssemblyName>
-    <DefaultLanguage>ru-RU</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
@@ -135,7 +135,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ResourseHelper.cs" />
-    <Compile Include="Tools\Selector.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -144,6 +143,7 @@
     <None Include="Graph1.dgml" />
     <None Include="RuzTermPaper_StoreKey.pfx" />
     <None Include="RuzTermPaper_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\en-us\Resources.resw" />
     <PRIResource Include="Strings\ru-ru\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
@@ -239,9 +239,7 @@
       <Version>11.0.2</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Strings\en-us\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
