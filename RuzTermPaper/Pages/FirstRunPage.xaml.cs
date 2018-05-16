@@ -87,6 +87,8 @@ namespace RuzTermPaper.Pages
                 {
                     _data.CurrentUser = new Student(args.QueryText);
                 }
+                else
+                    sender.BorderBrush = _invalidFormat;
             }
             else
             {
