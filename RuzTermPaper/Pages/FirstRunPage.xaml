@@ -34,7 +34,7 @@
                     Windows10FallCreatorsUpdate:Style="{StaticResource ButtonRevealStyle}"/>
 
             <StackPanel x:Name="Buttons" x:Load="False" Margin="4" HorizontalAlignment="Center">
-                <RadioButton x:Name="StudentRB" x:Uid="FirstRunPage_ButtonStudent" Checked="StudentRB_Checked" Unchecked="RB_Unchecked">
+                <RadioButton x:Name="StudentRB" x:Uid="FirstRunPage_ButtonStudent" Checked="RadioButton_Checked" Unchecked="RB_Unchecked">
                     <RadioButton.Tag>
                         <models:UserType>Student</models:UserType>
                     </RadioButton.Tag>

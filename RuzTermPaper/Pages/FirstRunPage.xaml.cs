@@ -56,6 +56,9 @@ namespace RuzTermPaper.Pages
         {
             StartButton.Visibility = Visibility.Collapsed;
             FindName("Buttons");
+            StudentRB.Checked += StudentRB_Checked;
+            GroupRB.Checked += GroupRB_Checked;
+            LecturerRB.Checked += LecturerRB_Checked;
             Hint.Text = "FirstRunPage_Hint_Text".Localize();
         }
 
@@ -67,16 +70,6 @@ namespace RuzTermPaper.Pages
                 if (SearchBox == null)
                     FindName("SearchBox");
             }
-        }
-
-        private void StudentRB_Checked(object sender, RoutedEventArgs e)
-        {
-            if (SearchBox == null)
-                FindName("SearchBox");
-
-            _type = UserType.Student;
-            SearchBox.PlaceholderText = "example@edu.hse.ru";
-            SearchBox.ItemsSource = null;
         }
 
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -116,7 +109,7 @@ namespace RuzTermPaper.Pages
                             {
                                 List<Lecturer> _suggestions = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
                                 if (_suggestions.Count > 0)
-                                    sender.ItemsSource = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
+                                    sender.ItemsSource = _suggestions;
                                 else
                                     sender.ItemsSource = new[] { "NoResult".Localize() };
                             }
@@ -125,7 +118,7 @@ namespace RuzTermPaper.Pages
                             {
                                 List<Group> _suggestions = await Group.FindAsync(sender.Text, tokenSource.Token);
                                 if (_suggestions.Count > 0)
-                                    sender.ItemsSource = await Group.FindAsync(sender.Text, tokenSource.Token);
+                                    sender.ItemsSource = _suggestions;
                                 else
                                     sender.ItemsSource = new[] { "NoResult".Localize() };
                             }
@@ -151,6 +144,22 @@ namespace RuzTermPaper.Pages
         {
             base.OnNavigatingFrom(e);
             _data.PropertyChanged -= _data_PropertyChanged;
+        }
+
+        private void GroupRB_Checked(object sender, RoutedEventArgs e)
+        {
+            SearchBox.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Group".Localize();
+        }
+
+        private void LecturerRB_Checked(object sender, RoutedEventArgs e)
+        {
+            SearchBox.PlaceholderText = "ChooseDialog_SuggestBox_Placeholder_Lecturer".Localize();
+        }
+
+        private void StudentRB_Checked(object sender, RoutedEventArgs e)
+        {
+            SearchBox.PlaceholderText = "example@edu.hse.ru";
+            SearchBox.ItemsSource = null;
         }
     }
 }

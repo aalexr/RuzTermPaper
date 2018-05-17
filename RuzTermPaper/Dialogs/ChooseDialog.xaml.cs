@@ -56,9 +56,21 @@ namespace RuzTermPaper.Dialogs
                         return;
 
                     if (_type == UserType.Lecturer)
-                        sender.ItemsSource = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
+                    {
+                        var _suggestions = await Lecturer.FindAsync(sender.Text, tokenSource.Token);
+                        if (_suggestions.Count > 0)
+                            sender.ItemsSource = _suggestions;
+                        else
+                            sender.ItemsSource = new[] { "NoResult".Localize() };
+                    }
                     else
-                        sender.ItemsSource = await Group.FindAsync(sender.Text, tokenSource.Token);
+                    {
+                        var _suggestions = await Group.FindAsync(sender.Text, tokenSource.Token);
+                        if (_suggestions.Count > 0)
+                            sender.ItemsSource = _suggestions;
+                        else
+                            sender.ItemsSource = new[] { "NoResult".Localize() };
+                    }
 
                     IsPrimaryButtonEnabled = false;
                 }
