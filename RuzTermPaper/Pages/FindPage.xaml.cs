@@ -55,13 +55,7 @@ namespace RuzTermPaper.Pages
             }
             catch (HttpRequestException ex)
             {
-                var dialog = new ContentDialog
-                {
-                    PrimaryButtonText = "OK",
-                    Title = "Connection_Error".Localize(),
-                    Content = "Connection_Error_Details".Localize() + ex.Message
-                };
-                await dialog.ShowAsync();
+                await new Dialogs.ErrorDialog(ex).ShowAsync();
             }
 
         }

@@ -81,7 +81,7 @@ namespace RuzTermPaper.Dialogs
                 catch (HttpRequestException ex)
                 {
                     FindName("ErrorSP");
-                    ErrorBlock.Text = ex.Message;
+                    ErrorBlock.Text = "Connection_Error_Details".Localize() + ex.Message;
                 }
                 catch (Exception) { }
             }

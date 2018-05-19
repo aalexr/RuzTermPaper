@@ -16,6 +16,7 @@ namespace RuzTermPaper.Pages
         public static Pivot View { get; private set; }
         private Frame currentFrame;
         private SingletonData _data = SingletonData.Initialize();
+        private ContentDialog dialog;
         public MainPage()
         {
             InitializeComponent();
@@ -34,11 +35,13 @@ namespace RuzTermPaper.Pages
                 }
                 catch (Exception ex)
                 {
-                    await new Dialogs.ErrorDialog(ex).ShowAsync();
+                    dialog?.Hide();
+                    dialog = new Dialogs.ErrorDialog(ex);
+                    await dialog.ShowAsync();
                     return;
                 }
-                
-                MainPage.View.SelectedIndex = 0;
+
+                View.SelectedIndex = 0;
                 _data.Recent.AddIfNew(_data.CurrentUser);
             }
         }

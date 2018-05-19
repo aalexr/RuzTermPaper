@@ -69,6 +69,7 @@ namespace RuzTermPaper.Pages
                 _type = (UserType)radio.Tag;
                 if (SearchBox == null)
                     FindName("SearchBox");
+                SearchBox.ItemsSource = null;
             }
         }
 
@@ -131,7 +132,13 @@ namespace RuzTermPaper.Pages
                 }
                 catch (HttpRequestException ex)
                 {
-                    await new Dialogs.ErrorDialog(ex).ShowAsync();
+                    try
+                    {
+                        await new Dialogs.ErrorDialog(ex).ShowAsync();
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
                 catch (Exception) { }
             }
