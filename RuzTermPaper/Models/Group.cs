@@ -28,8 +28,8 @@ namespace RuzTermPaper.Models
             var response = await App.Http.GetAsync(requestUri, cancellationToken);
             if (response.IsSuccessStatusCode)
                 return await Json.ToObjectAsync<List<Group>>(await response.Content.ReadAsStringAsync(), cancellationToken);
-            else
-                throw new System.Net.Http.HttpRequestException($"Error Code {(int)response.StatusCode} - {response.ReasonPhrase}");
+
+            throw new System.Net.Http.HttpRequestException($"Error Code {(int)response.StatusCode} - {response.ReasonPhrase}");
         }
 
         protected override Uri BuildUri(DateTime from, DateTime to)
