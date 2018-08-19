@@ -85,7 +85,7 @@ namespace RuzTermPaper
                 if (ApplicationData.Current.LocalSettings.Values["FirstRun"] == null)
                 {
                     _data = SingletonData.Initialize();
-                    rootFrame.Navigate(typeof(FirstRunPage), e.Arguments);
+                    rootFrame.Navigate(typeof(FirstRunPage_Beta), e.Arguments);
                 }
                 else
                 {

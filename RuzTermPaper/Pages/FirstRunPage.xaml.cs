@@ -54,7 +54,6 @@ namespace RuzTermPaper.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            StartButton.Visibility = Visibility.Collapsed;
             FindName("Buttons");
             StudentRB.Checked += StudentRB_Checked;
             GroupRB.Checked += GroupRB_Checked;

@@ -9,31 +9,16 @@
     xmlns:Windows10FallCreatorsUpdate="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 5)"
     mc:Ignorable="d">
 
-    <Grid Windows10FallCreatorsUpdate:Background="{ThemeResource SystemControlBaseLowAcrylicWindowBrush}">
+    <Grid>
         <StackPanel VerticalAlignment="Center">
-            <TextBlock x:Name="WelcomeTextBlock"
-                       x:Uid="FirstRunPage_WelcomeTextBlock_Welcome"
-                       HorizontalAlignment="Center"
-                       Style="{StaticResource SubheaderTextBlockStyle}"
-                       Margin="8,16,8,4">
-            </TextBlock>
-
             <TextBlock x:Name="Hint"
                            x:Uid="FirstRunPage_Hint"
                            Margin="4"
                            HorizontalAlignment="Center"
                            Style="{StaticResource BaseTextBlockStyle}"/>
 
-            <Button x:Name="StartButton"
-                    x:Uid="FirstRunPage_StartButton"
-                    Background="{ThemeResource SystemAccentColorLight1}"
-                    Click="Button_Click"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Margin="8"
-                    Windows10FallCreatorsUpdate:Style="{StaticResource ButtonRevealStyle}"/>
 
-            <StackPanel x:Name="Buttons" x:Load="False" Margin="4" HorizontalAlignment="Center">
+            <StackPanel Margin="4" HorizontalAlignment="Center">
                 <RadioButton x:Name="StudentRB" x:Uid="FirstRunPage_ButtonStudent" Checked="RadioButton_Checked" Unchecked="RB_Unchecked">
                     <RadioButton.Tag>
                         <models:UserType>Student</models:UserType>
@@ -69,10 +54,9 @@
                     </TransitionCollection>
                 </AutoSuggestBox.Transitions>
             </AutoSuggestBox>
-            <TextBlock x:Name="ErrorBlock" x:Uid="FirstRunPage_ErrorBlock"
+            <!--<TextBlock x:Name="ErrorBlock" x:Uid="FirstRunPage_ErrorBlock" x:Load="False"
                            Foreground="Red"
-                           Margin="0,8,0,0"
-                           Visibility="Collapsed"/>
+                           Margin="0,8,0,0"/>-->
         </StackPanel>
     </Grid>
 </Page>
